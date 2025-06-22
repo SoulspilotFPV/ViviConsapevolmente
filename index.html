@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vivi Consapevole</title>
+    <title>Vivi Consapevolmente</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -658,6 +658,35 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
+        /* Gender Selection */
+        .gender-selection {
+            margin-bottom: 20px;
+        }
+
+        .gender-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .gender-option {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .gender-option.selected {
+            border-color: var(--primary);
+            background: rgba(94, 234, 212, 0.1);
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
         /* Toast Notification */
         .toast {
             position: fixed;
@@ -842,8 +871,7 @@
             display: flex;
             align-items: center;
             padding: 20px 0;
-            border-bottom: 1px solid #e2e8f0;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .profile-emoji {
@@ -867,6 +895,11 @@
             font-weight: 600;
             color: var(--primary-dark);
             margin-bottom: 5px;
+        }
+
+        .profile-welcome {
+            color: var(--text-light);
+            font-size: 1rem;
         }
 
         .profile-item {
@@ -921,6 +954,19 @@
                 padding: 15px 0;
             }
         }
+
+        /* Mobile adjustments for reminder items */
+        @media (max-width: 768px) {
+            .reminder-item {
+                min-height: auto; /* Rimuove l'altezza minima fissa */
+                padding: 12px; /* Riduci il padding */
+            }
+
+            .reminder-controls {
+                grid-template-columns: 1fr; /* Cambia a una colonna su mobile */
+                gap: 8px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -928,12 +974,12 @@
         <!-- Home Section -->
         <section id="home" class="section active">
             <div class="header">
-                <h1>Bentornato!</h1>
+                <h1 id="welcome-header">Bentornato!</h1>
                 <p>Prenditi un momento per te oggi</p>
             </div>
 
             <div class="daily-card">
-                <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80" alt="Immagine del giorno">
+                <img src="images/logo-vivi-consapevolmente.png" alt="Logo Vivi Consapevolmente">
                 <div class="daily-card-overlay">
                     <h3>Pensiero del Giorno</h3>
                     <p>"La pace viene da dentro. Non cercarla fuori." - Buddha</p>
@@ -1104,13 +1150,13 @@
             </div>
         </section>
 
-        <!-- Profile Section (CORRETTA) -->
+        <!-- Profile Section -->
         <section id="profile" class="section">
             <div class="profile-header">
                 <div class="profile-emoji">😊</div>
                 <div class="profile-info">
                     <div class="profile-name">Marco Rossi</div>
-                    <p>Benvenuto nella tua area personale</p>
+                    <div class="profile-welcome">Benvenuto nella tua area personale</div>
                 </div>
             </div>
 
@@ -1245,7 +1291,7 @@
         </div>
     </div>
 
-    <!-- Profile Edit Modal -->
+    <!-- Profile Edit Modal con selezione genere -->
     <div class="profile-edit-modal" id="profile-edit-modal">
         <div class="profile-edit-container">
             <h2 class="profile-edit-title">Modifica Profilo</h2>
@@ -1253,6 +1299,15 @@
             <div>
                 <label>Nome</label>
                 <input type="text" class="profile-edit-input" id="profile-name-input" placeholder="Il tuo nome">
+            </div>
+
+            <div class="gender-selection">
+                <label>Genere</label>
+                <div class="gender-options">
+                    <div class="gender-option" data-gender="M">Maschile</div>
+                    <div class="gender-option" data-gender="F">Femminile</div>
+                    <div class="gender-option" data-gender="N">Neutro</div>
+                </div>
             </div>
 
             <div>
@@ -1305,7 +1360,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Funzione corretta per ottenere la data locale
+            // Funzione per ottenere la data locale
             function getLocalDateString(date = new Date()) {
                 const year = date.getFullYear();
                 const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -1316,23 +1371,13 @@
             // App state
             const state = {
                 currentMeditation: null,
-                moodEntries: {
-                    [getLocalDateString()]: [
-                        { mood: 'calmo', time: '07:30' },
-                        { mood: 'felice', time: '14:15' }
-                    ]
-                },
-                gratitudeEntries: {
-                    [getLocalDateString()]: [
-                        "Oggi sono grato per la mia famiglia",
-                        "Apprezzo il bel tempo di oggi",
-                        "Sono grato per la mia salute"
-                    ]
-                },
+                moodEntries: {},
+                gratitudeEntries: {},
                 meditationReviews: {},
-                timeWindows: [7, 14, 21], // 7am, 2pm, 9pm
+                timeWindows: [7, 14, 21],
                 profile: {
                     name: "Marco Rossi",
+                    gender: "M",
                     emoji: "😊"
                 },
                 userReviewed: {},
@@ -1382,21 +1427,119 @@
             const calendarMonth = document.getElementById('calendar-month');
             const prevMonthBtn = document.getElementById('prev-month-btn');
             const nextMonthBtn = document.getElementById('next-month-btn');
+            const genderOptions = document.querySelectorAll('.gender-option');
+            const welcomeHeader = document.getElementById('welcome-header');
 
-            // Initialize UI with profile data
-            document.querySelector('.profile-name').textContent = state.profile.name;
-            document.querySelector('.profile-emoji').textContent = state.profile.emoji;
+            // Carica dati salvati da localStorage
+            function loadSavedData() {
+                const savedProfile = localStorage.getItem('userProfile');
+                if (savedProfile) {
+                    state.profile = JSON.parse(savedProfile);
+                }
 
-            // Initialize reminder settings
-            document.querySelectorAll('.reminder-interval').forEach(input => {
-                const type = input.dataset.type;
-                input.value = state.reminders[type].interval;
-            });
+                const savedMoodEntries = localStorage.getItem('moodEntries');
+                if (savedMoodEntries) {
+                    state.moodEntries = JSON.parse(savedMoodEntries);
+                }
 
-            document.querySelectorAll('.reminder-sound').forEach(select => {
-                const type = select.dataset.type;
-                select.value = state.reminders[type].sound;
-            });
+                const savedGratitudeEntries = localStorage.getItem('gratitudeEntries');
+                if (savedGratitudeEntries) {
+                    state.gratitudeEntries = JSON.parse(savedGratitudeEntries);
+                }
+
+                const savedMeditationReviews = localStorage.getItem('meditationReviews');
+                if (savedMeditationReviews) {
+                    state.meditationReviews = JSON.parse(savedMeditationReviews);
+                }
+            }
+
+            // Salva dati in localStorage
+            function saveData() {
+                localStorage.setItem('userProfile', JSON.stringify(state.profile));
+                localStorage.setItem('moodEntries', JSON.stringify(state.moodEntries));
+                localStorage.setItem('gratitudeEntries', JSON.stringify(state.gratitudeEntries));
+                localStorage.setItem('meditationReviews', JSON.stringify(state.meditationReviews));
+            }
+
+            // Simulazione salvataggio recensioni sul server
+            function saveReviewToServer(meditationId, rating) {
+                // Simuliamo una chiamata AJAX al server
+                showToast("Recensione salvata sul server...");
+
+                setTimeout(() => {
+                    // In un'applicazione reale, qui verrebbe fatto un fetch() al server
+                    showToast("Recensione pubblicata con successo! ✅");
+                }, 1500);
+            }
+
+            // Funzione per aggiornare il messaggio di benvenuto in base al genere
+            function updateWelcomeMessage() {
+                let welcomeText = "";
+
+                switch(state.profile.gender) {
+                    case "M":
+                        welcomeText = "Bentornato!";
+                        break;
+                    case "F":
+                        welcomeText = "Bentornata!";
+                        break;
+                    case "N":
+                        welcomeText = "Bentornatə!";
+                        break;
+                    default:
+                        welcomeText = "Bentornato/a!";
+                }
+
+                welcomeHeader.textContent = welcomeText;
+
+                const welcomeElement = document.querySelector('.profile-welcome');
+                let welcomeProfileText = "";
+
+                switch(state.profile.gender) {
+                    case "M":
+                        welcomeProfileText = "Benvenuto nella tua area personale";
+                        break;
+                    case "F":
+                        welcomeProfileText = "Benvenuta nella tua area personale";
+                        break;
+                    case "N":
+                        welcomeProfileText = "Benvenutə nella tua area personale";
+                        break;
+                    default:
+                        welcomeProfileText = "Benvenuto/a nella tua area personale";
+                }
+
+                if (welcomeElement) {
+                    welcomeElement.textContent = welcomeProfileText;
+                }
+            }
+
+            // Initialize UI
+            function initUI() {
+                document.querySelector('.profile-name').textContent = state.profile.name;
+                document.querySelector('.profile-emoji').textContent = state.profile.emoji;
+                updateWelcomeMessage();
+
+                // Initialize reminder settings
+                document.querySelectorAll('.reminder-interval').forEach(input => {
+                    const type = input.dataset.type;
+                    input.value = state.reminders[type].interval;
+                });
+
+                document.querySelectorAll('.reminder-sound').forEach(select => {
+                    const type = select.dataset.type;
+                    select.value = state.reminders[type].sound;
+                });
+
+                // Aggiorna le valutazioni delle meditazioni
+                for (const meditationId in state.meditationReviews) {
+                    updateMeditationRating(meditationId);
+                }
+            }
+
+            // Carica i dati salvati e inizializza l'UI
+            loadSavedData();
+            initUI();
 
             // Navigation
             navItems.forEach(item => {
@@ -1418,14 +1561,13 @@
                 });
             });
 
-            // Mood tracking (CON DATA CORRETTA)
+            // Mood tracking
             moodButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const mood = this.dataset.mood;
                     const now = new Date();
                     const timeString = now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
 
-                    // Usa la funzione corretta per la data locale
                     const today = getLocalDateString();
 
                     if (!state.moodEntries[today]) {
@@ -1435,6 +1577,9 @@
 
                     showToast(`Umore registrato: ${getMoodName(mood)} ${getMoodEmoji(mood)}`);
                     moodButtons.forEach(btn => btn.disabled = true);
+
+                    // Salva i dati
+                    saveData();
                 });
             });
 
@@ -1510,7 +1655,7 @@
                     return;
                 }
 
-                // Save review
+                // Save review locally
                 if (!state.meditationReviews[state.currentMeditation]) {
                     state.meditationReviews[state.currentMeditation] = [];
                 }
@@ -1523,7 +1668,11 @@
                 // Hide review section
                 playerReviewSection.style.display = 'none';
 
-                showToast("Grazie per la tua recensione!");
+                // Save data locally
+                saveData();
+
+                // Save to server
+                saveReviewToServer(state.currentMeditation, selectedRating);
             });
 
             // Close player
@@ -1567,6 +1716,14 @@
                     }
                 });
 
+                // Highlight current gender
+                document.querySelectorAll('.gender-option').forEach(option => {
+                    option.classList.remove('selected');
+                    if (option.dataset.gender === state.profile.gender) {
+                        option.classList.add('selected');
+                    }
+                });
+
                 profileEditModal.classList.add('active');
             });
 
@@ -1580,10 +1737,21 @@
                 });
             });
 
+            // Gender selection
+            genderOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.gender-option').forEach(opt =>
+                        opt.classList.remove('selected')
+                    );
+                    this.classList.add('selected');
+                });
+            });
+
             // Save profile
             document.getElementById('profile-edit-save').addEventListener('click', function() {
                 const newName = document.getElementById('profile-name-input').value.trim();
                 const selectedEmoji = document.querySelector('.emoji-option.selected');
+                const selectedGender = document.querySelector('.gender-option.selected');
 
                 if (!newName) {
                     showToast("Per favore inserisci un nome");
@@ -1595,12 +1763,22 @@
                     return;
                 }
 
+                if (!selectedGender) {
+                    showToast("Seleziona un genere");
+                    return;
+                }
+
                 state.profile.name = newName;
+                state.profile.gender = selectedGender.dataset.gender;
                 state.profile.emoji = selectedEmoji.dataset.emoji;
 
                 // Update UI
                 document.querySelector('.profile-name').textContent = newName;
                 document.querySelector('.profile-emoji').textContent = selectedEmoji.dataset.emoji;
+                updateWelcomeMessage();
+
+                // Salva i dati
+                saveData();
 
                 profileEditModal.classList.remove('active');
                 showToast("Profilo aggiornato con successo!");
@@ -1611,10 +1789,9 @@
                 profileEditModal.classList.remove('active');
             });
 
-            // Gratitude form (CON DATA CORRETTA)
+            // Gratitude form
             document.querySelector('.gratitude-form').addEventListener('submit', function(e) {
                 e.preventDefault();
-                // Usa la funzione corretta per la data locale
                 const today = getLocalDateString();
 
                 const inputs = this.querySelectorAll('.gratitude-input');
@@ -1623,6 +1800,9 @@
                 state.gratitudeEntries[today] = entries;
                 showToast("Diario della gratitudine salvato!");
                 this.reset();
+
+                // Salva i dati
+                saveData();
             });
 
             // Save reminder settings
@@ -1716,21 +1896,28 @@
                 }, 3000);
 
                 // Show system notification only for reminders
-                if (isReminder && Notification.permission === "granted") {
+                if (isReminder) {
                     showSystemNotification(message);
                 }
             }
 
             function showSystemNotification(message) {
-                const options = {
-                    body: message,
-                    icon: 'https://cdn-icons-png.flaticon.com/512/1998/1998662.png'
-                };
-                new Notification("Vivi Consapevole", options);
+                // Verifica se siamo su un dispositivo mobile
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+                if (!isMobile && Notification.permission === "granted") {
+                    // Notifiche desktop
+                    new Notification("Vivi Consapevolmente", {
+                        body: message,
+                        icon: 'https://cdn-icons-png.flaticon.com/512/1998/1998662.png'
+                    });
+                } else if (isMobile) {
+                    // Notifiche mobile alternative (alert per ora)
+                    alert(`Notifica: ${message}`);
+                }
             }
 
             function updateHistoryDisplay(date) {
-                // Usa la funzione corretta per la data locale
                 const selectedDate = getLocalDateString(date);
 
                 const moodEntries = state.moodEntries[selectedDate] || [];
@@ -1825,7 +2012,7 @@
                     calendarContainer.appendChild(empty);
                 }
 
-                // Add days (CON DATE CORRETTE)
+                // Add days
                 for (let i = 1; i <= lastDay.getDate(); i++) {
                     const day = new Date(
                         state.currentCalendarDate.getFullYear(),
@@ -1833,7 +2020,6 @@
                         i
                     );
 
-                    // Usa la funzione corretta per la data locale
                     const dayString = getLocalDateString(day);
 
                     const dayElement = document.createElement('div');
@@ -1844,7 +2030,7 @@
                         dayElement.classList.add('has-data');
                     }
 
-                    // Highlight today (CON DATA CORRETTA)
+                    // Highlight today
                     const today = new Date();
                     if (day.getDate() === today.getDate() &&
                         day.getMonth() === today.getMonth() &&
@@ -1859,7 +2045,7 @@
                     calendarContainer.appendChild(dayElement);
                 }
 
-                // Aggiorna lo storico con la data corretta
+                // Update history for today by default
                 updateHistoryDisplay(new Date());
             }
 
