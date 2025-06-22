@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vivi Consapevole</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #4a4a4a; -webkit-tap-highlight-color: transparent; }
+        .section { display: none; }
+        .section.active { display: block; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-button.active { color: #0d9488; background-color: #ccfbf1; }
+        .glassmorphism-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid rgba(200, 200, 200, 0.2); }
+        .mood-btn:disabled { filter: grayscale(80%); opacity: 0.5; transform: scale(1); cursor: not-allowed; }
+        .modal { display: none; }
+        .modal.active { display: flex; }
+        /* Fix per la pagina dello storico */
+        #history-modal.modal.active {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fdfaf6; /* Sfondo solido */
+        }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #0d9488; }
+        input:checked + .slider:before { transform: translateX(20px); }
+        /* Fix per il layout shift */
+        #meditations-list, #mood-history {
+            min-height: 12rem; /* Altezza minima per evitare salti */
+        }
+    </style>
+</head>
+<body class="text-stone-800">
+
+    <div id="app-container" class="max-w-4xl mx-auto md:p-4">
+        <!-- Aggiunto padding-bottom per evitare che il contenuto finisca sotto la nav-bar fissa -->
+        <main id="main-content" class="pb-24 md:pb-4">
+            <!-- Le sezioni verranno popolate da JS -->
+            <section id="home" class="section active p-4 md:p-6"></section>
+            <section id="meditations" class="section p-4 md:p-6"></section>
+            <section id="health" class="section p-4 md:p-6 space-y-6"></section>
+            <section id="profile" class="section p-4 md:p-6"></section>
+        </main>
+
+        <!-- BARRA DI NAVIGAZIONE -->
+        <nav class="fixed bottom-0 left-0 right-0 glassmorphism-nav z-40">
+            <div class="max-w-4xl mx-auto flex justify-around md:justify-center md:space-x-8 p-2">
+                <button data-target="home" class="nav-button active flex flex-col items-center justify-center text-stone-500 hover:text-teal-600 p-2 rounded-lg transition-colors w-16"><i class="ph-house text-2xl"></i><span class="text-xs font-medium">Home</span></button>
+                <button data-target="meditations" class="nav-button flex flex-col items-center justify-center text-stone-500 hover:text-teal-600 p-2 rounded-lg transition-colors w-16"><i class="ph-leaf text-2xl"></i><span class="text-xs font-medium">Meditazioni</span></button>
+                <button data-target="health" class="nav-button flex flex-col items-center justify-center text-stone-500 hover:text-teal-600 p-2 rounded-lg transition-colors w-16"><i class="ph-heartbeat text-2xl"></i><span class="text-xs font-medium">Salute</span></button>
+                <button data-target="profile" class="nav-button flex flex-col items-center justify-center text-stone-500 hover:text-teal-600 p-2 rounded-lg transition-colors w-16"><i class="ph-user text-2xl"></i><span class="text-xs font-medium">Profilo</span></button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- MODALI -->
+    <div id="meditation-player-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50"></div>
+    <div id="review-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50"></div>
+    <div id="weekly-congrats-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50"></div>
+
+    <!-- Pagina Storico (corretta) -->
+    <div id="history-modal" class="modal fixed inset-0 bg-fdfaf6 z-50 overflow-y-auto"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="fixed bottom-24 md:bottom-10 right-10 bg-stone-800 text-white px-4 py-2 rounded-lg shadow-lg opacity-0 transition-opacity duration-300 z-[60]"></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- CONFIG & STATE ---
+        const AppState = { audio: { synth: null, isPlaying: false } };
+        const moodEmojis = { felice: '😄', calmo: '😊', neutro: '😐', triste: '😔', stressato: '😩' };
+        const moodScores = { stressato: 1, triste: 2, neutro: 3, calmo: 4, felice: 5 };
+        const MOOD_WINDOWS = { 7: "del mattino", 14: "del pomeriggio", 21: "della sera" };
+
+        // --- TEMPLATES HTML ---
+        const TEMPLATES = {
+            'home': `<div class="text-center mb-6"><h1 class="text-3xl font-bold text-stone-900">Bentornato!</h1><p class="text-stone-600">Prenditi un momento per te.</p></div><div class="mb-6 rounded-2xl overflow-hidden shadow-lg"><img id="daily-image" src="https://source.unsplash.com/800x400/?nature,calm,sky&sig=${new Date().getDate()}" alt="Immagine del giorno" class="w-full h-48 md:h-64 object-cover"></div><div class="bg-white p-6 rounded-2xl shadow-md"><h2 class="text-lg font-semibold mb-2 text-stone-800">Pensiero del Giorno ✨</h2><blockquote class="text-center"><p id="daily-quote" class="text-stone-600 italic">"La pace viene da dentro. Non cercarla fuori."</p><footer id="quote-author" class="mt-2 text-sm text-stone-500">- Buddha</footer></blockquote></div>`,
+            'meditations': `<div class="text-center mb-6"><h1 class="text-3xl font-bold text-stone-900">Meditazioni 🧘</h1><p class="text-stone-600">Trova la tua pace interiore.</p></div><div id="meditations-list" class="space-y-4"></div>`,
+            'health': `<div class="text-center"><h1 class="text-3xl font-bold text-stone-900">Monitor Salute ❤️</h1><p class="text-stone-600">Tieni traccia del tuo benessere.</p></div><div class="bg-white p-6 rounded-2xl shadow-md"><h2 class="text-lg font-semibold mb-2 text-stone-800">Check-in Umore</h2><p id="mood-window-status" class="text-sm text-center text-teal-600 mb-4">Controllo...</p><div id="mood-tracker" class="flex justify-around items-center"><button data-mood="felice" class="mood-btn text-5xl transform hover:scale-110 transition-transform">😄</button><button data-mood="calmo" class="mood-btn text-5xl transform hover:scale-110 transition-transform">😊</button><button data-mood="neutro" class="mood-btn text-5xl transform hover:scale-110 transition-transform">😐</button><button data-mood="triste" class="mood-btn text-5xl transform hover:scale-110 transition-transform">😔</button><button data-mood="stressato" class="mood-btn text-5xl transform hover:scale-110 transition-transform">😩</button></div></div><div class="bg-white p-6 rounded-2xl shadow-md"><h2 class="text-lg font-semibold mb-4 text-stone-800">Umore di Oggi</h2><div id="mood-history" class="space-y-2"><p class="text-stone-500">Nessun dato registrato.</p></div></div><div class="bg-white p-6 rounded-2xl shadow-md"><h2 class="text-lg font-semibold text-stone-800 mb-3">Diario della Gratitudine 🙏</h2><form id="gratitude-form" class="space-y-3"><input type="text" name="gratitude-1" placeholder="1. Oggi sono grato/a per..." required class="gratitude-input w-full border border-stone-300 rounded-lg p-2"><input type="text" name="gratitude-2" placeholder="2. ..." required class="gratitude-input w-full border border-stone-300 rounded-lg p-2"><input type="text" name="gratitude-3" placeholder="3. ..." required class="gratitude-input w-full border border-stone-300 rounded-lg p-2"><button type="submit" class="w-full mt-2 px-4 py-2 bg-teal-500 text-white rounded-lg font-semibold hover:bg-teal-600">Salva le note di oggi</button></form></div><div class="bg-white p-6 rounded-2xl shadow-md space-y-6"><h2 class="text-lg font-semibold text-stone-800">Promemoria Benessere</h2><div class="reminder-control" data-reminder="drink"><div class="flex justify-between items-center"><h3 class="font-semibold text-stone-700">💧 Promemoria Bevi Acqua</h3><label class="switch"><input type="checkbox" class="reminder-toggle"><span class="slider"></span></label></div><div class="reminder-settings hidden mt-4 space-y-2"><div class="flex space-x-2"><input type="time" class="start-time w-full border p-1 rounded" value="09:00"><input type="time" class="end-time w-full border p-1 rounded" value="18:00"></div><div class="flex items-center space-x-2"><label class="text-sm">Ogni</label><input type="number" class="frequency w-20 border p-1 rounded" value="60"><label class="text-sm">minuti</label></div></div></div><div class="reminder-control" data-reminder="posture"><div class="flex justify-between items-center"><h3 class="font-semibold text-stone-700">🧘 Promemoria Postura</h3><label class="switch"><input type="checkbox" class="reminder-toggle"><span class="slider"></span></label></div><div class="reminder-settings hidden mt-4 space-y-2"><div class="flex space-x-2"><input type="time" class="start-time w-full border p-1 rounded" value="09:00"><input type="time" class="end-time w-full border p-1 rounded" value="17:00"></div><div class="flex items-center space-x-2"><label class="text-sm">Ogni</label><input type="number" class="frequency w-20 border p-1 rounded" value="45"><label class="text-sm">minuti</label></div></div></div><div class="reminder-control" data-reminder="breathe"><div class="flex justify-between items-center"><h3 class="font-semibold text-stone-700">🌬️ Promemoria Respiro</h3><label class="switch"><input type="checkbox" class="reminder-toggle"><span class="slider"></span></label></div><div class="reminder-settings hidden mt-4 space-y-2"><div class="flex space-x-2"><input type="time" class="start-time w-full border p-1 rounded" value="10:00"><input type="time" class="end-time w-full border p-1 rounded" value="20:00"></div><div class="flex items-center space-x-2"><label class="text-sm">Ogni</label><input type="number" class="frequency w-20 border p-1 rounded" value="90"><label class="text-sm">minuti</label></div></div></div></div>`,
+            'profile': `<div class="text-center mb-6"><h1 class="text-3xl font-bold text-stone-900">Profilo 👤</h1><p class="text-stone-600">I tuoi progressi e impostazioni.</p></div><div class="bg-white p-6 rounded-2xl shadow-md space-y-4"><button id="history-btn" class="w-full text-left flex items-center p-4 rounded-lg hover:bg-stone-100 transition-colors"><i class="ph-chart-line-up text-2xl mr-4 text-teal-500"></i><span class="font-semibold">Storico e Progressi</span></button><hr><h3 class="font-semibold text-center text-stone-500 text-sm pt-2">Diventa Premium</h3><button id="google-login-btn" class="w-full text-left flex items-center p-4 rounded-lg hover:bg-stone-100 transition-colors"><i class="ph-google-logo text-2xl mr-4 text-red-500"></i><span class="font-semibold">1. Accedi con Google</span></button><button id="patreon-unlock-btn" class="w-full text-left flex items-center p-4 rounded-lg hover:bg-stone-100 transition-colors"><i class="ph-patreon-logo text-2xl mr-4 text-orange-500"></i><span class="font-semibold">2. Sblocca Premium con Patreon</span></button></div>`,
+            'meditation-player-modal': `<div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl text-center"><h3 id="player-title" class="text-xl font-bold mb-2"></h3><p id="player-description" class="text-stone-600 mb-6"></p><div class="flex items-center justify-center space-x-4"><button id="player-play-pause" class="bg-teal-500 text-white rounded-full w-16 h-16 flex items-center justify-center text-4xl"><i class="ph-play"></i></button></div><button id="player-close" class="mt-6 w-full px-4 py-2 bg-stone-200 rounded-lg font-semibold">Chiudi</button></div>`,
+            'review-modal': `<div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl"><h3 class="text-xl font-bold mb-4" id="review-modal-title">Lascia una recensione</h3><div id="review-stars" class="flex justify-center space-x-2 mb-4 text-4xl cursor-pointer"></div><div class="mt-4 flex justify-end space-x-2"><button id="cancel-review" class="px-4 py-2 bg-stone-200 rounded-lg font-semibold">Annulla</button><button id="submit-review" class="px-4 py-2 bg-teal-500 text-white rounded-lg font-semibold">Invia</button></div></div>`,
+            'history-modal': `<div class="bg-fdfaf6 w-full max-w-4xl min-h-screen p-4 md:p-6"><div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold">Storico</h2><button id="history-close" class="text-3xl font-light">&times;</button></div><div class="mb-4"><input type="date" id="history-date-picker" class="w-full p-2 border rounded-lg bg-white"></div><div id="history-content" class="space-y-6"></div></div>`,
+            'weekly-congrats-modal': `<div class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-xl text-center"><p class="text-5xl mb-4">🎉🥳</p><h2 class="text-2xl font-bold text-stone-800">Congratulazioni!</h2><p class="text-stone-600 mt-2 mb-6">È passata un'altra settimana di costanza e benessere. Siamo fieri di te!</p><button id="weekly-congrats-close" class="w-full px-4 py-2 bg-teal-500 text-white rounded-lg font-semibold">Continua</button></div>`
+        };
+
+        // --- UTILITY FUNCTIONS ---
+        const getToday = () => new Date().toISOString().split('T')[0];
+        const loadData = (key, defaultValue = {}) => {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : defaultValue;
+        };
+        const saveData = (key, data) => {
+            localStorage.setItem(key, JSON.stringify(data));
+        };
+
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            if(!toast) return;
+            toast.textContent = message;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => { toast.classList.add('opacity-0'); }, 3000);
+        }
+        function playSound(type) {
+            let synth;
+            if(!Tone) return; // Tone.js might not be loaded
+            switch(type) {
+                case 'drink':
+                    synth = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
+                    synth.triggerAttackRelease("C6", "16n", Tone.now());
+                    break;
+                case 'posture':
+                     synth = new Tone.Synth({ oscillator: { type: 'triangle' }, envelope: { attack: 0.01, decay: 0.5, sustain: 0.2, release: 0.5 } }).toDestination();
+                    synth.triggerAttackRelease("A5", "8n", Tone.now());
+                    break;
+                case 'breathe':
+                    synth = new Tone.PluckSynth().toDestination();
+                    synth.triggerAttackRelease("G4", "2n", Tone.now());
+                    break;
+                default:
+                     new Tone.MembraneSynth({octaves: 10, pitchDecay: 0.1}).toDestination().triggerAttackRelease("C2", "8n", Tone.now());
+            }
+        }
+
+        // --- NOTIFICATIONS ---
+        function requestNotificationPermission() {
+             if (!('Notification' in window)) { return; }
+            if (Notification.permission === 'default') {
+                showToast('Per favore, consenti le notifiche per i promemoria.');
+                Notification.requestPermission();
+            }
+        }
+        function showBrowserNotification(title, body) {
+            if (!('Notification' in window) || Notification.permission !== 'granted') {
+                return;
+            }
+            new Notification(title, { body: body, icon: 'https://img.icons8.com/fluency/48/lotus.png' });
+        }
+
+        // --- PAGE/SECTION RENDERING ---
+        function changeSection(targetId) {
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active', 'fade-in'));
+            const newSection = document.getElementById(targetId);
+            if(newSection) newSection.classList.add('active', 'fade-in');
+            document.querySelectorAll('.nav-button').forEach(b => b.classList.toggle('active', b.dataset.target === targetId));
+            window.scrollTo(0, 0);
+        }
+        function renderAllContent() {
+            Object.keys(TEMPLATES).forEach(key => {
+                const el = document.getElementById(key);
+                if (el) el.innerHTML = TEMPLATES[key];
+            });
+        }
+
+        // --- FEATURE SETUP ---
+        function setupHome() { /* Static content */ }
+        function renderMeditations() {
+             const list = document.getElementById('meditations-list');
+             if(!list) return;
+             list.innerHTML = '';
+             const globalReviews = loadData('globalMeditationReviews', {});
+             const userReviews = loadData('userMeditationReviews', {});
+
+             [{ id: 1, title: "Meditazione del Respiro", description: "10 min di calma."}, {id: 2, title: "Scansione Corporea", description: "Rilascia le tensioni."}].forEach(med => {
+                 const card = document.createElement('div');
+                 card.className = "bg-white p-5 rounded-2xl shadow-md";
+
+                 const allRatingsForMed = globalReviews[med.id] || [];
+                 const averageRating = allRatingsForMed.length > 0
+                    ? (allRatingsForMed.reduce((a, b) => a + b, 0) / allRatingsForMed.length).toFixed(1)
+                    : 'N/A';
+
+                 const userHasVoted = !!userReviews[med.id];
+
+                 const reviewButtonHtml = userHasVoted
+                    ? `<div class="text-right"><span class="text-sm font-semibold text-amber-600">★ ${averageRating}</span><p class="text-xs text-stone-500">(${allRatingsForMed.length} voti)</p></div>`
+                    : `<button data-id="${med.id}" class="review-btn bg-stone-200 text-stone-600 px-3 py-1 rounded-full font-semibold text-sm">Recensisci</button>`;
+
+                 card.innerHTML = `<div class="flex items-center space-x-4"><div class="flex-grow"><div class="play-btn cursor-pointer" data-id="${med.id}"><h3 class="font-bold text-stone-900">${med.title}</h3><p class="text-sm text-stone-500">${med.description}</p></div></div><div class="text-right">${reviewButtonHtml}</div></div>`;
+                 list.appendChild(card);
+             });
+        }
+        function setupMeditationPlayer() {
+            const playerModal = document.getElementById('meditation-player-modal');
+            document.getElementById('meditations-list')?.addEventListener('click', e => {
+                 const playBtn = e.target.closest('.play-btn');
+                 if (playBtn) {
+                     playerModal.querySelector('#player-title').textContent = "Meditazione";
+                     playerModal.classList.add('active');
+                 }
+             });
+            playerModal.querySelector('#player-close')?.addEventListener('click', () => playerModal.classList.remove('active'));
+        }
+        function setupReviews() {
+             const modal = document.getElementById('review-modal');
+             let currentMedId = null;
+             let currentRating = 0;
+             document.getElementById('meditations-list')?.addEventListener('click', e => {
+                 if (e.target.classList.contains('review-btn')) {
+                     currentMedId = e.target.dataset.id;
+                     modal.querySelector('#review-modal-title').textContent = `Recensisci la meditazione`;
+
+                     const starContainer = modal.querySelector('#review-stars');
+                     starContainer.innerHTML = '';
+                     for(let i = 1; i <= 5; i++) {
+                         starContainer.innerHTML += `<span class="star text-stone-300" data-value="${i}">★</span>`;
+                     }
+                     modal.classList.add('active');
+                 }
+             });
+             modal.addEventListener('click', e => {
+                if(e.target.classList.contains('star')) {
+                    currentRating = parseInt(e.target.dataset.value, 10);
+                    const stars = modal.querySelectorAll('.star');
+                    stars.forEach(star => {
+                        star.classList.toggle('text-amber-400', star.dataset.value <= currentRating);
+                        star.classList.toggle('text-stone-300', star.dataset.value > currentRating);
+                    });
+                }
+             });
+             document.getElementById('submit-review')?.addEventListener('click', () => {
+                if(currentRating === 0) {
+                    showToast("Per favore, seleziona un voto.");
+                    return;
+                }
+                // Save user's vote to prevent re-voting
+                let userReviews = loadData('userMeditationReviews');
+                userReviews[currentMedId] = currentRating;
+                saveData('userMeditationReviews', userReviews);
+
+                // Add to global list for average calculation
+                let globalReviews = loadData('globalMeditationReviews');
+                if(!globalReviews[currentMedId]) {
+                    globalReviews[currentMedId] = [];
+                }
+                globalReviews[currentMedId].push(currentRating);
+                saveData('globalMeditationReviews', globalReviews);
+
+                showToast("Grazie per la tua recensione!");
+                modal.classList.remove('active');
+                renderMeditations(); // Rerender to show the new average
+             });
+             document.getElementById('cancel-review')?.addEventListener('click', () => modal.classList.remove('active'));
+        }
+        function setupHealthMonitor() {
+            updateMoodHistory();
+            document.getElementById('mood-tracker')?.addEventListener('click', (e) => {
+                const moodBtn = e.target.closest('.mood-btn');
+                if(!moodBtn || moodBtn.disabled) return;
+
+                const mood = moodBtn.dataset.mood;
+                const now = new Date();
+                const hour = now.getHours();
+                let activeWindow = 0;
+                if (hour >= 6 && hour < 10) activeWindow = 7;
+                else if (hour >= 13 && hour < 17) activeWindow = 14;
+                else if (hour >= 20 && hour < 23) activeWindow = 21;
+
+                let moodData = loadData('moodHistory');
+                if (!moodData[getToday()]) moodData[getToday()] = [];
+
+                moodData[getToday()].push({ mood: mood, time: now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}), window: activeWindow });
+                saveData('moodHistory', moodData);
+
+                showToast("Umore registrato con successo!");
+                updateMoodHistory();
+                checkTimeAndSetState();
+            });
+        }
+        function checkTimeAndSetState() {
+            const now = new Date();
+            const hour = now.getHours();
+            const statusEl = document.getElementById('mood-window-status');
+            const moodButtons = document.querySelectorAll('.mood-btn');
+            if(!statusEl || moodButtons.length === 0) return;
+
+            let activeWindow = null;
+            if (hour >= 6 && hour < 10) activeWindow = 7;
+            else if (hour >= 13 && hour < 17) activeWindow = 14;
+            else if (hour >= 20 && hour < 23) activeWindow = 21;
+
+            const moodData = loadData('moodHistory');
+            const todaysMoods = moodData[getToday()] || [];
+            const isWindowRecorded = todaysMoods.some(entry => entry.window === activeWindow);
+
+            if (activeWindow && !isWindowRecorded) {
+                statusEl.textContent = `È ora per il tuo check-in ${MOOD_WINDOWS[activeWindow]}!`;
+                moodButtons.forEach(btn => btn.disabled = false);
+            } else {
+                moodButtons.forEach(btn => btn.disabled = true);
+                if (activeWindow && isWindowRecorded) statusEl.textContent = `Check-in ${MOOD_WINDOWS[activeWindow]} già effettuato.`;
+                else if (hour < 7) statusEl.textContent = "Il prossimo check-in è alle 7:00.";
+                else if (hour < 14) statusEl.textContent = "Il prossimo check-in è alle 14:00.";
+                else if (hour < 21) statusEl.textContent = "Il prossimo check-in è alle 21:00.";
+                else statusEl.textContent = "Check-in completati per oggi. A domani!";
+            }
+        }
+        function updateMoodHistory() {
+            const historyContainer = document.getElementById('mood-history');
+            if(!historyContainer) return;
+            const todaysMoods = loadData('moodHistory')[getToday()] || [];
+
+            if (todaysMoods.length > 0) {
+                historyContainer.innerHTML = '';
+                todaysMoods.forEach(entry => {
+                    const div = document.createElement('div');
+                    div.className = 'bg-stone-100 p-3 rounded-lg flex justify-between items-center';
+                    div.innerHTML = `<div><span class="text-2xl mr-3">${moodEmojis[entry.mood]}</span><span class="font-medium capitalize">${entry.mood}</span></div><span class="text-sm text-stone-500">${entry.time}</span>`;
+                    historyContainer.appendChild(div);
+                });
+            } else {
+                historyContainer.innerHTML = '<p class="text-stone-500">Nessun dato registrato per oggi.</p>';
+            }
+        }
+        function setupReminders() {
+             document.body.addEventListener('click', requestNotificationPermission, { once: true });
+             document.querySelectorAll('.reminder-control').forEach(control => {
+                const reminderKey = control.dataset.reminder;
+                const toggle = control.querySelector('.reminder-toggle');
+                toggle.addEventListener('change', () => {
+                    control.querySelector('.reminder-settings').classList.toggle('hidden', !toggle.checked);
+                    saveReminderSettings();
+                });
+                control.querySelectorAll('input').forEach(input => input.addEventListener('change', saveReminderSettings));
+
+                const settings = loadData('reminders')[reminderKey];
+                if(settings) {
+                    toggle.checked = settings.active;
+                    control.querySelector('.reminder-settings').classList.toggle('hidden', !settings.active);
+                    control.querySelector('.start-time').value = settings.startTime || '09:00';
+                    control.querySelector('.end-time').value = settings.endTime || '18:00';
+                    control.querySelector('.frequency').value = settings.frequency || 60;
+                }
+             });
+        }
+        function saveReminderSettings() {
+            let reminders = {};
+            document.querySelectorAll('.reminder-control').forEach(control => {
+                const key = control.dataset.reminder;
+                reminders[key] = {
+                    active: control.querySelector('.reminder-toggle').checked,
+                    startTime: control.querySelector('.start-time').value,
+                    endTime: control.querySelector('.end-time').value,
+                    frequency: parseInt(control.querySelector('.frequency').value, 10)
+                };
+            });
+            saveData('reminders', reminders);
+        }
+        function checkReminders() {
+            const now = new Date();
+            const currentTime = now.toTimeString().slice(0, 5);
+            const savedReminders = loadData('reminders');
+            let lastTriggers = loadData('lastReminderTrigger');
+
+            for (const key in savedReminders) {
+                const r = savedReminders[key];
+                if (!r || !r.active) continue;
+                const lastTriggered = lastTriggers[key] || 0;
+                if (currentTime >= r.startTime && currentTime <= r.endTime && (now.getTime() - lastTriggered > r.frequency * 60 * 1000)) {
+                    const messages = { drink: '💧 È ora di bere un sorso d\'acqua!', posture: '🧘 Controlla la tua postura!', breathe: '🌬️ Prenditi un minuto per respirare.' };
+                    showToast(messages[key]);
+                    showBrowserNotification('Vivi Consapevole', messages[key]);
+                    playSound(key);
+
+                    lastTriggers[key] = now.getTime();
+                    saveData('lastReminderTrigger', lastTriggers);
+                }
+            }
+        }
+        function setupGratitude() {
+            const form = document.getElementById('gratitude-form');
+            if(!form) return;
+            const inputs = form.querySelectorAll('.gratitude-input');
+            const savedGratitude = loadData('gratitudeHistory')[getToday()] || [];
+            if(savedGratitude.length > 0) {
+                inputs.forEach((input, index) => input.value = savedGratitude[index] || '');
+            }
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const entries = Array.from(inputs).map(input => input.value);
+                if (entries.some(entry => entry.trim() === '')) {
+                    showToast("Per favore, compila tutti e 3 i campi.");
+                    return;
+                }
+                let history = loadData('gratitudeHistory');
+                history[getToday()] = entries;
+                saveData('gratitudeHistory', history);
+                showToast('Diario della gratitudine salvato!');
+            });
+        }
+        function setupProfile() {
+            document.getElementById('history-btn')?.addEventListener('click', () => {
+                const historyModal = document.getElementById('history-modal');
+                historyModal.classList.add('active');
+                historyModal.querySelector('#history-date-picker').valueAsDate = new Date();
+                renderHistoryForDate(getToday());
+            });
+            document.getElementById('history-close')?.addEventListener('click', () => document.getElementById('history-modal').classList.remove('active'));
+            document.getElementById('history-date-picker')?.addEventListener('change', e => {
+                const date = new Date(e.target.value).toISOString().split('T')[0];
+                renderHistoryForDate(date);
+            });
+
+            document.getElementById('google-login-btn')?.addEventListener('click', () => showToast("Simulazione: Accesso con Google..."));
+            document.getElementById('patreon-unlock-btn')?.addEventListener('click', () => showToast("Simulazione: Verifica Patreon in corso..."));
+        }
+        function renderHistoryForDate(date) {
+            const container = document.getElementById('history-content');
+            if(!container) return;
+
+            const moodHistory = loadData('moodHistory')[date] || [];
+            const gratitudeHistory = loadData('gratitudeHistory')[date] || [];
+
+            container.innerHTML = '';
+            if (moodHistory.length === 0 && gratitudeHistory.length === 0) {
+                container.innerHTML = `<p class="text-center text-stone-500">Nessun dato per questa giornata.</p>`;
+                return;
+            }
+
+            // Mood Bar
+            if (moodHistory.length > 0) {
+                const totalScore = moodHistory.reduce((sum, entry) => sum + moodScores[entry.mood], 0);
+                const avgScore = totalScore / moodHistory.length;
+                const percentage = (avgScore - 1) / 4 * 100;
+
+                const moodBarSection = document.createElement('div');
+                moodBarSection.innerHTML = `<h3 class="font-bold text-lg mb-2">Media Umore della Giornata</h3><div class="w-full bg-gradient-to-r from-red-500 via-yellow-400 to-green-500 rounded-full h-3 relative"><div class="absolute w-5 h-5 bg-white rounded-full shadow-md border-2 border-stone-400 -top-1" style="left: calc(${percentage}% - 10px);"></div></div>`;
+                container.appendChild(moodBarSection);
+            }
+
+            // Mood List
+            if(moodHistory.length > 0) {
+                const moodSection = document.createElement('div');
+                moodSection.innerHTML = `<h3 class="font-bold text-lg mb-2 mt-4">Umore registrato</h3>`;
+                moodHistory.forEach(entry => {
+                    const el = document.createElement('div');
+                    el.className = 'bg-white p-3 rounded-lg flex justify-between items-center text-sm';
+                    el.innerHTML = `<p>${moodEmojis[entry.mood]} <span class="capitalize font-medium">${entry.mood}</span></p><p class="text-stone-500">${entry.time}</p>`;
+                    moodSection.appendChild(el);
+                });
+                container.appendChild(moodSection);
+            }
+
+            // Gratitude List
+            if(gratitudeHistory.length > 0) {
+                 const gratitudeSection = document.createElement('div');
+                gratitudeSection.innerHTML = `<h3 class="font-bold text-lg mb-2 mt-4">Diario della Gratitudine</h3>`;
+                gratitudeHistory.forEach(entry => {
+                    const el = document.createElement('p');
+                    el.className = 'bg-white p-3 rounded-lg text-sm';
+                    el.textContent = entry;
+                    gratitudeSection.appendChild(el);
+                });
+                container.appendChild(gratitudeSection);
+            }
+        }
+        function checkWeeklyCongrats() {
+            const lastCongrats = new Date(loadData('lastWeeklyCongrats', '2000-01-01'));
+            const today = new Date();
+            const daysDiff = (today - lastCongrats) / (1000 * 60 * 60 * 24);
+            if (daysDiff >= 7) {
+                document.getElementById('weekly-congrats-modal').classList.add('active');
+                saveData('lastWeeklyCongrats', getToday());
+            }
+            const closeBtn = document.getElementById('weekly-congrats-close');
+            if(closeBtn) {
+                 closeBtn.addEventListener('click', () => document.getElementById('weekly-congrats-modal').classList.remove('active'));
+            }
+        }
+
+        // --- APP INITIALIZATION ---
+        function initializeApp() {
+            renderAllContent();
+
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.addEventListener('click', () => changeSection(button.dataset.target));
+            });
+
+            // Setup per ogni sezione
+            setupHome();
+            renderMeditations();
+            setupMeditationPlayer();
+            setupReviews();
+            setupHealthMonitor();
+            setupGratitude();
+            setupReminders();
+            setupProfile();
+
+            // Controlli periodici e iniziali
+            checkTimeAndSetState();
+            checkWeeklyCongrats();
+            setInterval(checkTimeAndSetState, 30000);
+            setInterval(checkReminders, 60000);
+
+            changeSection('home');
+        }
+
+        initializeApp();
+    });
+    </script>
+</body>
+</html>
