@@ -4,513 +4,1935 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vivi Consapevole</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #4a4a4a; -webkit-tap-highlight-color: transparent; }
-        .section { display: none; }
-        .section.active { display: block; }
-        .fade-in { animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .nav-button.active { color: #0d9488; background-color: #ccfbf1; }
-        .glassmorphism-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid rgba(200, 200, 200, 0.2); }
-        .mood-btn:disabled { filter: grayscale(80%); opacity: 0.5; transform: scale(1); cursor: not-allowed; }
-        .modal { display: none; }
-        .modal.active { display: flex; }
-        /* Fix per la pagina dello storico */
-        #history-modal.modal.active {
+        :root {
+            --primary: #0d9488;
+            --primary-light: #5eead4;
+            --primary-dark: #115e59;
+            --background: #f0fdfa;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --text-light: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 100px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            width: 100%;
+            padding: 0 15px;
+            margin: 0 auto;
+        }
+
+        /* Sezioni */
+        .section {
+            display: none;
+            padding: 20px 15px 120px;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-top: 15px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Daily Card */
+        .daily-card {
+            position: relative;
+            height: 200px;
+            border-radius: 18px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .daily-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .daily-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            padding: 20px;
+            color: white;
+        }
+
+        .daily-card-overlay h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        /* Mood Tracker */
+        .mood-tracker {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+
+        .mood-btn {
+            background: none;
+            border: none;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px;
+            border-radius: 50%;
+        }
+
+        .mood-btn:hover {
+            transform: scale(1.15);
+            background: rgba(94, 234, 212, 0.2);
+        }
+
+        .mood-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .mood-status {
+            text-align: center;
+            padding: 8px;
+            border-radius: 12px;
+            background: rgba(94, 234, 212, 0.2);
+            color: var(--primary-dark);
+            font-size: 0.9rem;
+            margin: 10px 0;
+        }
+
+        /* Meditations */
+        .meditation-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .meditation-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .meditation-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .meditation-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(94, 234, 212, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-right: 15px;
+        }
+
+        .meditation-info {
+            flex: 1;
+        }
+
+        .meditation-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .meditation-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .meditation-rating {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--warning);
+        }
+
+        /* Meditation Player */
+        .player-modal {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #fdfaf6; /* Sfondo solido */
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
         }
-        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: #0d9488; }
-        input:checked + .slider:before { transform: translateX(20px); }
-        /* Fix per il layout shift */
-        #meditations-list, #mood-history {
-            min-height: 12rem; /* Altezza minima per evitare salti */
+
+        .player-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .player-container {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .player-header {
+            padding: 20px;
+            text-align: center;
+            background: var(--primary);
+            color: white;
+        }
+
+        .player-body {
+            padding: 25px 20px;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .player-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .player-btn:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .player-close {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #f1f5f9;
+            color: var(--text);
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .player-close:hover {
+            background: #e2e8f0;
+        }
+
+        .player-review-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .player-review-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .player-review-stars {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .player-review-star {
+            font-size: 1.8rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .player-review-star.active, .player-review-star:hover {
+            color: var(--warning);
+        }
+
+        .player-review-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .player-review-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* History Modal */
+        .history-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .history-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .history-container {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            padding: 25px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .history-title {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        .history-close {
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .history-close:hover {
+            background: #f1f5f9;
+            color: var(--text);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .mood-bar-container {
+            margin: 20px 0;
+        }
+
+        .mood-bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .mood-bar {
+            height: 20px;
+            width: 100%;
+            background: linear-gradient(to right, #ef4444, #f59e0b, #10b981);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .mood-bar-indicator {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background: white;
+            border-radius: 3px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .history-section {
+            margin-bottom: 30px;
+        }
+
+        .history-section-title {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        /* Calendar */
+        .calendar-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .calendar-nav-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .calendar-nav-btn:hover {
+            background: rgba(94, 234, 212, 0.2);
+        }
+
+        .calendar-month {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .calendar-container {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-header {
+            text-align: center;
+            font-weight: 600;
+            padding: 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 10px 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-day:hover {
+            background: rgba(94, 234, 212, 0.2);
+        }
+
+        .calendar-day.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .calendar-day.has-data {
+            position: relative;
+        }
+
+        .calendar-day.has-data::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 5px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* Profile Edit Modal */
+        .profile-edit-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .profile-edit-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .profile-edit-container {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            padding: 25px;
+        }
+
+        .profile-edit-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+        }
+
+        .emoji-picker {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .emoji-option {
+            font-size: 2rem;
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .emoji-option:hover, .emoji-option.selected {
+            background: rgba(94, 234, 212, 0.2);
+            transform: scale(1.1);
+        }
+
+        .profile-edit-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            background: #f8fafc;
+            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .profile-edit-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .profile-edit-buttons button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-edit-cancel {
+            background: #f1f5f9;
+            color: var(--text);
+        }
+
+        .profile-edit-cancel:hover {
+            background: #e2e8f0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-edit-save {
+            background: var(--primary);
+            color: white;
+        }
+
+        .profile-edit-save:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 120px;
+            right: 15px;
+            background: var(--primary-dark);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            max-width: 300px;
+            font-size: 0.95rem;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+            z-index: 100;
+            display: flex;
+            padding: 12px 0;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 0;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        /* Reminder Settings */
+        .reminder-settings {
+            display: grid;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .reminder-item {
+            background: rgba(94, 234, 212, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(13, 148, 136, 0.2);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .reminder-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .reminder-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .reminder-control {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reminder-control label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .reminder-control select,
+        .reminder-control input {
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%230d9488' viewBox='0 0 16 16'%3E%3Cpath d='M8 11.5a.5.5 0 0 1-.354-.854l3.646-3.646a.5.5 0 0 1 .708.708L8.707 11.5a.5.5 0 0 1-.707 0z'/%3E%3Cpath d='M8 4.5a.5.5 0 0 1 .354.854l-3.646 3.646a.5.5 0 0 1-.708-.708L7.293 4.5a.5.5 0 0 1 .707 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+        }
+
+        .reminder-control input {
+            background-image: none;
+        }
+
+        .save-reminders {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 500;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .save-reminders:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Gratitude Diary */
+        .gratitude-form {
+            display: grid;
+            gap: 12px;
+        }
+
+        .gratitude-input {
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .gratitude-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(94, 234, 212, 0.3);
+        }
+
+        .gratitude-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+            font-size: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .gratitude-btn:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Profile Section Styles */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .profile-emoji {
+            font-size: 3rem;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(94, 234, 212, 0.2);
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .profile-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .profile-item:hover {
+            background: rgba(94, 234, 212, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .profile-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(94, 234, 212, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-right: 15px;
+        }
+
+        .profile-text {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 750px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .daily-card {
+                height: 250px;
+            }
+
+            .nav-bar {
+                padding: 15px 0;
+            }
         }
     </style>
 </head>
-<body class="text-stone-800">
-
-    <div id="app-container" class="max-w-4xl mx-auto md:p-4">
-        <!-- Aggiunto padding-bottom per evitare che il contenuto finisca sotto la nav-bar fissa -->
-        <main id="main-content" class="pb-24 md:pb-4">
-            <!-- Le sezioni verranno popolate da JS -->
-            <section id="home" class="section active p-4 md:p-6"></section>
-            <section id="meditations" class="section p-4 md:p-6"></section>
-            <section id="health" class="section p-4 md:p-6 space-y-6"></section>
-            <section id="profile" class="section p-4 md:p-6"></section>
-        </main>
-
-        <!-- BARRA DI NAVIGAZIONE -->
-        <nav class="fixed bottom-0 left-0 right-0 glassmorphism-nav z-40">
-            <div class="max-w-4xl mx-auto flex justify-around md:justify-center md:space-x-8 p-2">
-                <button data-target="home" class="nav-button active flex flex-col items-center justify-center text-stone-500 hover:text-teal-600 p-2 rounded-lg transition-colors w-16"><i class="ph-house text-2xl"></i><span class="text-xs font-medium">Home</span></button>
-                <button data-target="meditations" class="nav-button flex flex-col items-center justify-center text-stone-500 hover:text-teal-600 p-2 rounded-lg transition-colors w-16"><i class="ph-leaf text-2xl"></i><span class="text-xs font-medium">Meditazioni</span></button>
-                <button data-target="health" class="nav-button flex flex-col items-center justify-center text-stone-500 hover:text-teal-600 p-2 rounded-lg transition-colors w-16"><i class="ph-heartbeat text-2xl"></i><span class="text-xs font-medium">Salute</span></button>
-                <button data-target="profile" class="nav-button flex flex-col items-center justify-center text-stone-500 hover:text-teal-600 p-2 rounded-lg transition-colors w-16"><i class="ph-user text-2xl"></i><span class="text-xs font-medium">Profilo</span></button>
+<body>
+    <div class="container">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="header">
+                <h1>Bentornato!</h1>
+                <p>Prenditi un momento per te oggi</p>
             </div>
-        </nav>
+
+            <div class="daily-card">
+                <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80" alt="Immagine del giorno">
+                <div class="daily-card-overlay">
+                    <h3>Pensiero del Giorno</h3>
+                    <p>"La pace viene da dentro. Non cercarla fuori." - Buddha</p>
+                </div>
+            </div>
+
+            <!-- Daily inspiration card -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Consiglio del Giorno</span>
+                </div>
+                <p>Dedica almeno 5 minuti alla meditazione oggi. Trova un luogo tranquillo, siediti comodamente e concentrati sul tuo respiro.</p>
+            </div>
+        </section>
+
+        <!-- Meditations Section -->
+        <section id="meditations" class="section">
+            <div class="header">
+                <h1>Meditazioni Guidate</h1>
+                <p>Trova la tua pace interiore</p>
+            </div>
+
+            <div class="meditation-list">
+                <div class="meditation-item" data-id="1" data-title="Meditazione del Respiro">
+                    <div class="meditation-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div class="meditation-info">
+                        <div class="meditation-title">Meditazione del Respiro</div>
+                        <div class="meditation-desc">10 minuti di calma e concentrazione</div>
+                        <div class="meditation-rating" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="meditation-item" data-id="2" data-title="Scansione Corporea">
+                    <div class="meditation-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <div class="meditation-info">
+                        <div class="meditation-title">Scansione Corporea</div>
+                        <div class="meditation-desc">Rilascia le tensioni nel corpo</div>
+                        <div class="meditation-rating" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="meditation-item" data-id="3" data-title="Rilassamento Profondo">
+                    <div class="meditation-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="meditation-info">
+                        <div class="meditation-title">Rilassamento Profondo</div>
+                        <div class="meditation-desc">Per un sonno riposante</div>
+                        <div class="meditation-rating" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health Section -->
+        <section id="health" class="section">
+            <div class="header">
+                <h1>Monitor Salute</h1>
+                <p>Tieni traccia del tuo benessere</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>Check-in Umore</span>
+                </div>
+                <div class="mood-status">
+                    È ora per il tuo check-in del pomeriggio!
+                </div>
+                <div class="mood-tracker">
+                    <button class="mood-btn" data-mood="stressato">😩</button>
+                    <button class="mood-btn" data-mood="triste">😔</button>
+                    <button class="mood-btn" data-mood="neutro">😐</button>
+                    <button class="mood-btn" data-mood="calmo">😊</button>
+                    <button class="mood-btn" data-mood="felice">😄</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-book"></i>
+                    <span>Diario della Gratitudine</span>
+                </div>
+                <form class="gratitude-form">
+                    <input type="text" placeholder="1. Oggi sono grato/a per..." required class="gratitude-input">
+                    <input type="text" placeholder="2. Un'altra cosa che apprezzo..." required class="gratitude-input">
+                    <input type="text" placeholder="3. E infine sono grato/a per..." required class="gratitude-input">
+                    <button type="submit" class="gratitude-btn">Salva le note di oggi</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-bell"></i>
+                    <span>Promemoria Benessere</span>
+                </div>
+                <div class="reminder-settings">
+                    <div class="reminder-item">
+                        <div class="reminder-header">
+                            <i class="fas fa-wind"></i>
+                            <span>Respiro Consapevole</span>
+                        </div>
+                        <div class="reminder-controls">
+                            <div class="reminder-control">
+                                <label>Ogni (minuti)</label>
+                                <input type="number" min="1" value="60" class="reminder-interval" data-type="breathing">
+                            </div>
+                            <div class="reminder-control">
+                                <label>Suono</label>
+                                <select class="reminder-sound" data-type="breathing">
+                                    <option value="sound1">Campane</option>
+                                    <option value="sound2">Natura</option>
+                                    <option value="sound3">Pianoforte</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reminder-item">
+                        <div class="reminder-header">
+                            <i class="fas fa-user"></i>
+                            <span>Controllo Postura</span>
+                        </div>
+                        <div class="reminder-controls">
+                            <div class="reminder-control">
+                                <label>Ogni (minuti)</label>
+                                <input type="number" min="1" value="45" class="reminder-interval" data-type="posture">
+                            </div>
+                            <div class="reminder-control">
+                                <label>Suono</label>
+                                <select class="reminder-sound" data-type="posture">
+                                    <option value="sound1">Campane</option>
+                                    <option value="sound2">Natura</option>
+                                    <option value="sound3">Pianoforte</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reminder-item">
+                        <div class="reminder-header">
+                            <i class="fas fa-tint"></i>
+                            <span>Bere Acqua</span>
+                        </div>
+                        <div class="reminder-controls">
+                            <div class="reminder-control">
+                                <label>Ogni (minuti)</label>
+                                <input type="number" min="1" value="30" class="reminder-interval" data-type="water">
+                            </div>
+                            <div class="reminder-control">
+                                <label>Suono</label>
+                                <select class="reminder-sound" data-type="water">
+                                    <option value="sound1">Campane</option>
+                                    <option value="sound2">Natura</option>
+                                    <option value="sound3">Pianoforte</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="save-reminders" id="save-reminders-btn">Salva Impostazioni</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section (CORRETTA) -->
+        <section id="profile" class="section">
+            <div class="profile-header">
+                <div class="profile-emoji">😊</div>
+                <div class="profile-info">
+                    <div class="profile-name">Marco Rossi</div>
+                    <p>Benvenuto nella tua area personale</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="profile-item" id="history-btn">
+                    <div class="profile-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="profile-text">Storico e Progressi</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-crown"></i>
+                    <span>Diventa Premium</span>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-icon">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="profile-text">Accedi con Google</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-icon">
+                        <i class="fab fa-patreon"></i>
+                    </div>
+                    <div class="profile-text">Sblocca Premium con Patreon</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="profile-item" id="edit-profile-btn">
+                    <div class="profile-icon">
+                        <i class="fas fa-user-edit"></i>
+                    </div>
+                    <div class="profile-text">Modifica profilo</div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <!-- MODALI -->
-    <div id="meditation-player-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50"></div>
-    <div id="review-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50"></div>
-    <div id="weekly-congrats-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50"></div>
+    <!-- Meditation Player Modal -->
+    <div class="player-modal" id="player-modal">
+        <div class="player-container">
+            <div class="player-header">
+                <h2 id="player-title">Meditazione del Respiro</h2>
+            </div>
+            <div class="player-body">
+                <p id="player-description" style="text-align: center; margin-bottom: 20px; color: var(--text-light);">
+                    10 minuti di calma e concentrazione
+                </p>
+                <div class="player-controls">
+                    <button class="player-btn" id="player-back">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="player-btn" id="player-play">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="player-btn" id="player-next">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                </div>
+                <audio id="meditation-audio" src="meditation1.mp3"></audio>
 
-    <!-- Pagina Storico (corretta) -->
-    <div id="history-modal" class="modal fixed inset-0 bg-fdfaf6 z-50 overflow-y-auto"></div>
+                <!-- Review Section in Player -->
+                <div class="player-review-section" id="player-review-section">
+                    <div class="player-review-title">Lascia una recensione</div>
+                    <div class="player-review-stars">
+                        <div class="player-review-star" data-value="1">★</div>
+                        <div class="player-review-star" data-value="2">★</div>
+                        <div class="player-review-star" data-value="3">★</div>
+                        <div class="player-review-star" data-value="4">★</div>
+                        <div class="player-review-star" data-value="5">★</div>
+                    </div>
+                    <button class="player-review-btn" id="player-review-btn">Invia Recensione</button>
+                </div>
+
+                <button class="player-close" id="player-close-btn">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="history-modal" id="history-modal">
+        <div class="history-container">
+            <div class="history-header">
+                <div class="history-title">Storico e Progressi</div>
+                <button class="history-close" id="history-close-btn">&times;</button>
+            </div>
+
+            <div class="calendar-navigation">
+                <button class="calendar-nav-btn" id="prev-month-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="calendar-month" id="calendar-month">Ottobre 2023</div>
+                <button class="calendar-nav-btn" id="next-month-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="calendar-container" id="calendar">
+                <!-- Calendar will be generated here -->
+            </div>
+
+            <div class="mood-bar-container">
+                <div class="mood-bar-label">
+                    <span>Basso</span>
+                    <span>Alto</span>
+                </div>
+                <div class="mood-bar">
+                    <div class="mood-bar-indicator" id="mood-indicator" style="left: 70%;"></div>
+                </div>
+                <p style="text-align: center; margin-top: 10px; color: var(--text-light);">
+                    Media umore giornaliera: <span id="mood-average">3.8</span>
+                </p>
+            </div>
+
+            <div class="history-section">
+                <div class="history-section-title">Umore Registrato</div>
+                <div class="card" id="mood-history-container">
+                    <!-- Mood history will be populated here -->
+                </div>
+            </div>
+
+            <div class="history-section">
+                <div class="history-section-title">Diario della Gratitudine</div>
+                <div class="card" id="gratitude-history-container">
+                    <!-- Gratitude entries will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div class="profile-edit-modal" id="profile-edit-modal">
+        <div class="profile-edit-container">
+            <h2 class="profile-edit-title">Modifica Profilo</h2>
+
+            <div>
+                <label>Nome</label>
+                <input type="text" class="profile-edit-input" id="profile-name-input" placeholder="Il tuo nome">
+            </div>
+
+            <div>
+                <label>Emoji</label>
+                <div class="emoji-picker">
+                    <div class="emoji-option" data-emoji="😊">😊</div>
+                    <div class="emoji-option" data-emoji="😄">😄</div>
+                    <div class="emoji-option" data-emoji="😎">😎</div>
+                    <div class="emoji-option" data-emoji="🧘">🧘</div>
+                    <div class="emoji-option" data-emoji="🌿">🌿</div>
+                    <div class="emoji-option" data-emoji="🌸">🌸</div>
+                    <div class="emoji-option" data-emoji="🐶">🐶</div>
+                    <div class="emoji-option" data-emoji="🦋">🦋</div>
+                    <div class="emoji-option" data-emoji="🌈">🌈</div>
+                    <div class="emoji-option" data-emoji="🌞">🌞</div>
+                    <div class="emoji-option" data-emoji="🌙">🌙</div>
+                    <div class="emoji-option" data-emoji="🍃">🍃</div>
+                </div>
+            </div>
+
+            <div class="profile-edit-buttons">
+                <button class="profile-edit-cancel" id="profile-edit-cancel">Annulla</button>
+                <button class="profile-edit-save" id="profile-edit-save">Salva</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Toast Notification -->
-    <div id="toast-notification" class="fixed bottom-24 md:bottom-10 right-10 bg-stone-800 text-white px-4 py-2 rounded-lg shadow-lg opacity-0 transition-opacity duration-300 z-[60]"></div>
+    <div class="toast" id="toast"></div>
+
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <a href="#" class="nav-item active" data-target="home">
+            <div class="nav-icon"><i class="fas fa-home"></i></div>
+            <div>Home</div>
+        </a>
+        <a href="#" class="nav-item" data-target="meditations">
+            <div class="nav-icon"><i class="fas fa-spa"></i></div>
+            <div>Meditazioni</div>
+        </a>
+        <a href="#" class="nav-item" data-target="health">
+            <div class="nav-icon"><i class="fas fa-heartbeat"></i></div>
+            <div>Salute</div>
+        </a>
+        <a href="#" class="nav-item" data-target="profile">
+            <div class="nav-icon"><i class="fas fa-user"></i></div>
+            <div>Profilo</div>
+        </a>
+    </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- CONFIG & STATE ---
-        const AppState = { audio: { synth: null, isPlaying: false } };
-        const moodEmojis = { felice: '😄', calmo: '😊', neutro: '😐', triste: '😔', stressato: '😩' };
-        const moodScores = { stressato: 1, triste: 2, neutro: 3, calmo: 4, felice: 5 };
-        const MOOD_WINDOWS = { 7: "del mattino", 14: "del pomeriggio", 21: "della sera" };
-
-        // --- TEMPLATES HTML ---
-        const TEMPLATES = {
-            'home': `<div class="text-center mb-6"><h1 class="text-3xl font-bold text-stone-900">Bentornato!</h1><p class="text-stone-600">Prenditi un momento per te.</p></div><div class="mb-6 rounded-2xl overflow-hidden shadow-lg"><img id="daily-image" src="https://source.unsplash.com/800x400/?nature,calm,sky&sig=${new Date().getDate()}" alt="Immagine del giorno" class="w-full h-48 md:h-64 object-cover"></div><div class="bg-white p-6 rounded-2xl shadow-md"><h2 class="text-lg font-semibold mb-2 text-stone-800">Pensiero del Giorno ✨</h2><blockquote class="text-center"><p id="daily-quote" class="text-stone-600 italic">"La pace viene da dentro. Non cercarla fuori."</p><footer id="quote-author" class="mt-2 text-sm text-stone-500">- Buddha</footer></blockquote></div>`,
-            'meditations': `<div class="text-center mb-6"><h1 class="text-3xl font-bold text-stone-900">Meditazioni 🧘</h1><p class="text-stone-600">Trova la tua pace interiore.</p></div><div id="meditations-list" class="space-y-4"></div>`,
-            'health': `<div class="text-center"><h1 class="text-3xl font-bold text-stone-900">Monitor Salute ❤️</h1><p class="text-stone-600">Tieni traccia del tuo benessere.</p></div><div class="bg-white p-6 rounded-2xl shadow-md"><h2 class="text-lg font-semibold mb-2 text-stone-800">Check-in Umore</h2><p id="mood-window-status" class="text-sm text-center text-teal-600 mb-4">Controllo...</p><div id="mood-tracker" class="flex justify-around items-center"><button data-mood="felice" class="mood-btn text-5xl transform hover:scale-110 transition-transform">😄</button><button data-mood="calmo" class="mood-btn text-5xl transform hover:scale-110 transition-transform">😊</button><button data-mood="neutro" class="mood-btn text-5xl transform hover:scale-110 transition-transform">😐</button><button data-mood="triste" class="mood-btn text-5xl transform hover:scale-110 transition-transform">😔</button><button data-mood="stressato" class="mood-btn text-5xl transform hover:scale-110 transition-transform">😩</button></div></div><div class="bg-white p-6 rounded-2xl shadow-md"><h2 class="text-lg font-semibold mb-4 text-stone-800">Umore di Oggi</h2><div id="mood-history" class="space-y-2"><p class="text-stone-500">Nessun dato registrato.</p></div></div><div class="bg-white p-6 rounded-2xl shadow-md"><h2 class="text-lg font-semibold text-stone-800 mb-3">Diario della Gratitudine 🙏</h2><form id="gratitude-form" class="space-y-3"><input type="text" name="gratitude-1" placeholder="1. Oggi sono grato/a per..." required class="gratitude-input w-full border border-stone-300 rounded-lg p-2"><input type="text" name="gratitude-2" placeholder="2. ..." required class="gratitude-input w-full border border-stone-300 rounded-lg p-2"><input type="text" name="gratitude-3" placeholder="3. ..." required class="gratitude-input w-full border border-stone-300 rounded-lg p-2"><button type="submit" class="w-full mt-2 px-4 py-2 bg-teal-500 text-white rounded-lg font-semibold hover:bg-teal-600">Salva le note di oggi</button></form></div><div class="bg-white p-6 rounded-2xl shadow-md space-y-6"><h2 class="text-lg font-semibold text-stone-800">Promemoria Benessere</h2><div class="reminder-control" data-reminder="drink"><div class="flex justify-between items-center"><h3 class="font-semibold text-stone-700">💧 Promemoria Bevi Acqua</h3><label class="switch"><input type="checkbox" class="reminder-toggle"><span class="slider"></span></label></div><div class="reminder-settings hidden mt-4 space-y-2"><div class="flex space-x-2"><input type="time" class="start-time w-full border p-1 rounded" value="09:00"><input type="time" class="end-time w-full border p-1 rounded" value="18:00"></div><div class="flex items-center space-x-2"><label class="text-sm">Ogni</label><input type="number" class="frequency w-20 border p-1 rounded" value="60"><label class="text-sm">minuti</label></div></div></div><div class="reminder-control" data-reminder="posture"><div class="flex justify-between items-center"><h3 class="font-semibold text-stone-700">🧘 Promemoria Postura</h3><label class="switch"><input type="checkbox" class="reminder-toggle"><span class="slider"></span></label></div><div class="reminder-settings hidden mt-4 space-y-2"><div class="flex space-x-2"><input type="time" class="start-time w-full border p-1 rounded" value="09:00"><input type="time" class="end-time w-full border p-1 rounded" value="17:00"></div><div class="flex items-center space-x-2"><label class="text-sm">Ogni</label><input type="number" class="frequency w-20 border p-1 rounded" value="45"><label class="text-sm">minuti</label></div></div></div><div class="reminder-control" data-reminder="breathe"><div class="flex justify-between items-center"><h3 class="font-semibold text-stone-700">🌬️ Promemoria Respiro</h3><label class="switch"><input type="checkbox" class="reminder-toggle"><span class="slider"></span></label></div><div class="reminder-settings hidden mt-4 space-y-2"><div class="flex space-x-2"><input type="time" class="start-time w-full border p-1 rounded" value="10:00"><input type="time" class="end-time w-full border p-1 rounded" value="20:00"></div><div class="flex items-center space-x-2"><label class="text-sm">Ogni</label><input type="number" class="frequency w-20 border p-1 rounded" value="90"><label class="text-sm">minuti</label></div></div></div></div>`,
-            'profile': `<div class="text-center mb-6"><h1 class="text-3xl font-bold text-stone-900">Profilo 👤</h1><p class="text-stone-600">I tuoi progressi e impostazioni.</p></div><div class="bg-white p-6 rounded-2xl shadow-md space-y-4"><button id="history-btn" class="w-full text-left flex items-center p-4 rounded-lg hover:bg-stone-100 transition-colors"><i class="ph-chart-line-up text-2xl mr-4 text-teal-500"></i><span class="font-semibold">Storico e Progressi</span></button><hr><h3 class="font-semibold text-center text-stone-500 text-sm pt-2">Diventa Premium</h3><button id="google-login-btn" class="w-full text-left flex items-center p-4 rounded-lg hover:bg-stone-100 transition-colors"><i class="ph-google-logo text-2xl mr-4 text-red-500"></i><span class="font-semibold">1. Accedi con Google</span></button><button id="patreon-unlock-btn" class="w-full text-left flex items-center p-4 rounded-lg hover:bg-stone-100 transition-colors"><i class="ph-patreon-logo text-2xl mr-4 text-orange-500"></i><span class="font-semibold">2. Sblocca Premium con Patreon</span></button></div>`,
-            'meditation-player-modal': `<div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl text-center"><h3 id="player-title" class="text-xl font-bold mb-2"></h3><p id="player-description" class="text-stone-600 mb-6"></p><div class="flex items-center justify-center space-x-4"><button id="player-play-pause" class="bg-teal-500 text-white rounded-full w-16 h-16 flex items-center justify-center text-4xl"><i class="ph-play"></i></button></div><button id="player-close" class="mt-6 w-full px-4 py-2 bg-stone-200 rounded-lg font-semibold">Chiudi</button></div>`,
-            'review-modal': `<div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl"><h3 class="text-xl font-bold mb-4" id="review-modal-title">Lascia una recensione</h3><div id="review-stars" class="flex justify-center space-x-2 mb-4 text-4xl cursor-pointer"></div><div class="mt-4 flex justify-end space-x-2"><button id="cancel-review" class="px-4 py-2 bg-stone-200 rounded-lg font-semibold">Annulla</button><button id="submit-review" class="px-4 py-2 bg-teal-500 text-white rounded-lg font-semibold">Invia</button></div></div>`,
-            'history-modal': `<div class="bg-fdfaf6 w-full max-w-4xl min-h-screen p-4 md:p-6"><div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold">Storico</h2><button id="history-close" class="text-3xl font-light">&times;</button></div><div class="mb-4"><input type="date" id="history-date-picker" class="w-full p-2 border rounded-lg bg-white"></div><div id="history-content" class="space-y-6"></div></div>`,
-            'weekly-congrats-modal': `<div class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-xl text-center"><p class="text-5xl mb-4">🎉🥳</p><h2 class="text-2xl font-bold text-stone-800">Congratulazioni!</h2><p class="text-stone-600 mt-2 mb-6">È passata un'altra settimana di costanza e benessere. Siamo fieri di te!</p><button id="weekly-congrats-close" class="w-full px-4 py-2 bg-teal-500 text-white rounded-lg font-semibold">Continua</button></div>`
-        };
-
-        // --- UTILITY FUNCTIONS ---
-        const getToday = () => new Date().toISOString().split('T')[0];
-        const loadData = (key, defaultValue = {}) => {
-            const data = localStorage.getItem(key);
-            return data ? JSON.parse(data) : defaultValue;
-        };
-        const saveData = (key, data) => {
-            localStorage.setItem(key, JSON.stringify(data));
-        };
-
-        function showToast(message) {
-            const toast = document.getElementById('toast-notification');
-            if(!toast) return;
-            toast.textContent = message;
-            toast.classList.remove('opacity-0');
-            setTimeout(() => { toast.classList.add('opacity-0'); }, 3000);
-        }
-        function playSound(type) {
-            let synth;
-            if(!Tone) return; // Tone.js might not be loaded
-            switch(type) {
-                case 'drink':
-                    synth = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
-                    synth.triggerAttackRelease("C6", "16n", Tone.now());
-                    break;
-                case 'posture':
-                     synth = new Tone.Synth({ oscillator: { type: 'triangle' }, envelope: { attack: 0.01, decay: 0.5, sustain: 0.2, release: 0.5 } }).toDestination();
-                    synth.triggerAttackRelease("A5", "8n", Tone.now());
-                    break;
-                case 'breathe':
-                    synth = new Tone.PluckSynth().toDestination();
-                    synth.triggerAttackRelease("G4", "2n", Tone.now());
-                    break;
-                default:
-                     new Tone.MembraneSynth({octaves: 10, pitchDecay: 0.1}).toDestination().triggerAttackRelease("C2", "8n", Tone.now());
+        document.addEventListener('DOMContentLoaded', function() {
+            // Funzione corretta per ottenere la data locale
+            function getLocalDateString(date = new Date()) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
             }
-        }
 
-        // --- NOTIFICATIONS ---
-        function requestNotificationPermission() {
-             if (!('Notification' in window)) { return; }
-            if (Notification.permission === 'default') {
-                showToast('Per favore, consenti le notifiche per i promemoria.');
-                Notification.requestPermission();
-            }
-        }
-        function showBrowserNotification(title, body) {
-            if (!('Notification' in window) || Notification.permission !== 'granted') {
-                return;
-            }
-            new Notification(title, { body: body, icon: 'https://img.icons8.com/fluency/48/lotus.png' });
-        }
+            // App state
+            const state = {
+                currentMeditation: null,
+                moodEntries: {
+                    [getLocalDateString()]: [
+                        { mood: 'calmo', time: '07:30' },
+                        { mood: 'felice', time: '14:15' }
+                    ]
+                },
+                gratitudeEntries: {
+                    [getLocalDateString()]: [
+                        "Oggi sono grato per la mia famiglia",
+                        "Apprezzo il bel tempo di oggi",
+                        "Sono grato per la mia salute"
+                    ]
+                },
+                meditationReviews: {},
+                timeWindows: [7, 14, 21], // 7am, 2pm, 9pm
+                profile: {
+                    name: "Marco Rossi",
+                    emoji: "😊"
+                },
+                userReviewed: {},
+                reminders: {
+                    breathing: {
+                        interval: 60,
+                        sound: 'sound1',
+                        active: true
+                    },
+                    posture: {
+                        interval: 45,
+                        sound: 'sound1',
+                        active: true
+                    },
+                    water: {
+                        interval: 30,
+                        sound: 'sound1',
+                        active: true
+                    }
+                },
+                currentCalendarDate: new Date()
+            };
 
-        // --- PAGE/SECTION RENDERING ---
-        function changeSection(targetId) {
-            document.querySelectorAll('.section').forEach(section => section.classList.remove('active', 'fade-in'));
-            const newSection = document.getElementById(targetId);
-            if(newSection) newSection.classList.add('active', 'fade-in');
-            document.querySelectorAll('.nav-button').forEach(b => b.classList.toggle('active', b.dataset.target === targetId));
-            window.scrollTo(0, 0);
-        }
-        function renderAllContent() {
-            Object.keys(TEMPLATES).forEach(key => {
-                const el = document.getElementById(key);
-                if (el) el.innerHTML = TEMPLATES[key];
+            // DOM Elements
+            const sections = document.querySelectorAll('.section');
+            const navItems = document.querySelectorAll('.nav-item');
+            const moodButtons = document.querySelectorAll('.mood-btn');
+            const meditationItems = document.querySelectorAll('.meditation-item');
+            const playerModal = document.getElementById('player-modal');
+            const historyModal = document.getElementById('history-modal');
+            const profileEditModal = document.getElementById('profile-edit-modal');
+            const audioPlayer = document.getElementById('meditation-audio');
+            const playBtn = document.getElementById('player-play');
+            const toast = document.getElementById('toast');
+            const historyBtn = document.getElementById('history-btn');
+            const historyCloseBtn = document.getElementById('history-close-btn');
+            const editProfileBtn = document.getElementById('edit-profile-btn');
+            const moodHistoryContainer = document.getElementById('mood-history-container');
+            const gratitudeHistoryContainer = document.getElementById('gratitude-history-container');
+            const moodIndicator = document.getElementById('mood-indicator');
+            const moodAverage = document.getElementById('mood-average');
+            const saveRemindersBtn = document.getElementById('save-reminders-btn');
+            const playerReviewBtn = document.getElementById('player-review-btn');
+            const playerReviewStars = document.querySelectorAll('.player-review-star');
+            const playerReviewSection = document.getElementById('player-review-section');
+            const calendarContainer = document.getElementById('calendar');
+            const calendarMonth = document.getElementById('calendar-month');
+            const prevMonthBtn = document.getElementById('prev-month-btn');
+            const nextMonthBtn = document.getElementById('next-month-btn');
+
+            // Initialize UI with profile data
+            document.querySelector('.profile-name').textContent = state.profile.name;
+            document.querySelector('.profile-emoji').textContent = state.profile.emoji;
+
+            // Initialize reminder settings
+            document.querySelectorAll('.reminder-interval').forEach(input => {
+                const type = input.dataset.type;
+                input.value = state.reminders[type].interval;
             });
-        }
 
-        // --- FEATURE SETUP ---
-        function setupHome() { /* Static content */ }
-        function renderMeditations() {
-             const list = document.getElementById('meditations-list');
-             if(!list) return;
-             list.innerHTML = '';
-             const globalReviews = loadData('globalMeditationReviews', {});
-             const userReviews = loadData('userMeditationReviews', {});
+            document.querySelectorAll('.reminder-sound').forEach(select => {
+                const type = select.dataset.type;
+                select.value = state.reminders[type].sound;
+            });
 
-             [{ id: 1, title: "Meditazione del Respiro", description: "10 min di calma."}, {id: 2, title: "Scansione Corporea", description: "Rilascia le tensioni."}].forEach(med => {
-                 const card = document.createElement('div');
-                 card.className = "bg-white p-5 rounded-2xl shadow-md";
+            // Navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = this.dataset.target;
 
-                 const allRatingsForMed = globalReviews[med.id] || [];
-                 const averageRating = allRatingsForMed.length > 0
-                    ? (allRatingsForMed.reduce((a, b) => a + b, 0) / allRatingsForMed.length).toFixed(1)
-                    : 'N/A';
+                    // Update active navigation
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
 
-                 const userHasVoted = !!userReviews[med.id];
-
-                 const reviewButtonHtml = userHasVoted
-                    ? `<div class="text-right"><span class="text-sm font-semibold text-amber-600">★ ${averageRating}</span><p class="text-xs text-stone-500">(${allRatingsForMed.length} voti)</p></div>`
-                    : `<button data-id="${med.id}" class="review-btn bg-stone-200 text-stone-600 px-3 py-1 rounded-full font-semibold text-sm">Recensisci</button>`;
-
-                 card.innerHTML = `<div class="flex items-center space-x-4"><div class="flex-grow"><div class="play-btn cursor-pointer" data-id="${med.id}"><h3 class="font-bold text-stone-900">${med.title}</h3><p class="text-sm text-stone-500">${med.description}</p></div></div><div class="text-right">${reviewButtonHtml}</div></div>`;
-                 list.appendChild(card);
-             });
-        }
-        function setupMeditationPlayer() {
-            const playerModal = document.getElementById('meditation-player-modal');
-            document.getElementById('meditations-list')?.addEventListener('click', e => {
-                 const playBtn = e.target.closest('.play-btn');
-                 if (playBtn) {
-                     playerModal.querySelector('#player-title').textContent = "Meditazione";
-                     playerModal.classList.add('active');
-                 }
-             });
-            playerModal.querySelector('#player-close')?.addEventListener('click', () => playerModal.classList.remove('active'));
-        }
-        function setupReviews() {
-             const modal = document.getElementById('review-modal');
-             let currentMedId = null;
-             let currentRating = 0;
-             document.getElementById('meditations-list')?.addEventListener('click', e => {
-                 if (e.target.classList.contains('review-btn')) {
-                     currentMedId = e.target.dataset.id;
-                     modal.querySelector('#review-modal-title').textContent = `Recensisci la meditazione`;
-
-                     const starContainer = modal.querySelector('#review-stars');
-                     starContainer.innerHTML = '';
-                     for(let i = 1; i <= 5; i++) {
-                         starContainer.innerHTML += `<span class="star text-stone-300" data-value="${i}">★</span>`;
-                     }
-                     modal.classList.add('active');
-                 }
-             });
-             modal.addEventListener('click', e => {
-                if(e.target.classList.contains('star')) {
-                    currentRating = parseInt(e.target.dataset.value, 10);
-                    const stars = modal.querySelectorAll('.star');
-                    stars.forEach(star => {
-                        star.classList.toggle('text-amber-400', star.dataset.value <= currentRating);
-                        star.classList.toggle('text-stone-300', star.dataset.value > currentRating);
+                    // Show target section
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === target) {
+                            section.classList.add('active');
+                        }
                     });
+                });
+            });
+
+            // Mood tracking (CON DATA CORRETTA)
+            moodButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const mood = this.dataset.mood;
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
+
+                    // Usa la funzione corretta per la data locale
+                    const today = getLocalDateString();
+
+                    if (!state.moodEntries[today]) {
+                        state.moodEntries[today] = [];
+                    }
+                    state.moodEntries[today].push({ mood, time: timeString });
+
+                    showToast(`Umore registrato: ${getMoodName(mood)} ${getMoodEmoji(mood)}`);
+                    moodButtons.forEach(btn => btn.disabled = true);
+                });
+            });
+
+            // Meditation player
+            meditationItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const meditationId = this.dataset.id;
+                    const meditationTitle = this.dataset.title;
+
+                    state.currentMeditation = meditationId;
+
+                    // Set meditation info in player
+                    document.getElementById('player-title').textContent = meditationTitle;
+                    document.getElementById('player-description').textContent =
+                        this.querySelector('.meditation-desc').textContent;
+
+                    // Show/hide review section based on whether user has reviewed
+                    if (state.userReviewed[meditationId]) {
+                        playerReviewSection.style.display = 'none';
+                    } else {
+                        playerReviewSection.style.display = 'block';
+                        // Reset stars
+                        playerReviewStars.forEach(star => star.classList.remove('active'));
+                    }
+
+                    playerModal.classList.add('active');
+                });
+            });
+
+            // Player controls
+            playBtn.addEventListener('click', function() {
+                if (audioPlayer.paused) {
+                    audioPlayer.play();
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                } else {
+                    audioPlayer.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
                 }
-             });
-             document.getElementById('submit-review')?.addEventListener('click', () => {
-                if(currentRating === 0) {
-                    showToast("Per favore, seleziona un voto.");
+            });
+
+            // When audio ends
+            audioPlayer.addEventListener('ended', function() {
+                showToast("Meditazione completata! Lascia una recensione se ti è piaciuta.");
+            });
+
+            // Player review stars
+            playerReviewStars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const value = parseInt(this.dataset.value);
+
+                    // Update stars display
+                    playerReviewStars.forEach((s, index) => {
+                        if (index < value) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Submit review from player
+            playerReviewBtn.addEventListener('click', function() {
+                let selectedRating = 0;
+                playerReviewStars.forEach((star, index) => {
+                    if (star.classList.contains('active')) {
+                        selectedRating = index + 1;
+                    }
+                });
+
+                if (selectedRating === 0) {
+                    showToast("Seleziona una valutazione prima di inviare");
                     return;
                 }
-                // Save user's vote to prevent re-voting
-                let userReviews = loadData('userMeditationReviews');
-                userReviews[currentMedId] = currentRating;
-                saveData('userMeditationReviews', userReviews);
 
-                // Add to global list for average calculation
-                let globalReviews = loadData('globalMeditationReviews');
-                if(!globalReviews[currentMedId]) {
-                    globalReviews[currentMedId] = [];
+                // Save review
+                if (!state.meditationReviews[state.currentMeditation]) {
+                    state.meditationReviews[state.currentMeditation] = [];
                 }
-                globalReviews[currentMedId].push(currentRating);
-                saveData('globalMeditationReviews', globalReviews);
+                state.meditationReviews[state.currentMeditation].push(selectedRating);
+                state.userReviewed[state.currentMeditation] = true;
+
+                // Update rating display
+                updateMeditationRating(state.currentMeditation);
+
+                // Hide review section
+                playerReviewSection.style.display = 'none';
 
                 showToast("Grazie per la tua recensione!");
-                modal.classList.remove('active');
-                renderMeditations(); // Rerender to show the new average
-             });
-             document.getElementById('cancel-review')?.addEventListener('click', () => modal.classList.remove('active'));
-        }
-        function setupHealthMonitor() {
-            updateMoodHistory();
-            document.getElementById('mood-tracker')?.addEventListener('click', (e) => {
-                const moodBtn = e.target.closest('.mood-btn');
-                if(!moodBtn || moodBtn.disabled) return;
-
-                const mood = moodBtn.dataset.mood;
-                const now = new Date();
-                const hour = now.getHours();
-                let activeWindow = 0;
-                if (hour >= 6 && hour < 10) activeWindow = 7;
-                else if (hour >= 13 && hour < 17) activeWindow = 14;
-                else if (hour >= 20 && hour < 23) activeWindow = 21;
-
-                let moodData = loadData('moodHistory');
-                if (!moodData[getToday()]) moodData[getToday()] = [];
-
-                moodData[getToday()].push({ mood: mood, time: now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}), window: activeWindow });
-                saveData('moodHistory', moodData);
-
-                showToast("Umore registrato con successo!");
-                updateMoodHistory();
-                checkTimeAndSetState();
             });
-        }
-        function checkTimeAndSetState() {
-            const now = new Date();
-            const hour = now.getHours();
-            const statusEl = document.getElementById('mood-window-status');
-            const moodButtons = document.querySelectorAll('.mood-btn');
-            if(!statusEl || moodButtons.length === 0) return;
 
-            let activeWindow = null;
-            if (hour >= 6 && hour < 10) activeWindow = 7;
-            else if (hour >= 13 && hour < 17) activeWindow = 14;
-            else if (hour >= 20 && hour < 23) activeWindow = 21;
-
-            const moodData = loadData('moodHistory');
-            const todaysMoods = moodData[getToday()] || [];
-            const isWindowRecorded = todaysMoods.some(entry => entry.window === activeWindow);
-
-            if (activeWindow && !isWindowRecorded) {
-                statusEl.textContent = `È ora per il tuo check-in ${MOOD_WINDOWS[activeWindow]}!`;
-                moodButtons.forEach(btn => btn.disabled = false);
-            } else {
-                moodButtons.forEach(btn => btn.disabled = true);
-                if (activeWindow && isWindowRecorded) statusEl.textContent = `Check-in ${MOOD_WINDOWS[activeWindow]} già effettuato.`;
-                else if (hour < 7) statusEl.textContent = "Il prossimo check-in è alle 7:00.";
-                else if (hour < 14) statusEl.textContent = "Il prossimo check-in è alle 14:00.";
-                else if (hour < 21) statusEl.textContent = "Il prossimo check-in è alle 21:00.";
-                else statusEl.textContent = "Check-in completati per oggi. A domani!";
-            }
-        }
-        function updateMoodHistory() {
-            const historyContainer = document.getElementById('mood-history');
-            if(!historyContainer) return;
-            const todaysMoods = loadData('moodHistory')[getToday()] || [];
-
-            if (todaysMoods.length > 0) {
-                historyContainer.innerHTML = '';
-                todaysMoods.forEach(entry => {
-                    const div = document.createElement('div');
-                    div.className = 'bg-stone-100 p-3 rounded-lg flex justify-between items-center';
-                    div.innerHTML = `<div><span class="text-2xl mr-3">${moodEmojis[entry.mood]}</span><span class="font-medium capitalize">${entry.mood}</span></div><span class="text-sm text-stone-500">${entry.time}</span>`;
-                    historyContainer.appendChild(div);
-                });
-            } else {
-                historyContainer.innerHTML = '<p class="text-stone-500">Nessun dato registrato per oggi.</p>';
-            }
-        }
-        function setupReminders() {
-             document.body.addEventListener('click', requestNotificationPermission, { once: true });
-             document.querySelectorAll('.reminder-control').forEach(control => {
-                const reminderKey = control.dataset.reminder;
-                const toggle = control.querySelector('.reminder-toggle');
-                toggle.addEventListener('change', () => {
-                    control.querySelector('.reminder-settings').classList.toggle('hidden', !toggle.checked);
-                    saveReminderSettings();
-                });
-                control.querySelectorAll('input').forEach(input => input.addEventListener('change', saveReminderSettings));
-
-                const settings = loadData('reminders')[reminderKey];
-                if(settings) {
-                    toggle.checked = settings.active;
-                    control.querySelector('.reminder-settings').classList.toggle('hidden', !settings.active);
-                    control.querySelector('.start-time').value = settings.startTime || '09:00';
-                    control.querySelector('.end-time').value = settings.endTime || '18:00';
-                    control.querySelector('.frequency').value = settings.frequency || 60;
-                }
-             });
-        }
-        function saveReminderSettings() {
-            let reminders = {};
-            document.querySelectorAll('.reminder-control').forEach(control => {
-                const key = control.dataset.reminder;
-                reminders[key] = {
-                    active: control.querySelector('.reminder-toggle').checked,
-                    startTime: control.querySelector('.start-time').value,
-                    endTime: control.querySelector('.end-time').value,
-                    frequency: parseInt(control.querySelector('.frequency').value, 10)
-                };
+            // Close player
+            document.getElementById('player-close-btn').addEventListener('click', function() {
+                playerModal.classList.remove('active');
+                audioPlayer.pause();
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
             });
-            saveData('reminders', reminders);
-        }
-        function checkReminders() {
-            const now = new Date();
-            const currentTime = now.toTimeString().slice(0, 5);
-            const savedReminders = loadData('reminders');
-            let lastTriggers = loadData('lastReminderTrigger');
 
-            for (const key in savedReminders) {
-                const r = savedReminders[key];
-                if (!r || !r.active) continue;
-                const lastTriggered = lastTriggers[key] || 0;
-                if (currentTime >= r.startTime && currentTime <= r.endTime && (now.getTime() - lastTriggered > r.frequency * 60 * 1000)) {
-                    const messages = { drink: '💧 È ora di bere un sorso d\'acqua!', posture: '🧘 Controlla la tua postura!', breathe: '🌬️ Prenditi un minuto per respirare.' };
-                    showToast(messages[key]);
-                    showBrowserNotification('Vivi Consapevole', messages[key]);
-                    playSound(key);
+            // History section
+            historyBtn.addEventListener('click', function() {
+                historyModal.classList.add('active');
+                generateCalendar();
+            });
 
-                    lastTriggers[key] = now.getTime();
-                    saveData('lastReminderTrigger', lastTriggers);
-                }
-            }
-        }
-        function setupGratitude() {
-            const form = document.getElementById('gratitude-form');
-            if(!form) return;
-            const inputs = form.querySelectorAll('.gratitude-input');
-            const savedGratitude = loadData('gratitudeHistory')[getToday()] || [];
-            if(savedGratitude.length > 0) {
-                inputs.forEach((input, index) => input.value = savedGratitude[index] || '');
-            }
+            historyCloseBtn.addEventListener('click', function() {
+                historyModal.classList.remove('active');
+            });
 
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const entries = Array.from(inputs).map(input => input.value);
-                if (entries.some(entry => entry.trim() === '')) {
-                    showToast("Per favore, compila tutti e 3 i campi.");
+            // Calendar navigation
+            prevMonthBtn.addEventListener('click', function() {
+                state.currentCalendarDate.setMonth(state.currentCalendarDate.getMonth() - 1);
+                generateCalendar();
+            });
+
+            nextMonthBtn.addEventListener('click', function() {
+                state.currentCalendarDate.setMonth(state.currentCalendarDate.getMonth() + 1);
+                generateCalendar();
+            });
+
+            // Edit profile
+            editProfileBtn.addEventListener('click', function() {
+                // Populate form with current data
+                document.getElementById('profile-name-input').value = state.profile.name;
+
+                // Highlight current emoji
+                document.querySelectorAll('.emoji-option').forEach(option => {
+                    option.classList.remove('selected');
+                    if (option.dataset.emoji === state.profile.emoji) {
+                        option.classList.add('selected');
+                    }
+                });
+
+                profileEditModal.classList.add('active');
+            });
+
+            // Emoji selection
+            document.querySelectorAll('.emoji-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.emoji-option').forEach(opt =>
+                        opt.classList.remove('selected')
+                    );
+                    this.classList.add('selected');
+                });
+            });
+
+            // Save profile
+            document.getElementById('profile-edit-save').addEventListener('click', function() {
+                const newName = document.getElementById('profile-name-input').value.trim();
+                const selectedEmoji = document.querySelector('.emoji-option.selected');
+
+                if (!newName) {
+                    showToast("Per favore inserisci un nome");
                     return;
                 }
-                let history = loadData('gratitudeHistory');
-                history[getToday()] = entries;
-                saveData('gratitudeHistory', history);
-                showToast('Diario della gratitudine salvato!');
-            });
-        }
-        function setupProfile() {
-            document.getElementById('history-btn')?.addEventListener('click', () => {
-                const historyModal = document.getElementById('history-modal');
-                historyModal.classList.add('active');
-                historyModal.querySelector('#history-date-picker').valueAsDate = new Date();
-                renderHistoryForDate(getToday());
-            });
-            document.getElementById('history-close')?.addEventListener('click', () => document.getElementById('history-modal').classList.remove('active'));
-            document.getElementById('history-date-picker')?.addEventListener('change', e => {
-                const date = new Date(e.target.value).toISOString().split('T')[0];
-                renderHistoryForDate(date);
+
+                if (!selectedEmoji) {
+                    showToast("Seleziona un'emoji");
+                    return;
+                }
+
+                state.profile.name = newName;
+                state.profile.emoji = selectedEmoji.dataset.emoji;
+
+                // Update UI
+                document.querySelector('.profile-name').textContent = newName;
+                document.querySelector('.profile-emoji').textContent = selectedEmoji.dataset.emoji;
+
+                profileEditModal.classList.remove('active');
+                showToast("Profilo aggiornato con successo!");
             });
 
-            document.getElementById('google-login-btn')?.addEventListener('click', () => showToast("Simulazione: Accesso con Google..."));
-            document.getElementById('patreon-unlock-btn')?.addEventListener('click', () => showToast("Simulazione: Verifica Patreon in corso..."));
-        }
-        function renderHistoryForDate(date) {
-            const container = document.getElementById('history-content');
-            if(!container) return;
+            // Cancel profile edit
+            document.getElementById('profile-edit-cancel').addEventListener('click', function() {
+                profileEditModal.classList.remove('active');
+            });
 
-            const moodHistory = loadData('moodHistory')[date] || [];
-            const gratitudeHistory = loadData('gratitudeHistory')[date] || [];
+            // Gratitude form (CON DATA CORRETTA)
+            document.querySelector('.gratitude-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Usa la funzione corretta per la data locale
+                const today = getLocalDateString();
 
-            container.innerHTML = '';
-            if (moodHistory.length === 0 && gratitudeHistory.length === 0) {
-                container.innerHTML = `<p class="text-center text-stone-500">Nessun dato per questa giornata.</p>`;
-                return;
-            }
+                const inputs = this.querySelectorAll('.gratitude-input');
+                const entries = Array.from(inputs).map(input => input.value.trim());
 
-            // Mood Bar
-            if (moodHistory.length > 0) {
-                const totalScore = moodHistory.reduce((sum, entry) => sum + moodScores[entry.mood], 0);
-                const avgScore = totalScore / moodHistory.length;
-                const percentage = (avgScore - 1) / 4 * 100;
+                state.gratitudeEntries[today] = entries;
+                showToast("Diario della gratitudine salvato!");
+                this.reset();
+            });
 
-                const moodBarSection = document.createElement('div');
-                moodBarSection.innerHTML = `<h3 class="font-bold text-lg mb-2">Media Umore della Giornata</h3><div class="w-full bg-gradient-to-r from-red-500 via-yellow-400 to-green-500 rounded-full h-3 relative"><div class="absolute w-5 h-5 bg-white rounded-full shadow-md border-2 border-stone-400 -top-1" style="left: calc(${percentage}% - 10px);"></div></div>`;
-                container.appendChild(moodBarSection);
-            }
+            // Save reminder settings
+            saveRemindersBtn.addEventListener('click', function() {
+                // Update breathing reminder
+                state.reminders.breathing.interval = parseInt(
+                    document.querySelector('.reminder-interval[data-type="breathing"]').value
+                );
+                state.reminders.breathing.sound =
+                    document.querySelector('.reminder-sound[data-type="breathing"]').value;
 
-            // Mood List
-            if(moodHistory.length > 0) {
-                const moodSection = document.createElement('div');
-                moodSection.innerHTML = `<h3 class="font-bold text-lg mb-2 mt-4">Umore registrato</h3>`;
-                moodHistory.forEach(entry => {
-                    const el = document.createElement('div');
-                    el.className = 'bg-white p-3 rounded-lg flex justify-between items-center text-sm';
-                    el.innerHTML = `<p>${moodEmojis[entry.mood]} <span class="capitalize font-medium">${entry.mood}</span></p><p class="text-stone-500">${entry.time}</p>`;
-                    moodSection.appendChild(el);
+                // Update posture reminder
+                state.reminders.posture.interval = parseInt(
+                    document.querySelector('.reminder-interval[data-type="posture"]').value
+                );
+                state.reminders.posture.sound =
+                    document.querySelector('.reminder-sound[data-type="posture"]').value;
+
+                // Update water reminder
+                state.reminders.water.interval = parseInt(
+                    document.querySelector('.reminder-interval[data-type="water"]').value
+                );
+                state.reminders.water.sound =
+                    document.querySelector('.reminder-sound[data-type="water"]').value;
+
+                // Start reminders
+                startReminders();
+
+                showToast("Impostazioni promemoria salvate!", true);
+            });
+
+            // Helper functions
+            function updateMeditationRating(meditationId) {
+                const ratings = state.meditationReviews[meditationId];
+                if (!ratings || ratings.length === 0) return;
+
+                const average = ratings.reduce((sum, val) => sum + val, 0) / ratings.length;
+                const roundedAverage = average.toFixed(1);
+
+                // Find the meditation item and update its rating display
+                meditationItems.forEach(item => {
+                    if (item.dataset.id === meditationId) {
+                        const ratingEl = item.querySelector('.meditation-rating');
+                        if (ratingEl) {
+                            ratingEl.innerHTML = `<i class="fas fa-star"></i> ${roundedAverage} (${ratings.length})`;
+                            ratingEl.style.display = 'flex';
+                        }
+                    }
                 });
-                container.appendChild(moodSection);
             }
 
-            // Gratitude List
-            if(gratitudeHistory.length > 0) {
-                 const gratitudeSection = document.createElement('div');
-                gratitudeSection.innerHTML = `<h3 class="font-bold text-lg mb-2 mt-4">Diario della Gratitudine</h3>`;
-                gratitudeHistory.forEach(entry => {
-                    const el = document.createElement('p');
-                    el.className = 'bg-white p-3 rounded-lg text-sm';
-                    el.textContent = entry;
-                    gratitudeSection.appendChild(el);
+            function getMoodName(mood) {
+                const names = {
+                    'stressato': 'Stressato',
+                    'triste': 'Triste',
+                    'neutro': 'Neutro',
+                    'calmo': 'Calmo',
+                    'felice': 'Felice'
+                };
+                return names[mood] || mood;
+            }
+
+            function getMoodEmoji(mood) {
+                const emojis = {
+                    'stressato': '😩',
+                    'triste': '😔',
+                    'neutro': '😐',
+                    'calmo': '😊',
+                    'felice': '😄'
+                };
+                return emojis[mood] || '';
+            }
+
+            function getMoodValue(mood) {
+                const values = {
+                    'stressato': 1,
+                    'triste': 2,
+                    'neutro': 3,
+                    'calmo': 4,
+                    'felice': 5
+                };
+                return values[mood] || 3;
+            }
+
+            function showToast(message, isReminder = false) {
+                toast.textContent = message;
+                toast.classList.add('show');
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+
+                // Show system notification only for reminders
+                if (isReminder && Notification.permission === "granted") {
+                    showSystemNotification(message);
+                }
+            }
+
+            function showSystemNotification(message) {
+                const options = {
+                    body: message,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/1998/1998662.png'
+                };
+                new Notification("Vivi Consapevole", options);
+            }
+
+            function updateHistoryDisplay(date) {
+                // Usa la funzione corretta per la data locale
+                const selectedDate = getLocalDateString(date);
+
+                const moodEntries = state.moodEntries[selectedDate] || [];
+                const gratitudeEntries = state.gratitudeEntries[selectedDate] || [];
+
+                // Update mood history
+                moodHistoryContainer.innerHTML = '';
+                if (moodEntries.length > 0) {
+                    moodEntries.forEach(entry => {
+                        const moodItem = document.createElement('div');
+                        moodItem.className = 'mood-history-item';
+                        moodItem.style.display = 'flex';
+                        moodItem.style.alignItems = 'center';
+                        moodItem.style.padding = '10px';
+                        moodItem.style.borderBottom = '1px solid #f1f5f9';
+
+                        moodItem.innerHTML = `
+                            <div style="font-size: 2rem; margin-right: 15px;">${getMoodEmoji(entry.mood)}</div>
+                            <div>
+                                <div>${getMoodName(entry.mood)}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-light);">${entry.time}</div>
+                            </div>
+                        `;
+
+                        moodHistoryContainer.appendChild(moodItem);
+                    });
+                } else {
+                    moodHistoryContainer.innerHTML = '<p style="text-align: center; padding: 10px; color: var(--text-light);">Nessun umore registrato in questa data</p>';
+                }
+
+                // Update gratitude history
+                gratitudeHistoryContainer.innerHTML = '';
+                if (gratitudeEntries.length > 0) {
+                    const list = document.createElement('ol');
+                    list.style.paddingLeft = '20px';
+                    list.style.marginTop = '10px';
+
+                    gratitudeEntries.forEach(entry => {
+                        const item = document.createElement('li');
+                        item.style.marginBottom = '8px';
+                        item.textContent = entry;
+                        list.appendChild(item);
+                    });
+
+                    gratitudeHistoryContainer.appendChild(list);
+                } else {
+                    gratitudeHistoryContainer.innerHTML = '<p style="text-align: center; padding: 10px; color: var(--text-light);">Nessun diario della gratitudine in questa data</p>';
+                }
+
+                // Update mood average and indicator
+                if (moodEntries.length > 0) {
+                    const moodSum = moodEntries.reduce((sum, entry) => sum + getMoodValue(entry.mood), 0);
+                    const average = moodSum / moodEntries.length;
+                    const percentage = (average - 1) / 4 * 100; // Scale from 1-5 to 0-100%
+
+                    moodAverage.textContent = average.toFixed(1);
+                    moodIndicator.style.left = `${percentage}%`;
+                } else {
+                    moodAverage.textContent = "0.0";
+                    moodIndicator.style.left = "0%";
+                }
+            }
+
+            function generateCalendar() {
+                // Set month title
+                const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+                                    "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+                const month = monthNames[state.currentCalendarDate.getMonth()];
+                const year = state.currentCalendarDate.getFullYear();
+                calendarMonth.textContent = `${month} ${year}`;
+
+                // Clear calendar
+                calendarContainer.innerHTML = '';
+
+                // Add day headers
+                const days = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
+                days.forEach(day => {
+                    const header = document.createElement('div');
+                    header.className = 'calendar-header';
+                    header.textContent = day;
+                    calendarContainer.appendChild(header);
                 });
-                container.appendChild(gratitudeSection);
+
+                // Get first day of month
+                const firstDay = new Date(state.currentCalendarDate.getFullYear(), state.currentCalendarDate.getMonth(), 1);
+                // Get last day of month
+                const lastDay = new Date(state.currentCalendarDate.getFullYear(), state.currentCalendarDate.getMonth() + 1, 0);
+
+                // Add empty cells for days before first day
+                for (let i = 0; i < firstDay.getDay(); i++) {
+                    const empty = document.createElement('div');
+                    calendarContainer.appendChild(empty);
+                }
+
+                // Add days (CON DATE CORRETTE)
+                for (let i = 1; i <= lastDay.getDate(); i++) {
+                    const day = new Date(
+                        state.currentCalendarDate.getFullYear(),
+                        state.currentCalendarDate.getMonth(),
+                        i
+                    );
+
+                    // Usa la funzione corretta per la data locale
+                    const dayString = getLocalDateString(day);
+
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day';
+                    dayElement.textContent = i;
+
+                    if (state.moodEntries[dayString] || state.gratitudeEntries[dayString]) {
+                        dayElement.classList.add('has-data');
+                    }
+
+                    // Highlight today (CON DATA CORRETTA)
+                    const today = new Date();
+                    if (day.getDate() === today.getDate() &&
+                        day.getMonth() === today.getMonth() &&
+                        day.getFullYear() === today.getFullYear()) {
+                        dayElement.classList.add('active');
+                    }
+
+                    dayElement.addEventListener('click', function() {
+                        updateHistoryDisplay(day);
+                    });
+
+                    calendarContainer.appendChild(dayElement);
+                }
+
+                // Aggiorna lo storico con la data corretta
+                updateHistoryDisplay(new Date());
             }
-        }
-        function checkWeeklyCongrats() {
-            const lastCongrats = new Date(loadData('lastWeeklyCongrats', '2000-01-01'));
-            const today = new Date();
-            const daysDiff = (today - lastCongrats) / (1000 * 60 * 60 * 24);
-            if (daysDiff >= 7) {
-                document.getElementById('weekly-congrats-modal').classList.add('active');
-                saveData('lastWeeklyCongrats', getToday());
+
+            function startReminders() {
+                // Clear any existing reminders
+                if (window.reminderIntervals) {
+                    window.reminderIntervals.forEach(interval => clearInterval(interval));
+                }
+
+                window.reminderIntervals = [];
+
+                // Setup breathing reminder
+                if (state.reminders.breathing.active) {
+                    const interval = setInterval(() => {
+                        showToast("💨 Ricorda di fare un respiro profondo e consapevole!", true);
+                    }, state.reminders.breathing.interval * 60 * 1000);
+
+                    window.reminderIntervals.push(interval);
+                }
+
+                // Setup posture reminder
+                if (state.reminders.posture.active) {
+                    const interval = setInterval(() => {
+                        showToast("🧍 Controlla la tua postura! Stai dritto e rilassato!", true);
+                    }, state.reminders.posture.interval * 60 * 1000);
+
+                    window.reminderIntervals.push(interval);
+                }
+
+                // Setup water reminder
+                if (state.reminders.water.active) {
+                    const interval = setInterval(() => {
+                        showToast("💧 È ora di bere un po' d'acqua! Mantieniti idratato!", true);
+                    }, state.reminders.water.interval * 60 * 1000);
+
+                    window.reminderIntervals.push(interval);
+                }
             }
-            const closeBtn = document.getElementById('weekly-congrats-close');
-            if(closeBtn) {
-                 closeBtn.addEventListener('click', () => document.getElementById('weekly-congrats-modal').classList.remove('active'));
+
+            // Initialize time-based mood check-in
+            function initTimeBasedCheckin() {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const moodStatus = document.querySelector('.mood-status');
+
+                // Find next check-in time
+                let nextWindow = state.timeWindows.find(hour => hour > currentHour);
+
+                if (nextWindow) {
+                    moodStatus.textContent = `Prossimo check-in alle ${nextWindow}:00`;
+                } else {
+                    moodStatus.textContent = "Check-in completati per oggi";
+                }
+
+                // Enable buttons if it's check-in time
+                if (state.timeWindows.includes(currentHour)) {
+                    moodStatus.textContent = `È ora per il tuo check-in!`;
+                    moodButtons.forEach(btn => btn.disabled = false);
+                }
             }
-        }
 
-        // --- APP INITIALIZATION ---
-        function initializeApp() {
-            renderAllContent();
+            // Initialize the app
+            initTimeBasedCheckin();
+            startReminders();
+            generateCalendar();
 
-            document.querySelectorAll('.nav-button').forEach(button => {
-                button.addEventListener('click', () => changeSection(button.dataset.target));
-            });
-
-            // Setup per ogni sezione
-            setupHome();
-            renderMeditations();
-            setupMeditationPlayer();
-            setupReviews();
-            setupHealthMonitor();
-            setupGratitude();
-            setupReminders();
-            setupProfile();
-
-            // Controlli periodici e iniziali
-            checkTimeAndSetState();
-            checkWeeklyCongrats();
-            setInterval(checkTimeAndSetState, 30000);
-            setInterval(checkReminders, 60000);
-
-            changeSection('home');
-        }
-
-        initializeApp();
-    });
+            // Request notification permission
+            if (!("Notification" in window)) {
+                console.log("This browser does not support system notifications");
+            } else {
+                Notification.requestPermission();
+            }
+        });
     </script>
 </body>
 </html>
