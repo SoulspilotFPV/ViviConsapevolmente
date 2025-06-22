@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vivi Consapevolmente</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -26,6 +26,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            touch-action: manipulation;
         }
 
         body {
@@ -35,6 +36,7 @@
             padding-bottom: 100px;
             min-height: 100vh;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .container {
@@ -340,6 +342,7 @@
             color: #e2e8f0;
             cursor: pointer;
             transition: all 0.2s ease;
+            padding: 5px;
         }
 
         .player-review-star.active, .player-review-star:hover {
@@ -516,6 +519,7 @@
             font-weight: 600;
             padding: 8px 0;
             color: var(--primary-dark);
+            font-size: 0.9rem;
         }
 
         .calendar-day {
@@ -524,6 +528,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-size: 0.9rem;
         }
 
         .calendar-day:hover {
@@ -958,13 +963,33 @@
         /* Mobile adjustments for reminder items */
         @media (max-width: 768px) {
             .reminder-item {
-                min-height: auto; /* Rimuove l'altezza minima fissa */
-                padding: 12px; /* Riduci il padding */
+                min-height: auto;
+                padding: 12px;
             }
 
             .reminder-controls {
-                grid-template-columns: 1fr; /* Cambia a una colonna su mobile */
+                grid-template-columns: 1fr;
                 gap: 8px;
+            }
+
+            .calendar-header {
+                font-size: 0.8rem;
+                padding: 5px 0;
+            }
+
+            .calendar-day {
+                padding: 8px 3px;
+                font-size: 0.8rem;
+            }
+
+            .mood-history-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .mood-history-item > div:first-child {
+                margin-right: 0;
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -979,7 +1004,7 @@
             </div>
 
             <div class="daily-card">
-                <img src="images/logo-vivi-consapevolmente.png" alt="Logo Vivi Consapevolmente">
+                <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80" alt="Immagine del giorno">
                 <div class="daily-card-overlay">
                     <h3>Pensiero del Giorno</h3>
                     <p>"La pace viene da dentro. Non cercarla fuori." - Buddha</p>
@@ -1374,7 +1399,7 @@
                 moodEntries: {},
                 gratitudeEntries: {},
                 meditationReviews: {},
-                timeWindows: [7, 14, 21],
+                timeWindows: [7, 14, 21], // Orari per il check-in umore
                 profile: {
                     name: "Marco Rossi",
                     gender: "M",
@@ -1561,18 +1586,37 @@
                 });
             });
 
-            // Mood tracking
+            // Mood tracking - solo 3 volte al giorno (7, 14, 21)
             moodButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const mood = this.dataset.mood;
                     const now = new Date();
-                    const timeString = now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
+                    const currentHour = now.getHours();
 
+                    // Controlla se l'ora corrente è una delle finestre consentite
+                    if (!state.timeWindows.includes(currentHour)) {
+                        showToast("Il check-in è disponibile solo alle 7, 14 e 21");
+                        return;
+                    }
+
+                    const timeString = now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
                     const today = getLocalDateString();
 
                     if (!state.moodEntries[today]) {
                         state.moodEntries[today] = [];
                     }
+
+                    // Controlla se l'utente ha già effettuato il check-in in questa finestra oraria
+                    const hasLoggedInCurrentWindow = state.moodEntries[today].some(entry => {
+                        const entryHour = parseInt(entry.time.split(':')[0]);
+                        return entryHour === currentHour;
+                    });
+
+                    if (hasLoggedInCurrentWindow) {
+                        showToast("Hai già effettuato il check-in per questa fascia oraria");
+                        return;
+                    }
+
                     state.moodEntries[today].push({ mood, time: timeString });
 
                     showToast(`Umore registrato: ${getMoodName(mood)} ${getMoodEmoji(mood)}`);
@@ -1625,9 +1669,9 @@
                 showToast("Meditazione completata! Lascia una recensione se ti è piaciuta.");
             });
 
-            // Player review stars
+            // Player review stars - prevenire zoom su mobile
             playerReviewStars.forEach(star => {
-                star.addEventListener('click', function() {
+                star.addEventListener('click', function(e) {
                     const value = parseInt(this.dataset.value);
 
                     // Update stars display
@@ -1639,6 +1683,11 @@
                         }
                     });
                 });
+
+                // Prevenire zoom su mobile
+                star.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                }, { passive: false });
             });
 
             // Submit review from player
@@ -1905,14 +1954,14 @@
                 // Verifica se siamo su un dispositivo mobile
                 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-                if (!isMobile && Notification.permission === "granted") {
-                    // Notifiche desktop
+                if (Notification.permission === "granted") {
+                    // Notifiche di sistema
                     new Notification("Vivi Consapevolmente", {
                         body: message,
                         icon: 'https://cdn-icons-png.flaticon.com/512/1998/1998662.png'
                     });
                 } else if (isMobile) {
-                    // Notifiche mobile alternative (alert per ora)
+                    // Fallback per mobile se le notifiche non sono permesse
                     alert(`Notifica: ${message}`);
                 }
             }
@@ -2060,7 +2109,7 @@
                 // Setup breathing reminder
                 if (state.reminders.breathing.active) {
                     const interval = setInterval(() => {
-                        showToast("💨 Ricorda di fare un respiro profondo e consapevole!", true);
+                        showSystemNotification("💨 Ricorda di fare un respiro profondo e consapevole!");
                     }, state.reminders.breathing.interval * 60 * 1000);
 
                     window.reminderIntervals.push(interval);
@@ -2069,7 +2118,7 @@
                 // Setup posture reminder
                 if (state.reminders.posture.active) {
                     const interval = setInterval(() => {
-                        showToast("🧍 Controlla la tua postura! Stai dritto e rilassato!", true);
+                        showSystemNotification("🧍 Controlla la tua postura! Stai dritto e rilassato!");
                     }, state.reminders.posture.interval * 60 * 1000);
 
                     window.reminderIntervals.push(interval);
@@ -2078,7 +2127,7 @@
                 // Setup water reminder
                 if (state.reminders.water.active) {
                     const interval = setInterval(() => {
-                        showToast("💧 È ora di bere un po' d'acqua! Mantieniti idratato!", true);
+                        showSystemNotification("💧 È ora di bere un po' d'acqua! Mantieniti idratato!");
                     }, state.reminders.water.interval * 60 * 1000);
 
                     window.reminderIntervals.push(interval);
