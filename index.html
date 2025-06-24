@@ -4,14 +4,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
     <title>Vivi Consapevolmente</title>
+    <link rel="icon" href="logo-vivi-consapevolmente.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap">
     <style>
         :root {
             --primary: #0d9488;
             --primary-light: #5eead4;
             --primary-dark: #115e59;
-            --background: #f0fdfa;
-            --card-bg: #ffffff;
+            --background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);
+            --card-bg: rgba(255, 255, 255, 0.92);
             --text: #334155;
             --text-light: #64748b;
             --success: #10b981;
@@ -19,13 +21,16 @@
             --error: #ef4444;
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+            --calm-1: #a7f3d0;
+            --calm-2: #99f6e4;
+            --calm-3: #c7d2fe;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif;
             touch-action: manipulation;
         }
 
@@ -73,6 +78,10 @@
             font-size: 1.8rem;
             color: var(--primary-dark);
             margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .header p {
@@ -88,6 +97,8 @@
             padding: 20px;
             margin-bottom: 20px;
             transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         .card:hover {
@@ -111,6 +122,7 @@
             border-radius: 18px;
             overflow: hidden;
             margin-bottom: 20px;
+            box-shadow: var(--shadow);
         }
 
         .daily-card img {
@@ -132,6 +144,9 @@
         .daily-card-overlay h3 {
             font-size: 1.1rem;
             margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         /* Mood Tracker */
@@ -149,6 +164,7 @@
             transition: all 0.3s ease;
             padding: 5px;
             border-radius: 50%;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
         .mood-btn:hover {
@@ -164,12 +180,17 @@
 
         .mood-status {
             text-align: center;
-            padding: 8px;
+            padding: 12px;
             border-radius: 12px;
-            background: rgba(94, 234, 212, 0.2);
+            background: linear-gradient(to right, var(--calm-1), var(--calm-2));
             color: var(--primary-dark);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin: 10px 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         /* Meditations */
@@ -185,24 +206,26 @@
             background: var(--card-bg);
             border-radius: 16px;
             box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(13, 148, 136, 0.1);
         }
 
         .meditation-item:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow-lg);
+            background: linear-gradient(to right, rgba(167, 243, 208, 0.1), rgba(153, 246, 228, 0.1));
         }
 
         .meditation-icon {
             width: 50px;
             height: 50px;
-            background: rgba(94, 234, 212, 0.2);
+            background: linear-gradient(135deg, var(--calm-1), var(--calm-3));
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            color: var(--primary);
+            color: var(--primary-dark);
             margin-right: 15px;
         }
 
@@ -211,8 +234,9 @@
         }
 
         .meditation-title {
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 4px;
+            color: var(--primary-dark);
         }
 
         .meditation-desc {
@@ -225,6 +249,7 @@
             align-items: center;
             font-size: 0.9rem;
             color: var(--warning);
+            gap: 3px;
         }
 
         /* Meditation Player */
@@ -261,12 +286,13 @@
         .player-header {
             padding: 20px;
             text-align: center;
-            background: var(--primary);
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
             color: white;
         }
 
         .player-body {
             padding: 25px 20px;
+            background: linear-gradient(to bottom, #f0fdfa, #e0f2fe);
         }
 
         .player-controls {
@@ -352,13 +378,13 @@
         .player-review-btn {
             display: block;
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background: var(--primary);
             color: white;
             border: none;
             border-radius: 12px;
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: background 0.3s ease;
         }
@@ -399,6 +425,7 @@
             padding: 25px;
             max-height: 90vh;
             overflow-y: auto;
+            background: linear-gradient(to bottom, #f0fdfa, #e0f2fe);
         }
 
         .history-header {
@@ -426,13 +453,11 @@
             justify-content: center;
             border-radius: 50%;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .history-close:hover {
             background: #f1f5f9;
             color: var(--text);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         .mood-bar-container {
@@ -503,8 +528,9 @@
         }
 
         .calendar-month {
-            font-weight: 600;
+            font-weight: 700;
             color: var(--primary-dark);
+            font-size: 1.1rem;
         }
 
         .calendar-container {
@@ -516,7 +542,7 @@
 
         .calendar-header {
             text-align: center;
-            font-weight: 600;
+            font-weight: 700;
             padding: 8px 0;
             color: var(--primary-dark);
             font-size: 0.9rem;
@@ -529,6 +555,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.7);
         }
 
         .calendar-day:hover {
@@ -538,6 +565,7 @@
         .calendar-day.active {
             background: var(--primary);
             color: white;
+            font-weight: 700;
         }
 
         .calendar-day.has-data {
@@ -586,12 +614,14 @@
             overflow: hidden;
             box-shadow: var(--shadow-lg);
             padding: 25px;
+            background: linear-gradient(to bottom, #f0fdfa, #e0f2fe);
         }
 
         .profile-edit-title {
             text-align: center;
             margin-bottom: 20px;
             color: var(--primary-dark);
+            font-size: 1.4rem;
         }
 
         .emoji-picker {
@@ -608,6 +638,7 @@
             padding: 5px;
             border-radius: 8px;
             transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.7);
         }
 
         .emoji-option:hover, .emoji-option.selected {
@@ -621,7 +652,7 @@
             border: 1px solid #e2e8f0;
             border-radius: 12px;
             margin-bottom: 20px;
-            background: #f8fafc;
+            background: rgba(255, 255, 255, 0.8);
             font-size: 1rem;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
@@ -637,7 +668,7 @@
             padding: 12px;
             border-radius: 12px;
             border: none;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -650,7 +681,6 @@
 
         .profile-edit-cancel:hover {
             background: #e2e8f0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         .profile-edit-save {
@@ -660,7 +690,6 @@
 
         .profile-edit-save:hover {
             background: var(--primary-dark);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         /* Gender Selection */
@@ -677,19 +706,19 @@
         .gender-option {
             flex: 1;
             padding: 12px;
-            border-radius: 12px;
+            border-radius: 8px;
             border: 2px solid #e2e8f0;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: #f8fafc;
+            background: rgba(255, 255, 255, 0.8);
         }
 
         .gender-option.selected {
             border-color: var(--primary);
             background: rgba(94, 234, 212, 0.1);
             color: var(--primary-dark);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         /* Toast Notification */
@@ -708,6 +737,9 @@
             transition: all 0.4s ease;
             max-width: 300px;
             font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .toast.show {
@@ -727,6 +759,8 @@
             display: flex;
             padding: 12px 0;
             border-top: 1px solid #f1f5f9;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .nav-item {
@@ -771,7 +805,7 @@
             align-items: center;
             gap: 10px;
             margin-bottom: 10px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .reminder-controls {
@@ -796,7 +830,7 @@
             padding: 12px 15px;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            background: white;
+            background: rgba(255, 255, 255, 0.8);
             font-size: 1rem;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             appearance: none;
@@ -816,8 +850,7 @@
             border: none;
             padding: 14px;
             border-radius: 12px;
-            font-weight: 500;
-            margin-top: 10px;
+            font-weight: 600;
             cursor: pointer;
             transition: background 0.3s ease;
             width: 100%;
@@ -841,7 +874,7 @@
             border: 1px solid #e2e8f0;
             border-radius: 12px;
             font-size: 1rem;
-            background: #f8fafc;
+            background: rgba(255, 255, 255, 0.8);
             transition: all 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
@@ -858,7 +891,7 @@
             border: none;
             padding: 14px;
             border-radius: 12px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: background 0.3s ease;
             margin-top: 10px;
@@ -886,9 +919,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(94, 234, 212, 0.2);
+            background: linear-gradient(135deg, var(--calm-1), var(--calm-3));
             border-radius: 50%;
             margin-right: 20px;
+            box-shadow: var(--shadow);
         }
 
         .profile-info {
@@ -897,7 +931,7 @@
 
         .profile-name {
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--primary-dark);
             margin-bottom: 5px;
         }
@@ -916,29 +950,52 @@
             margin-bottom: 15px;
             transition: all 0.3s ease;
             cursor: pointer;
+            box-shadow: var(--shadow);
         }
 
         .profile-item:hover {
-            background: rgba(94, 234, 212, 0.1);
+            background: linear-gradient(to right, rgba(167, 243, 208, 0.1), rgba(153, 246, 228, 0.1));
             transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
         .profile-icon {
             width: 50px;
             height: 50px;
-            background: rgba(94, 234, 212, 0.2);
+            background: linear-gradient(135deg, var(--calm-1), var(--calm-3));
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
-            color: var(--primary);
+            color: var(--primary-dark);
             margin-right: 15px;
         }
 
         .profile-text {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text);
+        }
+
+        /* Calming Elements */
+        .calm-element {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .calm-leaf {
+            font-size: 4rem;
+            color: var(--primary);
+        }
+
+        .calm-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--calm-1);
+            filter: blur(20px);
         }
 
         /* Responsive */
@@ -981,33 +1038,112 @@
                 padding: 8px 3px;
                 font-size: 0.8rem;
             }
+        }
 
-            .mood-history-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        /* New styles for toggle switch and time windows */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin-left: auto;
+        }
 
-            .mood-history-item > div:first-child {
-                margin-right: 0;
-                margin-bottom: 10px;
-            }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .review-message {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Calming animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+
+        .pulse {
+            animation: pulse 3s ease-in-out infinite;
         }
     </style>
 </head>
 <body>
+    <!-- Calming background elements -->
+    <div class="calm-element" style="top: 10%; left: 5%; animation: float 8s infinite ease-in-out;">
+        <div class="calm-leaf">🍃</div>
+    </div>
+    <div class="calm-element" style="top: 30%; right: 10%; animation: float 6s infinite ease-in-out reverse;">
+        <div class="calm-leaf">🌸</div>
+    </div>
+    <div class="calm-element" style="top: 70%; left: 15%; animation: pulse 5s infinite ease-in-out;">
+        <div class="calm-leaf">🌿</div>
+    </div>
+    <div class="calm-element" style="bottom: 20%; right: 5%; animation: float 7s infinite ease-in-out;">
+        <div class="calm-leaf">🌱</div>
+    </div>
+
     <div class="container">
         <!-- Home Section -->
         <section id="home" class="section active">
             <div class="header">
-                <h1 id="welcome-header">Bentornato!</h1>
+                <h1 id="welcome-header">Bentornato! 😊</h1>
                 <p>Prenditi un momento per te oggi</p>
             </div>
 
             <div class="daily-card">
                 <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80" alt="Immagine del giorno">
                 <div class="daily-card-overlay">
-                    <h3>Pensiero del Giorno</h3>
-                    <p>"La pace viene da dentro. Non cercarla fuori." - Buddha</p>
+                    <h3><i class="fas fa-quote-left"></i> Pensiero del Giorno</h3>
+                    <p>"La pace viene da dentro. Non cercarla fuori." - Buddha 🌸</p>
                 </div>
             </div>
 
@@ -1017,47 +1153,58 @@
                     <i class="fas fa-lightbulb"></i>
                     <span>Consiglio del Giorno</span>
                 </div>
-                <p>Dedica almeno 5 minuti alla meditazione oggi. Trova un luogo tranquillo, siediti comodamente e concentrati sul tuo respiro.</p>
+                <p>Dedica almeno 5 minuti alla meditazione oggi. Trova un luogo tranquillo, siediti comodamente e concentrati sul tuo respiro. 🧘‍♀️</p>
             </div>
         </section>
 
         <!-- Meditations Section -->
         <section id="meditations" class="section">
             <div class="header">
-                <h1>Meditazioni Guidate</h1>
+                <h1>Meditazioni Guidate 🧘</h1>
                 <p>Trova la tua pace interiore</p>
             </div>
 
             <div class="meditation-list">
-                <div class="meditation-item" data-id="1" data-title="Meditazione del Respiro">
+                <div class="meditation-item" data-id="1" data-title="Meditazione del Respiro" data-duration="10 minuti">
                     <div class="meditation-icon">
                         <i class="fas fa-wind"></i>
                     </div>
                     <div class="meditation-info">
-                        <div class="meditation-title">Meditazione del Respiro</div>
-                        <div class="meditation-desc">10 minuti di calma e concentrazione</div>
+                        <div class="meditation-title">Meditazione del Respiro 🌬️</div>
+                        <div class="meditation-desc">Calma e concentrazione</div>
                         <div class="meditation-rating" style="display: none;"></div>
                     </div>
                 </div>
 
-                <div class="meditation-item" data-id="2" data-title="Scansione Corporea">
+                <div class="meditation-item" data-id="2" data-title="Scansione Corporea" data-duration="15 minuti">
                     <div class="meditation-icon">
                         <i class="fas fa-spa"></i>
                     </div>
                     <div class="meditation-info">
-                        <div class="meditation-title">Scansione Corporea</div>
+                        <div class="meditation-title">Scansione Corporea 🌸</div>
                         <div class="meditation-desc">Rilascia le tensioni nel corpo</div>
                         <div class="meditation-rating" style="display: none;"></div>
                     </div>
                 </div>
 
-                <div class="meditation-item" data-id="3" data-title="Rilassamento Profondo">
+                <div class="meditation-item" data-id="3" data-title="Rilassamento Profondo" data-duration="20 minuti">
                     <div class="meditation-icon">
                         <i class="fas fa-moon"></i>
                     </div>
                     <div class="meditation-info">
-                        <div class="meditation-title">Rilassamento Profondo</div>
+                        <div class="meditation-title">Rilassamento Profondo 🌙</div>
                         <div class="meditation-desc">Per un sonno riposante</div>
+                        <div class="meditation-rating" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="meditation-item" data-id="4" data-title="Gentilezza Amorevole" data-duration="12 minuti">
+                    <div class="meditation-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="meditation-info">
+                        <div class="meditation-title">Gentilezza Amorevole ❤️</div>
+                        <div class="meditation-desc">Coltiva compassione</div>
                         <div class="meditation-rating" style="display: none;"></div>
                     </div>
                 </div>
@@ -1066,8 +1213,9 @@
 
         <!-- Health Section -->
         <section id="health" class="section">
+            <!-- MODIFICA: Cambiato l'emoji nel titolo da 💖 a 🧠 -->
             <div class="header">
-                <h1>Monitor Salute</h1>
+                <h1>Monitor Salute 🧠</h1>
                 <p>Tieni traccia del tuo benessere</p>
             </div>
 
@@ -1077,8 +1225,11 @@
                     <span>Check-in Umore</span>
                 </div>
                 <div class="mood-status">
-                    È ora per il tuo check-in del pomeriggio!
+                    <i class="fas fa-smile"></i> È ora per il tuo check-in del pomeriggio!
                 </div>
+
+                <!-- MODIFICA: Rimossa la sezione delle fasce orarie -->
+
                 <div class="mood-tracker">
                     <button class="mood-btn" data-mood="stressato">😩</button>
                     <button class="mood-btn" data-mood="triste">😔</button>
@@ -1091,12 +1242,12 @@
             <div class="card">
                 <div class="card-title">
                     <i class="fas fa-book"></i>
-                    <span>Diario della Gratitudine</span>
+                    <span>Diario della Gratitudine 🌟</span>
                 </div>
                 <form class="gratitude-form">
-                    <input type="text" placeholder="1. Oggi sono grato/a per..." required class="gratitude-input">
-                    <input type="text" placeholder="2. Un'altra cosa che apprezzo..." required class="gratitude-input">
-                    <input type="text" placeholder="3. E infine sono grato/a per..." required class="gratitude-input">
+                    <input type="text" placeholder="1. Oggi sono grato/a per... 😊" required class="gratitude-input">
+                    <input type="text" placeholder="2. Un'altra cosa che apprezzo... 🌸" required class="gratitude-input">
+                    <input type="text" placeholder="3. E infine sono grato/a per... ❤️" required class="gratitude-input">
                     <button type="submit" class="gratitude-btn">Salva le note di oggi</button>
                 </form>
             </div>
@@ -1104,13 +1255,17 @@
             <div class="card">
                 <div class="card-title">
                     <i class="fas fa-bell"></i>
-                    <span>Promemoria Benessere</span>
+                    <span>Promemoria Benessere 🔔</span>
                 </div>
                 <div class="reminder-settings">
                     <div class="reminder-item">
                         <div class="reminder-header">
                             <i class="fas fa-wind"></i>
-                            <span>Respiro Consapevole</span>
+                            <span>Respiro Consapevole 🌬️</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="reminder-toggle" data-type="breathing" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
                         <div class="reminder-controls">
                             <div class="reminder-control">
@@ -1120,9 +1275,9 @@
                             <div class="reminder-control">
                                 <label>Suono</label>
                                 <select class="reminder-sound" data-type="breathing">
-                                    <option value="sound1">Campane</option>
-                                    <option value="sound2">Natura</option>
-                                    <option value="sound3">Pianoforte</option>
+                                    <option value="bells">Campane 🔔</option>
+                                    <option value="nature">Natura 🌿</option>
+                                    <option value="piano">Pianoforte 🎹</option>
                                 </select>
                             </div>
                         </div>
@@ -1131,7 +1286,11 @@
                     <div class="reminder-item">
                         <div class="reminder-header">
                             <i class="fas fa-user"></i>
-                            <span>Controllo Postura</span>
+                            <span>Controllo Postura 🧍</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="reminder-toggle" data-type="posture" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
                         <div class="reminder-controls">
                             <div class="reminder-control">
@@ -1141,9 +1300,9 @@
                             <div class="reminder-control">
                                 <label>Suono</label>
                                 <select class="reminder-sound" data-type="posture">
-                                    <option value="sound1">Campane</option>
-                                    <option value="sound2">Natura</option>
-                                    <option value="sound3">Pianoforte</option>
+                                    <option value="bells">Campane 🔔</option>
+                                    <option value="nature">Natura 🌿</option>
+                                    <option value="piano">Pianoforte 🎹</option>
                                 </select>
                             </div>
                         </div>
@@ -1152,7 +1311,11 @@
                     <div class="reminder-item">
                         <div class="reminder-header">
                             <i class="fas fa-tint"></i>
-                            <span>Bere Acqua</span>
+                            <span>Bere Acqua 💧</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="reminder-toggle" data-type="water" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
                         <div class="reminder-controls">
                             <div class="reminder-control">
@@ -1162,9 +1325,9 @@
                             <div class="reminder-control">
                                 <label>Suono</label>
                                 <select class="reminder-sound" data-type="water">
-                                    <option value="sound1">Campane</option>
-                                    <option value="sound2">Natura</option>
-                                    <option value="sound3">Pianoforte</option>
+                                    <option value="bells">Campane 🔔</option>
+                                    <option value="nature">Natura 🌿</option>
+                                    <option value="piano">Pianoforte 🎹</option>
                                 </select>
                             </div>
                         </div>
@@ -1181,7 +1344,7 @@
                 <div class="profile-emoji">😊</div>
                 <div class="profile-info">
                     <div class="profile-name">Marco Rossi</div>
-                    <div class="profile-welcome">Benvenuto nella tua area personale</div>
+                    <div class="profile-welcome">Benvenuto nella tua area personale 🌸</div>
                 </div>
             </div>
 
@@ -1190,14 +1353,14 @@
                     <div class="profile-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <div class="profile-text">Storico e Progressi</div>
+                    <div class="profile-text">Storico e Progressi 📊</div>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-title">
                     <i class="fas fa-crown"></i>
-                    <span>Diventa Premium</span>
+                    <span>Diventa Premium 🌟</span>
                 </div>
                 <div class="profile-item">
                     <div class="profile-icon">
@@ -1218,8 +1381,16 @@
                     <div class="profile-icon">
                         <i class="fas fa-user-edit"></i>
                     </div>
-                    <div class="profile-text">Modifica profilo</div>
+                    <div class="profile-text">Modifica profilo ✏️</div>
                 </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-hands"></i>
+                    <span>Supporto e Aiuto 🤗</span>
+                </div>
+                <p style="padding: 10px; color: var(--text-light);">Siamo qui per te. Se hai bisogno di supporto o vuoi condividere la tua esperienza, contattaci a supporto@viviconsapevolmente.it</p>
             </div>
         </section>
     </div>
@@ -1228,11 +1399,11 @@
     <div class="player-modal" id="player-modal">
         <div class="player-container">
             <div class="player-header">
-                <h2 id="player-title">Meditazione del Respiro</h2>
+                <h2 id="player-title">Meditazione del Respiro 🌬️</h2>
             </div>
             <div class="player-body">
                 <p id="player-description" style="text-align: center; margin-bottom: 20px; color: var(--text-light);">
-                    10 minuti di calma e concentrazione
+                    10 minuti di calma e concentrazione 🧘
                 </p>
                 <div class="player-controls">
                     <button class="player-btn" id="player-back">
@@ -1245,11 +1416,11 @@
                         <i class="fas fa-step-forward"></i>
                     </button>
                 </div>
-                <audio id="meditation-audio" src="meditation1.mp3"></audio>
+                <audio id="meditation-audio"></audio>
 
                 <!-- Review Section in Player -->
                 <div class="player-review-section" id="player-review-section">
-                    <div class="player-review-title">Lascia una recensione</div>
+                    <div class="player-review-title">Lascia una recensione 🌟</div>
                     <div class="player-review-stars">
                         <div class="player-review-star" data-value="1">★</div>
                         <div class="player-review-star" data-value="2">★</div>
@@ -1258,6 +1429,9 @@
                         <div class="player-review-star" data-value="5">★</div>
                     </div>
                     <button class="player-review-btn" id="player-review-btn">Invia Recensione</button>
+                    <div class="review-message" id="review-message" style="display: none;">
+                        Grazie per la tua recensione! 🤗
+                    </div>
                 </div>
 
                 <button class="player-close" id="player-close-btn">Chiudi</button>
@@ -1269,7 +1443,7 @@
     <div class="history-modal" id="history-modal">
         <div class="history-container">
             <div class="history-header">
-                <div class="history-title">Storico e Progressi</div>
+                <div class="history-title">Storico e Progressi 📊</div>
                 <button class="history-close" id="history-close-btn">&times;</button>
             </div>
 
@@ -1301,14 +1475,14 @@
             </div>
 
             <div class="history-section">
-                <div class="history-section-title">Umore Registrato</div>
+                <div class="history-section-title">Umore Registrato 😊</div>
                 <div class="card" id="mood-history-container">
                     <!-- Mood history will be populated here -->
                 </div>
             </div>
 
             <div class="history-section">
-                <div class="history-section-title">Diario della Gratitudine</div>
+                <div class="history-section-title">Diario della Gratitudine 🌟</div>
                 <div class="card" id="gratitude-history-container">
                     <!-- Gratitude entries will be populated here -->
                 </div>
@@ -1319,7 +1493,7 @@
     <!-- Profile Edit Modal con selezione genere -->
     <div class="profile-edit-modal" id="profile-edit-modal">
         <div class="profile-edit-container">
-            <h2 class="profile-edit-title">Modifica Profilo</h2>
+            <h2 class="profile-edit-title">Modifica Profilo ✏️</h2>
 
             <div>
                 <label>Nome</label>
@@ -1340,16 +1514,16 @@
                 <div class="emoji-picker">
                     <div class="emoji-option" data-emoji="😊">😊</div>
                     <div class="emoji-option" data-emoji="😄">😄</div>
-                    <div class="emoji-option" data-emoji="😎">😎</div>
+                    <div class="emoji-option" data-emoji="😌">😌</div>
                     <div class="emoji-option" data-emoji="🧘">🧘</div>
                     <div class="emoji-option" data-emoji="🌿">🌿</div>
                     <div class="emoji-option" data-emoji="🌸">🌸</div>
-                    <div class="emoji-option" data-emoji="🐶">🐶</div>
                     <div class="emoji-option" data-emoji="🦋">🦋</div>
                     <div class="emoji-option" data-emoji="🌈">🌈</div>
                     <div class="emoji-option" data-emoji="🌞">🌞</div>
                     <div class="emoji-option" data-emoji="🌙">🌙</div>
                     <div class="emoji-option" data-emoji="🍃">🍃</div>
+                    <div class="emoji-option" data-emoji="🌼">🌼</div>
                 </div>
             </div>
 
@@ -1399,7 +1573,11 @@
                 moodEntries: {},
                 gratitudeEntries: {},
                 meditationReviews: {},
-                timeWindows: [7, 14, 21], // Orari per il check-in umore
+                timeWindows: [
+                    {id: 'morning', start: 7, end: 13.99, name: 'Mattina'},
+                    {id: 'afternoon', start: 14, end: 20.99, name: 'Pomeriggio'},
+                    {id: 'evening', start: 21, end: 23.99, name: 'Sera'}
+                ],
                 profile: {
                     name: "Marco Rossi",
                     gender: "M",
@@ -1409,21 +1587,35 @@
                 reminders: {
                     breathing: {
                         interval: 60,
-                        sound: 'sound1',
+                        sound: 'bells',
                         active: true
                     },
                     posture: {
                         interval: 45,
-                        sound: 'sound1',
+                        sound: 'bells',
                         active: true
                     },
                     water: {
                         interval: 30,
-                        sound: 'sound1',
+                        sound: 'bells',
                         active: true
                     }
                 },
                 currentCalendarDate: new Date()
+            };
+
+            // Percorsi dei file audio (tutti nella stessa directory)
+            const meditationAudios = {
+                1: 'meditation1.mp3',
+                2: 'meditation2.mp3',
+                3: 'meditation3.mp3',
+                4: 'meditation4.mp3'
+            };
+
+            const soundFiles = {
+                bells: 'bells.mp3',
+                nature: 'nature.mp3',
+                piano: 'piano.mp3'
             };
 
             // DOM Elements
@@ -1454,6 +1646,8 @@
             const nextMonthBtn = document.getElementById('next-month-btn');
             const genderOptions = document.querySelectorAll('.gender-option');
             const welcomeHeader = document.getElementById('welcome-header');
+            const reminderToggles = document.querySelectorAll('.reminder-toggle');
+            const reviewMessage = document.getElementById('review-message');
 
             // Carica dati salvati da localStorage
             function loadSavedData() {
@@ -1476,6 +1670,16 @@
                 if (savedMeditationReviews) {
                     state.meditationReviews = JSON.parse(savedMeditationReviews);
                 }
+
+                const savedUserReviewed = localStorage.getItem('userReviewed');
+                if (savedUserReviewed) {
+                    state.userReviewed = JSON.parse(savedUserReviewed);
+                }
+
+                const savedReminders = localStorage.getItem('reminders');
+                if (savedReminders) {
+                    state.reminders = JSON.parse(savedReminders);
+                }
             }
 
             // Salva dati in localStorage
@@ -1484,17 +1688,8 @@
                 localStorage.setItem('moodEntries', JSON.stringify(state.moodEntries));
                 localStorage.setItem('gratitudeEntries', JSON.stringify(state.gratitudeEntries));
                 localStorage.setItem('meditationReviews', JSON.stringify(state.meditationReviews));
-            }
-
-            // Simulazione salvataggio recensioni sul server
-            function saveReviewToServer(meditationId, rating) {
-                // Simuliamo una chiamata AJAX al server
-                showToast("Recensione salvata sul server...");
-
-                setTimeout(() => {
-                    // In un'applicazione reale, qui verrebbe fatto un fetch() al server
-                    showToast("Recensione pubblicata con successo! ✅");
-                }, 1500);
+                localStorage.setItem('userReviewed', JSON.stringify(state.userReviewed));
+                localStorage.setItem('reminders', JSON.stringify(state.reminders));
             }
 
             // Funzione per aggiornare il messaggio di benvenuto in base al genere
@@ -1515,7 +1710,7 @@
                         welcomeText = "Bentornato/a!";
                 }
 
-                welcomeHeader.textContent = welcomeText;
+                welcomeHeader.textContent = welcomeText + " 😊";
 
                 const welcomeElement = document.querySelector('.profile-welcome');
                 let welcomeProfileText = "";
@@ -1535,7 +1730,7 @@
                 }
 
                 if (welcomeElement) {
-                    welcomeElement.textContent = welcomeProfileText;
+                    welcomeElement.textContent = welcomeProfileText + " 🌸";
                 }
             }
 
@@ -1554,6 +1749,12 @@
                 document.querySelectorAll('.reminder-sound').forEach(select => {
                     const type = select.dataset.type;
                     select.value = state.reminders[type].sound;
+                });
+
+                // Initialize reminder toggles
+                reminderToggles.forEach(toggle => {
+                    const type = toggle.dataset.type;
+                    toggle.checked = state.reminders[type].active;
                 });
 
                 // Aggiorna le valutazioni delle meditazioni
@@ -1583,91 +1784,174 @@
                             section.classList.add('active');
                         }
                     });
+
+                    // Se siamo nella sezione Salute, inizializza il check-in
+                    if (target === 'health') {
+                        initTimeBasedCheckin();
+                    }
                 });
             });
 
-            // Mood tracking - solo 3 volte al giorno (7, 14, 21)
-            moodButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const mood = this.dataset.mood;
-                    const now = new Date();
-                    const currentHour = now.getHours();
+            // Funzione per inizializzare il check-in basato sul tempo
+            function initTimeBasedCheckin() {
+                const moodStatus = document.querySelector('.mood-status');
+                const moodButtons = document.querySelectorAll('.mood-btn');
 
-                    // Controlla se l'ora corrente è una delle finestre consentite
-                    if (!state.timeWindows.includes(currentHour)) {
-                        showToast("Il check-in è disponibile solo alle 7, 14 e 21");
-                        return;
+                // Se non siamo nella pagina Salute, esci
+                if (!moodStatus || !moodButtons.length) return;
+
+                const now = new Date();
+                const currentTime = now.getHours() + now.getMinutes()/100;
+
+                // Trova la finestra oraria attuale
+                let currentWindow = null;
+                let nextWindow = null;
+
+                for (const window of state.timeWindows) {
+                    if (currentTime >= window.start && currentTime <= window.end) {
+                        currentWindow = window;
+                        break;
                     }
 
-                    const timeString = now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
-                    const today = getLocalDateString();
-
-                    if (!state.moodEntries[today]) {
-                        state.moodEntries[today] = [];
+                    // Trova la prossima finestra disponibile
+                    if (currentTime < window.start) {
+                        nextWindow = window;
+                        break;
                     }
+                }
 
-                    // Controlla se l'utente ha già effettuato il check-in in questa finestra oraria
-                    const hasLoggedInCurrentWindow = state.moodEntries[today].some(entry => {
-                        const entryHour = parseInt(entry.time.split(':')[0]);
-                        return entryHour === currentHour;
-                    });
-
-                    if (hasLoggedInCurrentWindow) {
-                        showToast("Hai già effettuato il check-in per questa fascia oraria");
-                        return;
+                // Abilita/disabilita i pulsanti in base alla finestra corrente
+                if (currentWindow) {
+                    moodStatus.innerHTML = `<i class="fas fa-smile"></i> È ora per il tuo check-in della ${currentWindow.name}!`;
+                    moodButtons.forEach(btn => btn.disabled = false);
+                } else {
+                    if (nextWindow) {
+                        moodStatus.innerHTML = `<i class="fas fa-clock"></i> Prossimo check-in alle ${nextWindow.start}:00`;
+                    } else {
+                        moodStatus.innerHTML = `<i class="fas fa-check"></i> Check-in completati per oggi`;
                     }
-
-                    state.moodEntries[today].push({ mood, time: timeString });
-
-                    showToast(`Umore registrato: ${getMoodName(mood)} ${getMoodEmoji(mood)}`);
                     moodButtons.forEach(btn => btn.disabled = true);
+                }
 
-                    // Salva i dati
-                    saveData();
+                // Controlla se ci sono check-in già effettuati oggi
+                const today = getLocalDateString();
+                if (state.moodEntries[today]) {
+                    state.moodEntries[today].forEach(entry => {
+                        if (entry.window === currentWindow?.id) {
+                            moodButtons.forEach(btn => btn.disabled = true);
+                        }
+                    });
+                }
+            }
+
+            // Mood tracking con finestre orarie
+            if (moodButtons.length) {
+                moodButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const mood = this.dataset.mood;
+                        const now = new Date();
+                        const currentTime = now.getHours() + now.getMinutes()/100;
+
+                        // Trova la finestra oraria attuale
+                        let currentWindow = null;
+                        for (const window of state.timeWindows) {
+                            if (currentTime >= window.start && currentTime <= window.end) {
+                                currentWindow = window;
+                                break;
+                            }
+                        }
+
+                        // Controlla se siamo in una finestra oraria valida
+                        if (!currentWindow) {
+                            showToast("Il check-in è disponibile solo dalle 7:00 alle 23:59");
+                            return;
+                        }
+
+                        const today = getLocalDateString();
+
+                        if (!state.moodEntries[today]) {
+                            state.moodEntries[today] = [];
+                        }
+
+                        // Controlla se l'utente ha già effettuato il check-in in questa finestra oraria
+                        const hasLoggedInCurrentWindow = state.moodEntries[today].some(entry =>
+                            entry.window === currentWindow.id
+                        );
+
+                        if (hasLoggedInCurrentWindow) {
+                            showToast(`Hai già effettuato il check-in per la ${currentWindow.name}`);
+                            return;
+                        }
+
+                        // Salva il check-in con la finestra oraria
+                        state.moodEntries[today].push({
+                            mood,
+                            window: currentWindow.id
+                        });
+
+                        showToast(`Umore registrato: ${getMoodName(mood)} ${getMoodEmoji(mood)}`);
+
+                        // Disabilita i pulsanti per la finestra corrente
+                        moodButtons.forEach(btn => btn.disabled = true);
+
+                        // Salva i dati
+                        saveData();
+                    });
                 });
-            });
+            }
 
             // Meditation player
-            meditationItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const meditationId = this.dataset.id;
-                    const meditationTitle = this.dataset.title;
+            if (meditationItems.length) {
+                meditationItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        const meditationId = this.dataset.id;
+                        const meditationTitle = this.dataset.title;
+                        const meditationDuration = this.dataset.duration;
 
-                    state.currentMeditation = meditationId;
+                        state.currentMeditation = meditationId;
 
-                    // Set meditation info in player
-                    document.getElementById('player-title').textContent = meditationTitle;
-                    document.getElementById('player-description').textContent =
-                        this.querySelector('.meditation-desc').textContent;
+                        // Set meditation info in player
+                        document.getElementById('player-title').textContent = meditationTitle;
+                        document.getElementById('player-description').textContent =
+                            `${meditationDuration} di ${this.querySelector('.meditation-desc').textContent} 🧘`;
 
-                    // Show/hide review section based on whether user has reviewed
-                    if (state.userReviewed[meditationId]) {
-                        playerReviewSection.style.display = 'none';
-                    } else {
-                        playerReviewSection.style.display = 'block';
-                        // Reset stars
-                        playerReviewStars.forEach(star => star.classList.remove('active'));
-                    }
+                        // Set audio source
+                        audioPlayer.src = meditationAudios[meditationId];
 
-                    playerModal.classList.add('active');
+                        // Show/hide review section based on whether user has reviewed
+                        if (state.userReviewed[meditationId]) {
+                            playerReviewSection.style.display = 'none';
+                        } else {
+                            playerReviewSection.style.display = 'block';
+                            // Reset stars
+                            playerReviewStars.forEach(star => star.classList.remove('active'));
+                            reviewMessage.style.display = 'none';
+                        }
+
+                        playerModal.classList.add('active');
+                    });
                 });
-            });
+            }
 
             // Player controls
-            playBtn.addEventListener('click', function() {
-                if (audioPlayer.paused) {
-                    audioPlayer.play();
-                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                } else {
-                    audioPlayer.pause();
-                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
-                }
-            });
+            if (playBtn) {
+                playBtn.addEventListener('click', function() {
+                    if (audioPlayer.paused) {
+                        audioPlayer.play();
+                        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    } else {
+                        audioPlayer.pause();
+                        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    }
+                });
+            }
 
             // When audio ends
-            audioPlayer.addEventListener('ended', function() {
-                showToast("Meditazione completata! Lascia una recensione se ti è piaciuta.");
-            });
+            if (audioPlayer) {
+                audioPlayer.addEventListener('ended', function() {
+                    showToast("Meditazione completata! Lascia una recensione se ti è piaciuta. 🧘");
+                });
+            }
 
             // Player review stars - prevenire zoom su mobile
             playerReviewStars.forEach(star => {
@@ -1691,44 +1975,53 @@
             });
 
             // Submit review from player
-            playerReviewBtn.addEventListener('click', function() {
-                let selectedRating = 0;
-                playerReviewStars.forEach((star, index) => {
-                    if (star.classList.contains('active')) {
-                        selectedRating = index + 1;
+            if (playerReviewBtn) {
+                playerReviewBtn.addEventListener('click', function() {
+                    let selectedRating = 0;
+                    playerReviewStars.forEach((star, index) => {
+                        if (star.classList.contains('active')) {
+                            selectedRating = index + 1;
+                        }
+                    });
+
+                    if (selectedRating === 0) {
+                        showToast("Seleziona una valutazione prima di inviare");
+                        return;
+                    }
+
+                    // Salva recensione (solo una volta per account)
+                    if (!state.userReviewed[state.currentMeditation]) {
+                        if (!state.meditationReviews[state.currentMeditation]) {
+                            state.meditationReviews[state.currentMeditation] = [];
+                        }
+                        state.meditationReviews[state.currentMeditation].push(selectedRating);
+                        state.userReviewed[state.currentMeditation] = true;
+
+                        // Update rating display
+                        updateMeditationRating(state.currentMeditation);
+
+                        // Show success message
+                        reviewMessage.style.display = 'block';
+
+                        // Save data locally
+                        saveData();
+
+                        showToast("Recensione salvata con successo! 🌟");
+                    } else {
+                        showToast("Hai già recensito questa meditazione");
                     }
                 });
-
-                if (selectedRating === 0) {
-                    showToast("Seleziona una valutazione prima di inviare");
-                    return;
-                }
-
-                // Save review locally
-                if (!state.meditationReviews[state.currentMeditation]) {
-                    state.meditationReviews[state.currentMeditation] = [];
-                }
-                state.meditationReviews[state.currentMeditation].push(selectedRating);
-                state.userReviewed[state.currentMeditation] = true;
-
-                // Update rating display
-                updateMeditationRating(state.currentMeditation);
-
-                // Hide review section
-                playerReviewSection.style.display = 'none';
-
-                // Save data locally
-                saveData();
-
-                // Save to server
-                saveReviewToServer(state.currentMeditation, selectedRating);
-            });
+            }
 
             // Close player
             document.getElementById('player-close-btn').addEventListener('click', function() {
                 playerModal.classList.remove('active');
-                audioPlayer.pause();
-                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                if (audioPlayer) {
+                    audioPlayer.pause();
+                }
+                if (playBtn) {
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
             });
 
             // History section
@@ -1830,7 +2123,7 @@
                 saveData();
 
                 profileEditModal.classList.remove('active');
-                showToast("Profilo aggiornato con successo!");
+                showToast("Profilo aggiornato con successo! 😊");
             });
 
             // Cancel profile edit
@@ -1847,7 +2140,7 @@
                 const entries = Array.from(inputs).map(input => input.value.trim());
 
                 state.gratitudeEntries[today] = entries;
-                showToast("Diario della gratitudine salvato!");
+                showToast("Diario della gratitudine salvato! 🌟");
                 this.reset();
 
                 // Salva i dati
@@ -1855,33 +2148,42 @@
             });
 
             // Save reminder settings
-            saveRemindersBtn.addEventListener('click', function() {
-                // Update breathing reminder
-                state.reminders.breathing.interval = parseInt(
-                    document.querySelector('.reminder-interval[data-type="breathing"]').value
-                );
-                state.reminders.breathing.sound =
-                    document.querySelector('.reminder-sound[data-type="breathing"]').value;
+            if (saveRemindersBtn) {
+                saveRemindersBtn.addEventListener('click', function() {
+                    // Update breathing reminder
+                    state.reminders.breathing.interval = parseInt(
+                        document.querySelector('.reminder-interval[data-type="breathing"]').value
+                    );
+                    state.reminders.breathing.sound =
+                        document.querySelector('.reminder-sound[data-type="breathing"]').value;
+                    state.reminders.breathing.active =
+                        document.querySelector('.reminder-toggle[data-type="breathing"]').checked;
 
-                // Update posture reminder
-                state.reminders.posture.interval = parseInt(
-                    document.querySelector('.reminder-interval[data-type="posture"]').value
-                );
-                state.reminders.posture.sound =
-                    document.querySelector('.reminder-sound[data-type="posture"]').value;
+                    // Update posture reminder
+                    state.reminders.posture.interval = parseInt(
+                        document.querySelector('.reminder-interval[data-type="posture"]').value
+                    );
+                    state.reminders.posture.sound =
+                        document.querySelector('.reminder-sound[data-type="posture"]').value;
+                    state.reminders.posture.active =
+                        document.querySelector('.reminder-toggle[data-type="posture"]').checked;
 
-                // Update water reminder
-                state.reminders.water.interval = parseInt(
-                    document.querySelector('.reminder-interval[data-type="water"]').value
-                );
-                state.reminders.water.sound =
-                    document.querySelector('.reminder-sound[data-type="water"]').value;
+                    // Update water reminder
+                    state.reminders.water.interval = parseInt(
+                        document.querySelector('.reminder-interval[data-type="water"]').value
+                    );
+                    state.reminders.water.sound =
+                        document.querySelector('.reminder-sound[data-type="water"]').value;
+                    state.reminders.water.active =
+                        document.querySelector('.reminder-toggle[data-type="water"]').checked;
 
-                // Start reminders
-                startReminders();
+                    // Start reminders
+                    startReminders();
 
-                showToast("Impostazioni promemoria salvate!", true);
-            });
+                    showToast("Impostazioni promemoria salvate! 🔔", true);
+                    saveData(); // Salva i settaggi
+                });
+            }
 
             // Helper functions
             function updateMeditationRating(meditationId) {
@@ -1937,20 +2239,26 @@
             }
 
             function showToast(message, isReminder = false) {
-                toast.textContent = message;
+                const emoji = isReminder ? '🔔' : '🌸';
+                toast.innerHTML = `<span>${emoji}</span> ${message}`;
                 toast.classList.add('show');
 
                 setTimeout(() => {
                     toast.classList.remove('show');
                 }, 3000);
+            }
 
-                // Show system notification only for reminders
-                if (isReminder) {
-                    showSystemNotification(message);
+            function playNotificationSound(type) {
+                try {
+                    const soundFile = soundFiles[type];
+                    const audio = new Audio(soundFile);
+                    audio.play().catch(e => console.log("Impossibile riprodurre il suono:", e));
+                } catch (e) {
+                    console.log("Errore nella riproduzione del suono:", e);
                 }
             }
 
-            function showSystemNotification(message) {
+            function showSystemNotification(message, type) {
                 // Verifica se siamo su un dispositivo mobile
                 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
@@ -1960,9 +2268,13 @@
                         body: message,
                         icon: 'https://cdn-icons-png.flaticon.com/512/1998/1998662.png'
                     });
+
+                    // Riproduci il suono di notifica specifico
+                    playNotificationSound(type);
                 } else if (isMobile) {
                     // Fallback per mobile se le notifiche non sono permesse
                     alert(`Notifica: ${message}`);
+                    playNotificationSound(type);
                 }
             }
 
@@ -1987,7 +2299,7 @@
                             <div style="font-size: 2rem; margin-right: 15px;">${getMoodEmoji(entry.mood)}</div>
                             <div>
                                 <div>${getMoodName(entry.mood)}</div>
-                                <div style="font-size: 0.8rem; color: var(--text-light);">${entry.time}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-light);">${state.timeWindows.find(w => w.id === entry.window).name}</div>
                             </div>
                         `;
 
@@ -2109,7 +2421,7 @@
                 // Setup breathing reminder
                 if (state.reminders.breathing.active) {
                     const interval = setInterval(() => {
-                        showSystemNotification("💨 Ricorda di fare un respiro profondo e consapevole!");
+                        showSystemNotification("💨 Ricorda di fare un respiro profondo e consapevole!", state.reminders.breathing.sound);
                     }, state.reminders.breathing.interval * 60 * 1000);
 
                     window.reminderIntervals.push(interval);
@@ -2118,7 +2430,7 @@
                 // Setup posture reminder
                 if (state.reminders.posture.active) {
                     const interval = setInterval(() => {
-                        showSystemNotification("🧍 Controlla la tua postura! Stai dritto e rilassato!");
+                        showSystemNotification("🧍 Controlla la tua postura! Stai dritto e rilassato!", state.reminders.posture.sound);
                     }, state.reminders.posture.interval * 60 * 1000);
 
                     window.reminderIntervals.push(interval);
@@ -2127,39 +2439,27 @@
                 // Setup water reminder
                 if (state.reminders.water.active) {
                     const interval = setInterval(() => {
-                        showSystemNotification("💧 È ora di bere un po' d'acqua! Mantieniti idratato!");
+                        showSystemNotification("💧 È ora di bere un po' d'acqua! Mantieniti idratato!", state.reminders.water.sound);
                     }, state.reminders.water.interval * 60 * 1000);
 
                     window.reminderIntervals.push(interval);
                 }
             }
 
-            // Initialize time-based mood check-in
-            function initTimeBasedCheckin() {
-                const now = new Date();
-                const currentHour = now.getHours();
-                const moodStatus = document.querySelector('.mood-status');
-
-                // Find next check-in time
-                let nextWindow = state.timeWindows.find(hour => hour > currentHour);
-
-                if (nextWindow) {
-                    moodStatus.textContent = `Prossimo check-in alle ${nextWindow}:00`;
-                } else {
-                    moodStatus.textContent = "Check-in completati per oggi";
-                }
-
-                // Enable buttons if it's check-in time
-                if (state.timeWindows.includes(currentHour)) {
-                    moodStatus.textContent = `È ora per il tuo check-in!`;
-                    moodButtons.forEach(btn => btn.disabled = false);
-                }
+            // Initialize the app
+            if (document.querySelector('#health.section.active')) {
+                initTimeBasedCheckin();
             }
 
-            // Initialize the app
-            initTimeBasedCheckin();
             startReminders();
             generateCalendar();
+
+            // Aggiorna periodicamente lo stato del check-in SOLO SE NELLA PAGINA SALUTE
+            setInterval(() => {
+                if (document.querySelector('#health.section.active')) {
+                    initTimeBasedCheckin();
+                }
+            }, 60000); // Ogni minuto
 
             // Request notification permission
             if (!("Notification" in window)) {
