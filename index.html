@@ -423,7 +423,7 @@
             overflow: hidden;
             box-shadow: var(--shadow-lg);
             padding: 25px;
-            max-height: 90vh;
+            max-height: 85vh; /* Adjusted for better mobile fit */
             overflow-y: auto;
             background: linear-gradient(to bottom, #f0fdfa, #e0f2fe);
         }
@@ -1140,10 +1140,10 @@
             </div>
 
             <div class="daily-card">
-                <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80" alt="Immagine del giorno">
+                <img id="daily-image" src="" alt="Immagine del giorno">
                 <div class="daily-card-overlay">
                     <h3><i class="fas fa-quote-left"></i> Pensiero del Giorno</h3>
-                    <p>"La pace viene da dentro. Non cercarla fuori." - Buddha 🌸</p>
+                    <p id="daily-quote">"La pace viene da dentro. Non cercarla fuori." - Buddha 🌸</p>
                 </div>
             </div>
 
@@ -1165,6 +1165,7 @@
             </div>
 
             <div class="meditation-list">
+                <!-- Existing meditations -->
                 <div class="meditation-item" data-id="1" data-title="Meditazione del Respiro" data-duration="10 minuti">
                     <div class="meditation-icon">
                         <i class="fas fa-wind"></i>
@@ -1208,12 +1209,67 @@
                         <div class="meditation-rating" style="display: none;"></div>
                     </div>
                 </div>
+
+                <!-- New office meditations -->
+                <div class="meditation-item" data-id="5" data-title="Pausa Caffè Consapevole" data-duration="5 minuti">
+                    <div class="meditation-icon">
+                        <i class="fas fa-coffee"></i>
+                    </div>
+                    <div class="meditation-info">
+                        <div class="meditation-title">Pausa Caffè Consapevole ☕</div>
+                        <div class="meditation-desc">Ricarica durante una pausa</div>
+                        <div class="meditation-rating" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="meditation-item" data-id="6" data-title="Rilassamento Sulla Sedia" data-duration="7 minuti">
+                    <div class="meditation-icon">
+                        <i class="fas fa-chair"></i>
+                    </div>
+                    <div class="meditation-info">
+                        <div class="meditation-title">Rilassamento Sulla Sedia 💺</div>
+                        <div class="meditation-desc">Sollievo immediato dallo stress</div>
+                        <div class="meditation-rating" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="meditation-item" data-id="7" data-title="Concentrazione al Lavoro" data-duration="8 minuti">
+                    <div class="meditation-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="meditation-info">
+                        <div class="meditation-title">Concentrazione al Lavoro 🧠</div>
+                        <div class="meditation-desc">Migliora la produttività</div>
+                        <div class="meditation-rating" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="meditation-item" data-id="8" data-title="Gestione dello Stress" data-duration="10 minuti">
+                    <div class="meditation-icon">
+                        <i class="fas fa-tired"></i>
+                    </div>
+                    <div class="meditation-info">
+                        <div class="meditation-title">Gestione dello Stress 😓</div>
+                        <div class="meditation-desc">Calma nelle situazioni difficili</div>
+                        <div class="meditation-rating" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="meditation-item" data-id="9" data-title="Ricarica Energetica" data-duration="6 minuti">
+                    <div class="meditation-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="meditation-info">
+                        <div class="meditation-title">Ricarica Energetica ⚡</div>
+                        <div class="meditation-desc">Energia per il resto della giornata</div>
+                        <div class="meditation-rating" style="display: none;"></div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- Health Section -->
         <section id="health" class="section">
-            <!-- MODIFICA: Cambiato l'emoji nel titolo da 💖 a 🧠 -->
             <div class="header">
                 <h1>Monitor Salute 🧠</h1>
                 <p>Tieni traccia del tuo benessere</p>
@@ -1227,8 +1283,6 @@
                 <div class="mood-status">
                     <i class="fas fa-smile"></i> È ora per il tuo check-in del pomeriggio!
                 </div>
-
-                <!-- MODIFICA: Rimossa la sezione delle fasce orarie -->
 
                 <div class="mood-tracker">
                     <button class="mood-btn" data-mood="stressato">😩</button>
@@ -1405,15 +1459,24 @@
                 <p id="player-description" style="text-align: center; margin-bottom: 20px; color: var(--text-light);">
                     10 minuti di calma e concentrazione 🧘
                 </p>
+
+                <!-- Progress bar -->
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span id="current-time">0:00</span>
+                        <span id="total-time">0:00</span>
+                    </div>
+                    <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                        <div id="progress-bar" style="height: 100%; width: 0%; background: var(--primary);"></div>
+                    </div>
+                </div>
+
                 <div class="player-controls">
-                    <button class="player-btn" id="player-back">
-                        <i class="fas fa-step-backward"></i>
+                    <button class="player-btn" id="player-restart">
+                        <i class="fas fa-redo"></i>
                     </button>
                     <button class="player-btn" id="player-play">
                         <i class="fas fa-play"></i>
-                    </button>
-                    <button class="player-btn" id="player-next">
-                        <i class="fas fa-step-forward"></i>
                     </button>
                 </div>
                 <audio id="meditation-audio"></audio>
@@ -1601,7 +1664,56 @@
                         active: true
                     }
                 },
-                currentCalendarDate: new Date()
+                currentCalendarDate: new Date(),
+                dailyInspiration: {
+                    quotes: [
+                        "La pace viene da dentro. Non cercarla fuori. - Buddha 🌸",
+                        "Ogni giorno è una nuova possibilità per cambiare la tua vita. 🌱",
+                        "La felicità non è una meta, ma un modo di viaggiare. 🛤️",
+                        "Respira. Lascia andare. E ricorda che questo preciso momento è l'unico che conosci con certezza. 🌬️",
+                        "Non puoi controllare le onde, ma puoi imparare a fare surf. 🌊",
+                        "La vita è un'eco: ciò che dai, ti torna indietro. ❤️",
+                        "La calma è la culla della potenza. 🧘",
+                        "Sii il cambiamento che vuoi vedere nel mondo. - Gandhi 🌍",
+                        "Ogni giorno può essere un buon giorno se decidi così. ☀️",
+                        "Le difficoltà preparano persone comuni a destini straordinari. ⚡",
+                        "L'unico modo per fare un ottimo lavoro è amare quello che fai. - Steve Jobs 💼",
+                        "Non aspettare. Il momento perfetto non arriverà mai. Inizia ora. 🚀",
+                        "La felicità non è avere ciò che desideri, ma desiderare ciò che hai. 🙏",
+                        "Il tuo corpo ascolta tutto ciò che la tua mente dice. Presta attenzione. 🧠",
+                        "Ogni respiro è un'opportunità per ricominciare. 🌬️",
+                        "Il sorriso è la curva che raddrizza tutto. 😊",
+                        "Sii come un albero: stabile nelle radici, flessibile nei rami. 🌳",
+                        "La bellezza della vita non sta nella durata, ma nella profondità. 🌊",
+                        "La gratitudine trasforma ciò che abbiamo in abbastanza. 🙏",
+                        "Il presente è un dono, per questo si chiama presente. 🎁"
+                    ],
+                    images: [
+                        "https://images.unsplash.com/photo-1505142468610-359e7d316be0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1426604966848-d7adac402bff?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1501854140801-50d01698950b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1433086966358-54859d0ed716?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1428908728789-d2de25dbd4e2?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1506260408121-e353d10b87c7?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1431794062232-2a99a5431c6c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1414541944151-2f3ec1cfd87d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1444464666168-49d633b86797?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1439396087961-98bc12c21176?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                        "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80"
+                    ],
+                    lastUpdated: null,
+                    currentQuote: null,
+                    currentImage: null
+                }
             };
 
             // Percorsi dei file audio (tutti nella stessa directory)
@@ -1609,7 +1721,12 @@
                 1: 'meditation1.mp3',
                 2: 'meditation2.mp3',
                 3: 'meditation3.mp3',
-                4: 'meditation4.mp3'
+                4: 'meditation4.mp3',
+                5: 'meditation5.mp3',
+                6: 'meditation6.mp3',
+                7: 'meditation7.mp3',
+                8: 'meditation8.mp3',
+                9: 'meditation9.mp3'
             };
 
             const soundFiles = {
@@ -1628,6 +1745,7 @@
             const profileEditModal = document.getElementById('profile-edit-modal');
             const audioPlayer = document.getElementById('meditation-audio');
             const playBtn = document.getElementById('player-play');
+            const restartBtn = document.getElementById('player-restart');
             const toast = document.getElementById('toast');
             const historyBtn = document.getElementById('history-btn');
             const historyCloseBtn = document.getElementById('history-close-btn');
@@ -1648,6 +1766,11 @@
             const welcomeHeader = document.getElementById('welcome-header');
             const reminderToggles = document.querySelectorAll('.reminder-toggle');
             const reviewMessage = document.getElementById('review-message');
+            const dailyQuote = document.getElementById('daily-quote');
+            const dailyImage = document.getElementById('daily-image');
+            const progressBar = document.getElementById('progress-bar');
+            const currentTimeEl = document.getElementById('current-time');
+            const totalTimeEl = document.getElementById('total-time');
 
             // Carica dati salvati da localStorage
             function loadSavedData() {
@@ -1680,6 +1803,11 @@
                 if (savedReminders) {
                     state.reminders = JSON.parse(savedReminders);
                 }
+
+                const savedDailyInspiration = localStorage.getItem('dailyInspiration');
+                if (savedDailyInspiration) {
+                    state.dailyInspiration = JSON.parse(savedDailyInspiration);
+                }
             }
 
             // Salva dati in localStorage
@@ -1690,6 +1818,7 @@
                 localStorage.setItem('meditationReviews', JSON.stringify(state.meditationReviews));
                 localStorage.setItem('userReviewed', JSON.stringify(state.userReviewed));
                 localStorage.setItem('reminders', JSON.stringify(state.reminders));
+                localStorage.setItem('dailyInspiration', JSON.stringify(state.dailyInspiration));
             }
 
             // Funzione per aggiornare il messaggio di benvenuto in base al genere
@@ -1761,6 +1890,9 @@
                 for (const meditationId in state.meditationReviews) {
                     updateMeditationRating(meditationId);
                 }
+
+                // Aggiorna l'ispirazione giornaliera
+                updateDailyInspiration();
             }
 
             // Carica i dati salvati e inizializza l'UI
@@ -1918,6 +2050,11 @@
                         // Set audio source
                         audioPlayer.src = meditationAudios[meditationId];
 
+                        // Reset progress bar
+                        progressBar.style.width = "0%";
+                        currentTimeEl.textContent = "0:00";
+                        totalTimeEl.textContent = "0:00";
+
                         // Show/hide review section based on whether user has reviewed
                         if (state.userReviewed[meditationId]) {
                             playerReviewSection.style.display = 'none';
@@ -1946,33 +2083,78 @@
                 });
             }
 
+            // Restart button
+            if (restartBtn) {
+                restartBtn.addEventListener('click', function() {
+                    audioPlayer.currentTime = 0;
+                    progressBar.style.width = "0%";
+                    currentTimeEl.textContent = "0:00";
+
+                    if (audioPlayer.paused) {
+                        audioPlayer.play();
+                        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    }
+                });
+            }
+
+            // Update progress bar
+            if (audioPlayer) {
+                audioPlayer.addEventListener('timeupdate', function() {
+                    const currentTime = audioPlayer.currentTime;
+                    const duration = audioPlayer.duration;
+
+                    if (duration > 0) {
+                        const progressPercent = (currentTime / duration) * 100;
+                        progressBar.style.width = `${progressPercent}%`;
+
+                        // Update time display
+                        currentTimeEl.textContent = formatTime(currentTime);
+                        totalTimeEl.textContent = formatTime(duration);
+                    }
+                });
+            }
+
+            // Format time as MM:SS
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
             // When audio ends
             if (audioPlayer) {
                 audioPlayer.addEventListener('ended', function() {
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
                     showToast("Meditazione completata! Lascia una recensione se ti è piaciuta. 🧘");
                 });
             }
 
-            // Player review stars - prevenire zoom su mobile
+            // Player review stars
             playerReviewStars.forEach(star => {
+                // Handle click for desktop
                 star.addEventListener('click', function(e) {
-                    const value = parseInt(this.dataset.value);
-
-                    // Update stars display
-                    playerReviewStars.forEach((s, index) => {
-                        if (index < value) {
-                            s.classList.add('active');
-                        } else {
-                            s.classList.remove('active');
-                        }
-                    });
+                    handleStarClick(this);
                 });
 
-                // Prevenire zoom su mobile
-                star.addEventListener('touchstart', function(e) {
+                // Handle touch for mobile
+                star.addEventListener('touchend', function(e) {
                     e.preventDefault();
-                }, { passive: false });
+                    handleStarClick(this);
+                });
             });
+
+            function handleStarClick(star) {
+                const value = parseInt(star.dataset.value);
+
+                // Update stars display
+                playerReviewStars.forEach((s, index) => {
+                    if (index < value) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            }
 
             // Submit review from player
             if (playerReviewBtn) {
@@ -2018,8 +2200,6 @@
                 playerModal.classList.remove('active');
                 if (audioPlayer) {
                     audioPlayer.pause();
-                }
-                if (playBtn) {
                     playBtn.innerHTML = '<i class="fas fa-play"></i>';
                 }
             });
@@ -2183,6 +2363,34 @@
                     showToast("Impostazioni promemoria salvate! 🔔", true);
                     saveData(); // Salva i settaggi
                 });
+            }
+
+            // Update daily inspiration
+            function updateDailyInspiration() {
+                const today = new Date().toDateString();
+
+                // Check if we need to update the daily inspiration
+                if (state.dailyInspiration.lastUpdated !== today) {
+                    // Get random quote and image
+                    const quoteIndex = Math.floor(Math.random() * state.dailyInspiration.quotes.length);
+                    const imageIndex = Math.floor(Math.random() * state.dailyInspiration.images.length);
+
+                    state.dailyInspiration.currentQuote = state.dailyInspiration.quotes[quoteIndex];
+                    state.dailyInspiration.currentImage = state.dailyInspiration.images[imageIndex];
+                    state.dailyInspiration.lastUpdated = today;
+
+                    // Save to localStorage
+                    saveData();
+                }
+
+                // Update the UI
+                if (dailyQuote && state.dailyInspiration.currentQuote) {
+                    dailyQuote.textContent = state.dailyInspiration.currentQuote;
+                }
+
+                if (dailyImage && state.dailyInspiration.currentImage) {
+                    dailyImage.src = state.dailyInspiration.currentImage;
+                }
             }
 
             // Helper functions
