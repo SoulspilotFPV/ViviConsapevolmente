@@ -12,6 +12,7 @@
             --primary: #0d9488;
             --primary-light: #5eead4;
             --primary-dark: #115e59;
+            --primary-darker: #0c7369;
             --background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);
             --card-bg: rgba(255, 255, 255, 0.92);
             --text: #334155;
@@ -172,6 +173,11 @@
             background: rgba(94, 234, 212, 0.2);
         }
 
+        .mood-btn:active, .mood-btn.active {
+            background: var(--primary-darker);
+            transform: scale(1.1);
+        }
+
         .mood-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -324,6 +330,11 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
+        .player-btn:active, .player-btn.active {
+            background: var(--primary-darker);
+            transform: scale(0.95);
+        }
+
         .player-close {
             display: block;
             width: 100%;
@@ -341,6 +352,10 @@
 
         .player-close:hover {
             background: #e2e8f0;
+        }
+
+        .player-close:active {
+            background: #d1d8e0;
         }
 
         .player-review-section {
@@ -375,6 +390,10 @@
             color: var(--warning);
         }
 
+        .player-review-star:active {
+            transform: scale(0.9);
+        }
+
         .player-review-btn {
             display: block;
             width: 100%;
@@ -391,6 +410,11 @@
 
         .player-review-btn:hover {
             background: var(--primary-dark);
+        }
+
+        .player-review-btn:active {
+            background: var(--primary-darker);
+            transform: scale(0.98);
         }
 
         /* History Modal */
@@ -423,9 +447,10 @@
             overflow: hidden;
             box-shadow: var(--shadow-lg);
             padding: 25px;
-            max-height: 85vh; /* Adjusted for better mobile fit */
+            max-height: 85vh;
             overflow-y: auto;
             background: linear-gradient(to bottom, #f0fdfa, #e0f2fe);
+            margin: 20px;
         }
 
         .history-header {
@@ -458,6 +483,11 @@
         .history-close:hover {
             background: #f1f5f9;
             color: var(--text);
+        }
+
+        .history-close:active {
+            background: #e2e8f0;
+            transform: scale(0.9);
         }
 
         .mood-bar-container {
@@ -527,6 +557,11 @@
             background: rgba(94, 234, 212, 0.2);
         }
 
+        .calendar-nav-btn:active {
+            background: rgba(94, 234, 212, 0.3);
+            transform: scale(0.95);
+        }
+
         .calendar-month {
             font-weight: 700;
             color: var(--primary-dark);
@@ -560,6 +595,11 @@
 
         .calendar-day:hover {
             background: rgba(94, 234, 212, 0.2);
+        }
+
+        .calendar-day:active {
+            background: var(--primary);
+            color: white;
         }
 
         .calendar-day.active {
@@ -615,6 +655,7 @@
             box-shadow: var(--shadow-lg);
             padding: 25px;
             background: linear-gradient(to bottom, #f0fdfa, #e0f2fe);
+            margin: 20px;
         }
 
         .profile-edit-title {
@@ -644,6 +685,10 @@
         .emoji-option:hover, .emoji-option.selected {
             background: rgba(94, 234, 212, 0.2);
             transform: scale(1.1);
+        }
+
+        .emoji-option:active {
+            transform: scale(0.95);
         }
 
         .profile-edit-input {
@@ -683,6 +728,11 @@
             background: #e2e8f0;
         }
 
+        .profile-edit-cancel:active {
+            background: #d1d8e0;
+            transform: scale(0.98);
+        }
+
         .profile-edit-save {
             background: var(--primary);
             color: white;
@@ -690,6 +740,11 @@
 
         .profile-edit-save:hover {
             background: var(--primary-dark);
+        }
+
+        .profile-edit-save:active {
+            background: var(--primary-darker);
+            transform: scale(0.98);
         }
 
         /* Gender Selection */
@@ -719,6 +774,10 @@
             background: rgba(94, 234, 212, 0.1);
             color: var(--primary-dark);
             font-weight: 600;
+        }
+
+        .gender-option:active {
+            transform: scale(0.95);
         }
 
         /* Toast Notification */
@@ -783,6 +842,11 @@
         .nav-icon {
             font-size: 1.4rem;
             margin-bottom: 4px;
+        }
+
+        .nav-item:active {
+            color: var(--primary-darker);
+            transform: scale(0.95);
         }
 
         /* Reminder Settings */
@@ -863,6 +927,11 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
+        .save-reminders:active {
+            background: var(--primary-darker);
+            transform: scale(0.98);
+        }
+
         /* Gratitude Diary */
         .gratitude-form {
             display: grid;
@@ -902,6 +971,11 @@
         .gratitude-btn:hover {
             background: var(--primary-dark);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .gratitude-btn:active {
+            background: var(--primary-darker);
+            transform: scale(0.98);
         }
 
         /* Profile Section Styles */
@@ -957,6 +1031,11 @@
             background: linear-gradient(to right, rgba(167, 243, 208, 0.1), rgba(153, 246, 228, 0.1));
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
+        }
+
+        .profile-item:active {
+            transform: translateY(0);
+            background: rgba(94, 234, 212, 0.2);
         }
 
         .profile-icon {
@@ -1038,6 +1117,16 @@
                 padding: 8px 3px;
                 font-size: 0.8rem;
             }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-emoji {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
         }
 
         /* New styles for toggle switch and time windows */
@@ -1094,6 +1183,126 @@
             font-weight: 600;
         }
 
+        /* Daily Goal Styles */
+        .goal-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .goal-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .goal-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .goal-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .goal-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .goal-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--primary-light);
+        }
+
+        .goal-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text-light);
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .goal-checkbox.checked {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .goal-checkbox.checked::after {
+            content: "✓";
+            color: white;
+            font-size: 14px;
+        }
+
+        .goal-text {
+            flex: 1;
+            font-size: 1rem;
+        }
+
+        .goal-text.completed {
+            text-decoration: line-through;
+            color: var(--text-light);
+        }
+
+        .goal-status {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-align: right;
+        }
+
+        .goal-history-item {
+            padding: 10px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+        }
+
+        .goal-history-icon {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .goal-history-icon.completed {
+            background: var(--success);
+            color: white;
+        }
+
+        .goal-history-icon.not-completed {
+            background: var(--error);
+            color: white;
+        }
+
         /* Calming animations */
         @keyframes float {
             0% { transform: translateY(0px); }
@@ -1140,10 +1349,21 @@
             </div>
 
             <div class="daily-card">
-                <img id="daily-image" src="" alt="Immagine del giorno">
+                <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80" alt="Immagine del giorno">
                 <div class="daily-card-overlay">
                     <h3><i class="fas fa-quote-left"></i> Pensiero del Giorno</h3>
-                    <p id="daily-quote">"La pace viene da dentro. Non cercarla fuori." - Buddha 🌸</p>
+                    <p>"La pace viene da dentro. Non cercarla fuori." - Buddha 🌸</p>
+                </div>
+            </div>
+
+            <!-- Nuova sezione Obiettivo Giornaliero -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-bullseye"></i>
+                    <span>Obiettivo Giornaliero 🎯</span>
+                </div>
+                <div class="goal-container" id="daily-goal-container">
+                    <!-- Contenuto dinamico -->
                 </div>
             </div>
 
@@ -1165,7 +1385,6 @@
             </div>
 
             <div class="meditation-list">
-                <!-- Existing meditations -->
                 <div class="meditation-item" data-id="1" data-title="Meditazione del Respiro" data-duration="10 minuti">
                     <div class="meditation-icon">
                         <i class="fas fa-wind"></i>
@@ -1550,6 +1769,13 @@
                     <!-- Gratitude entries will be populated here -->
                 </div>
             </div>
+
+            <div class="history-section">
+                <div class="history-section-title">Obiettivi Giornalieri 🎯</div>
+                <div class="card" id="goal-history-container">
+                    <!-- Goal history will be populated here -->
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1636,6 +1862,7 @@
                 moodEntries: {},
                 gratitudeEntries: {},
                 meditationReviews: {},
+                dailyGoals: {},
                 timeWindows: [
                     {id: 'morning', start: 7, end: 13.99, name: 'Mattina'},
                     {id: 'afternoon', start: 14, end: 20.99, name: 'Pomeriggio'},
@@ -1664,56 +1891,7 @@
                         active: true
                     }
                 },
-                currentCalendarDate: new Date(),
-                dailyInspiration: {
-                    quotes: [
-                        "La pace viene da dentro. Non cercarla fuori. - Buddha 🌸",
-                        "Ogni giorno è una nuova possibilità per cambiare la tua vita. 🌱",
-                        "La felicità non è una meta, ma un modo di viaggiare. 🛤️",
-                        "Respira. Lascia andare. E ricorda che questo preciso momento è l'unico che conosci con certezza. 🌬️",
-                        "Non puoi controllare le onde, ma puoi imparare a fare surf. 🌊",
-                        "La vita è un'eco: ciò che dai, ti torna indietro. ❤️",
-                        "La calma è la culla della potenza. 🧘",
-                        "Sii il cambiamento che vuoi vedere nel mondo. - Gandhi 🌍",
-                        "Ogni giorno può essere un buon giorno se decidi così. ☀️",
-                        "Le difficoltà preparano persone comuni a destini straordinari. ⚡",
-                        "L'unico modo per fare un ottimo lavoro è amare quello che fai. - Steve Jobs 💼",
-                        "Non aspettare. Il momento perfetto non arriverà mai. Inizia ora. 🚀",
-                        "La felicità non è avere ciò che desideri, ma desiderare ciò che hai. 🙏",
-                        "Il tuo corpo ascolta tutto ciò che la tua mente dice. Presta attenzione. 🧠",
-                        "Ogni respiro è un'opportunità per ricominciare. 🌬️",
-                        "Il sorriso è la curva che raddrizza tutto. 😊",
-                        "Sii come un albero: stabile nelle radici, flessibile nei rami. 🌳",
-                        "La bellezza della vita non sta nella durata, ma nella profondità. 🌊",
-                        "La gratitudine trasforma ciò che abbiamo in abbastanza. 🙏",
-                        "Il presente è un dono, per questo si chiama presente. 🎁"
-                    ],
-                    images: [
-                        "https://images.unsplash.com/photo-1505142468610-359e7d316be0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1426604966848-d7adac402bff?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1501854140801-50d01698950b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1433086966358-54859d0ed716?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1428908728789-d2de25dbd4e2?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1506260408121-e353d10b87c7?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1431794062232-2a99a5431c6c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1414541944151-2f3ec1cfd87d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1444464666168-49d633b86797?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1439396087961-98bc12c21176?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
-                        "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80"
-                    ],
-                    lastUpdated: null,
-                    currentQuote: null,
-                    currentImage: null
-                }
+                currentCalendarDate: new Date()
             };
 
             // Percorsi dei file audio (tutti nella stessa directory)
@@ -1752,6 +1930,7 @@
             const editProfileBtn = document.getElementById('edit-profile-btn');
             const moodHistoryContainer = document.getElementById('mood-history-container');
             const gratitudeHistoryContainer = document.getElementById('gratitude-history-container');
+            const goalHistoryContainer = document.getElementById('goal-history-container');
             const moodIndicator = document.getElementById('mood-indicator');
             const moodAverage = document.getElementById('mood-average');
             const saveRemindersBtn = document.getElementById('save-reminders-btn');
@@ -1766,11 +1945,10 @@
             const welcomeHeader = document.getElementById('welcome-header');
             const reminderToggles = document.querySelectorAll('.reminder-toggle');
             const reviewMessage = document.getElementById('review-message');
-            const dailyQuote = document.getElementById('daily-quote');
-            const dailyImage = document.getElementById('daily-image');
             const progressBar = document.getElementById('progress-bar');
             const currentTimeEl = document.getElementById('current-time');
             const totalTimeEl = document.getElementById('total-time');
+            const dailyGoalContainer = document.getElementById('daily-goal-container');
 
             // Carica dati salvati da localStorage
             function loadSavedData() {
@@ -1804,9 +1982,9 @@
                     state.reminders = JSON.parse(savedReminders);
                 }
 
-                const savedDailyInspiration = localStorage.getItem('dailyInspiration');
-                if (savedDailyInspiration) {
-                    state.dailyInspiration = JSON.parse(savedDailyInspiration);
+                const savedDailyGoals = localStorage.getItem('dailyGoals');
+                if (savedDailyGoals) {
+                    state.dailyGoals = JSON.parse(savedDailyGoals);
                 }
             }
 
@@ -1818,7 +1996,7 @@
                 localStorage.setItem('meditationReviews', JSON.stringify(state.meditationReviews));
                 localStorage.setItem('userReviewed', JSON.stringify(state.userReviewed));
                 localStorage.setItem('reminders', JSON.stringify(state.reminders));
-                localStorage.setItem('dailyInspiration', JSON.stringify(state.dailyInspiration));
+                localStorage.setItem('dailyGoals', JSON.stringify(state.dailyGoals));
             }
 
             // Funzione per aggiornare il messaggio di benvenuto in base al genere
@@ -1868,6 +2046,7 @@
                 document.querySelector('.profile-name').textContent = state.profile.name;
                 document.querySelector('.profile-emoji').textContent = state.profile.emoji;
                 updateWelcomeMessage();
+                renderDailyGoal();
 
                 // Initialize reminder settings
                 document.querySelectorAll('.reminder-interval').forEach(input => {
@@ -1890,9 +2069,81 @@
                 for (const meditationId in state.meditationReviews) {
                     updateMeditationRating(meditationId);
                 }
+            }
 
-                // Aggiorna l'ispirazione giornaliera
-                updateDailyInspiration();
+            // Funzione per visualizzare l'obiettivo giornaliero
+            function renderDailyGoal() {
+                const today = getLocalDateString();
+                const todayGoal = state.dailyGoals[today];
+
+                // Se non c'è un obiettivo per oggi
+                if (!todayGoal) {
+                    dailyGoalContainer.innerHTML = `
+                        <div class="goal-input-container">
+                            <input type="text" class="goal-input" id="goal-input" placeholder="Cosa vuoi realizzare oggi?" required>
+                            <button class="goal-btn" id="set-goal-btn"><i class="fas fa-plus"></i> Imposta</button>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 5px;">
+                            Inserisci un obiettivo realistico che vuoi portare a termine entro oggi.
+                        </p>
+                    `;
+
+                    document.getElementById('set-goal-btn').addEventListener('click', setDailyGoal);
+                    return;
+                }
+
+                // Se c'è un obiettivo per oggi
+                dailyGoalContainer.innerHTML = `
+                    <div class="goal-item">
+                        <div class="goal-checkbox ${todayGoal.completed ? 'checked' : ''}" id="goal-checkbox"></div>
+                        <div class="goal-text ${todayGoal.completed ? 'completed' : ''}">${todayGoal.text}</div>
+                        <div class="goal-status">
+                            ${todayGoal.completed ? 'Completato 🎉' : 'In corso... ⏳'}
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('goal-checkbox').addEventListener('click', toggleGoalCompletion);
+            }
+
+            // Funzione per impostare l'obiettivo giornaliero
+            function setDailyGoal() {
+                const input = document.getElementById('goal-input');
+                const goalText = input.value.trim();
+
+                if (!goalText) {
+                    showToast("Per favore inserisci un obiettivo");
+                    return;
+                }
+
+                const today = getLocalDateString();
+                state.dailyGoals[today] = {
+                    text: goalText,
+                    completed: false,
+                    timestamp: new Date().getTime()
+                };
+
+                saveData();
+                renderDailyGoal();
+                showToast("Obiettivo impostato! 💪");
+            }
+
+            // Funzione per segnare l'obiettivo come completato
+            function toggleGoalCompletion() {
+                const today = getLocalDateString();
+                const goal = state.dailyGoals[today];
+
+                if (!goal) return;
+
+                goal.completed = !goal.completed;
+                saveData();
+                renderDailyGoal();
+
+                if (goal.completed) {
+                    showToast("Obiettivo completato! Bravo! 🎉");
+                } else {
+                    showToast("Obiettivo riportato in corso ⏳");
+                }
             }
 
             // Carica i dati salvati e inizializza l'UI
@@ -2076,10 +2327,17 @@
                     if (audioPlayer.paused) {
                         audioPlayer.play();
                         playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                        playBtn.classList.add('active');
                     } else {
                         audioPlayer.pause();
                         playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                        playBtn.classList.remove('active');
                     }
+
+                    // Remove active state after animation
+                    setTimeout(() => {
+                        playBtn.classList.remove('active');
+                    }, 300);
                 });
             }
 
@@ -2094,6 +2352,11 @@
                         audioPlayer.play();
                         playBtn.innerHTML = '<i class="fas fa-pause"></i>';
                     }
+
+                    restartBtn.classList.add('active');
+                    setTimeout(() => {
+                        restartBtn.classList.remove('active');
+                    }, 300);
                 });
             }
 
@@ -2125,36 +2388,39 @@
             if (audioPlayer) {
                 audioPlayer.addEventListener('ended', function() {
                     playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    playBtn.classList.remove('active');
                     showToast("Meditazione completata! Lascia una recensione se ti è piaciuta. 🧘");
                 });
+
+                audioPlayer.addEventListener('play', function() {
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                });
+
+                audioPlayer.addEventListener('pause', function() {
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                });
             }
 
-            // Player review stars
+            // Player review stars - prevenire zoom su mobile
             playerReviewStars.forEach(star => {
-                // Handle click for desktop
                 star.addEventListener('click', function(e) {
-                    handleStarClick(this);
+                    const value = parseInt(this.dataset.value);
+
+                    // Update stars display
+                    playerReviewStars.forEach((s, index) => {
+                        if (index < value) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
                 });
 
-                // Handle touch for mobile
-                star.addEventListener('touchend', function(e) {
+                // Prevenire zoom su mobile
+                star.addEventListener('touchstart', function(e) {
                     e.preventDefault();
-                    handleStarClick(this);
-                });
+                }, { passive: false });
             });
-
-            function handleStarClick(star) {
-                const value = parseInt(star.dataset.value);
-
-                // Update stars display
-                playerReviewStars.forEach((s, index) => {
-                    if (index < value) {
-                        s.classList.add('active');
-                    } else {
-                        s.classList.remove('active');
-                    }
-                });
-            }
 
             // Submit review from player
             if (playerReviewBtn) {
@@ -2192,6 +2458,11 @@
                     } else {
                         showToast("Hai già recensito questa meditazione");
                     }
+
+                    this.classList.add('active');
+                    setTimeout(() => {
+                        this.classList.remove('active');
+                    }, 300);
                 });
             }
 
@@ -2202,6 +2473,11 @@
                     audioPlayer.pause();
                     playBtn.innerHTML = '<i class="fas fa-play"></i>';
                 }
+
+                this.classList.add('active');
+                setTimeout(() => {
+                    this.classList.remove('active');
+                }, 300);
             });
 
             // History section
@@ -2218,11 +2494,21 @@
             prevMonthBtn.addEventListener('click', function() {
                 state.currentCalendarDate.setMonth(state.currentCalendarDate.getMonth() - 1);
                 generateCalendar();
+
+                this.classList.add('active');
+                setTimeout(() => {
+                    this.classList.remove('active');
+                }, 300);
             });
 
             nextMonthBtn.addEventListener('click', function() {
                 state.currentCalendarDate.setMonth(state.currentCalendarDate.getMonth() + 1);
                 generateCalendar();
+
+                this.classList.add('active');
+                setTimeout(() => {
+                    this.classList.remove('active');
+                }, 300);
             });
 
             // Edit profile
@@ -2304,11 +2590,21 @@
 
                 profileEditModal.classList.remove('active');
                 showToast("Profilo aggiornato con successo! 😊");
+
+                this.classList.add('active');
+                setTimeout(() => {
+                    this.classList.remove('active');
+                }, 300);
             });
 
             // Cancel profile edit
             document.getElementById('profile-edit-cancel').addEventListener('click', function() {
                 profileEditModal.classList.remove('active');
+
+                this.classList.add('active');
+                setTimeout(() => {
+                    this.classList.remove('active');
+                }, 300);
             });
 
             // Gratitude form
@@ -2362,35 +2658,12 @@
 
                     showToast("Impostazioni promemoria salvate! 🔔", true);
                     saveData(); // Salva i settaggi
+
+                    this.classList.add('active');
+                    setTimeout(() => {
+                        this.classList.remove('active');
+                    }, 300);
                 });
-            }
-
-            // Update daily inspiration
-            function updateDailyInspiration() {
-                const today = new Date().toDateString();
-
-                // Check if we need to update the daily inspiration
-                if (state.dailyInspiration.lastUpdated !== today) {
-                    // Get random quote and image
-                    const quoteIndex = Math.floor(Math.random() * state.dailyInspiration.quotes.length);
-                    const imageIndex = Math.floor(Math.random() * state.dailyInspiration.images.length);
-
-                    state.dailyInspiration.currentQuote = state.dailyInspiration.quotes[quoteIndex];
-                    state.dailyInspiration.currentImage = state.dailyInspiration.images[imageIndex];
-                    state.dailyInspiration.lastUpdated = today;
-
-                    // Save to localStorage
-                    saveData();
-                }
-
-                // Update the UI
-                if (dailyQuote && state.dailyInspiration.currentQuote) {
-                    dailyQuote.textContent = state.dailyInspiration.currentQuote;
-                }
-
-                if (dailyImage && state.dailyInspiration.currentImage) {
-                    dailyImage.src = state.dailyInspiration.currentImage;
-                }
             }
 
             // Helper functions
@@ -2491,6 +2764,7 @@
 
                 const moodEntries = state.moodEntries[selectedDate] || [];
                 const gratitudeEntries = state.gratitudeEntries[selectedDate] || [];
+                const dailyGoal = state.dailyGoals[selectedDate] || null;
 
                 // Update mood history
                 moodHistoryContainer.innerHTML = '';
@@ -2534,6 +2808,30 @@
                     gratitudeHistoryContainer.appendChild(list);
                 } else {
                     gratitudeHistoryContainer.innerHTML = '<p style="text-align: center; padding: 10px; color: var(--text-light);">Nessun diario della gratitudine in questa data</p>';
+                }
+
+                // Update goal history
+                goalHistoryContainer.innerHTML = '';
+                if (dailyGoal) {
+                    const goalItem = document.createElement('div');
+                    goalItem.className = 'goal-history-item';
+
+                    goalItem.innerHTML = `
+                        <div class="goal-history-icon ${dailyGoal.completed ? 'completed' : 'not-completed'}">
+                            ${dailyGoal.completed ? '✓' : '✗'}
+                        </div>
+                        <div>
+                            <div style="font-weight: ${dailyGoal.completed ? 'normal' : 'bold'}">${dailyGoal.text}</div>
+                            <div style="font-size: 0.85rem; color: var(--text-light);">
+                                ${dailyGoal.completed ? 'Completato' : 'Non completato'} •
+                                ${new Date(dailyGoal.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </div>
+                        </div>
+                    `;
+
+                    goalHistoryContainer.appendChild(goalItem);
+                } else {
+                    goalHistoryContainer.innerHTML = '<p style="text-align: center; padding: 10px; color: var(--text-light);">Nessun obiettivo in questa data</p>';
                 }
 
                 // Update mood average and indicator
@@ -2595,7 +2893,7 @@
                     dayElement.className = 'calendar-day';
                     dayElement.textContent = i;
 
-                    if (state.moodEntries[dayString] || state.gratitudeEntries[dayString]) {
+                    if (state.moodEntries[dayString] || state.gratitudeEntries[dayString] || state.dailyGoals[dayString]) {
                         dayElement.classList.add('has-data');
                     }
 
@@ -2609,6 +2907,10 @@
 
                     dayElement.addEventListener('click', function() {
                         updateHistoryDisplay(day);
+                        this.classList.add('active');
+                        setTimeout(() => {
+                            this.classList.remove('active');
+                        }, 300);
                     });
 
                     calendarContainer.appendChild(dayElement);
@@ -2668,6 +2970,23 @@
                     initTimeBasedCheckin();
                 }
             }, 60000); // Ogni minuto
+
+            // Verifica se gli obiettivi delle giornate precedenti sono stati completati
+            function checkPreviousDayGoals() {
+                const today = new Date();
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = getLocalDateString(yesterday);
+
+                // Se esiste un obiettivo per ieri ma non è stato completato
+                if (state.dailyGoals[yesterdayStr] && !state.dailyGoals[yesterdayStr].completed) {
+                    // Non modifichiamo lo stato, solo per riferimento
+                    console.log("Obiettivo di ieri non completato");
+                }
+            }
+
+            // Esegui il controllo all'avvio
+            checkPreviousDayGoals();
 
             // Request notification permission
             if (!("Notification" in window)) {
