@@ -670,6 +670,8 @@
             grid-template-columns: repeat(6, 1fr);
             gap: 10px;
             margin: 20px 0;
+            padding: 0 5px; /* Aggiunto padding per evitare che tocchino i bordi */
+            justify-content: center; /* Centra gli emoji */
         }
 
         .emoji-option {
@@ -680,6 +682,10 @@
             border-radius: 8px;
             transition: all 0.2s ease;
             background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1; /* Mantiene l'aspetto quadrato */
         }
 
         .emoji-option:hover, .emoji-option.selected {
@@ -1077,112 +1083,6 @@
             filter: blur(20px);
         }
 
-        /* Responsive */
-        @media (min-width: 768px) {
-            .container {
-                max-width: 750px;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .daily-card {
-                height: 250px;
-            }
-
-            .nav-bar {
-                padding: 15px 0;
-            }
-        }
-
-        /* Mobile adjustments for reminder items */
-        @media (max-width: 768px) {
-            .reminder-item {
-                min-height: auto;
-                padding: 12px;
-            }
-
-            .reminder-controls {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-
-            .calendar-header {
-                font-size: 0.8rem;
-                padding: 5px 0;
-            }
-
-            .calendar-day {
-                padding: 8px 3px;
-                font-size: 0.8rem;
-            }
-
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .profile-emoji {
-                margin-right: 0;
-                margin-bottom: 15px;
-            }
-        }
-
-        /* New styles for toggle switch and time windows */
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-            margin-left: auto;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: var(--primary);
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(26px);
-        }
-
-        .review-message {
-            text-align: center;
-            margin-top: 15px;
-            color: var(--success);
-            font-weight: 600;
-        }
-
         /* Daily Goal Styles */
         .goal-container {
             display: flex;
@@ -1193,6 +1093,7 @@
         .goal-input-container {
             display: flex;
             gap: 10px;
+            flex-direction: column; /* Cambiato per mobile */
         }
 
         .goal-input {
@@ -1210,13 +1111,14 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 12px;
             border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s ease;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
         }
 
@@ -1301,6 +1203,128 @@
         .goal-history-icon.not-completed {
             background: var(--error);
             color: white;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 750px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .daily-card {
+                height: 250px;
+            }
+
+            .nav-bar {
+                padding: 15px 0;
+            }
+
+            /* Su desktop torna al layout originale */
+            .goal-input-container {
+                flex-direction: row;
+            }
+        }
+
+        /* Mobile adjustments for reminder items */
+        @media (max-width: 768px) {
+            .reminder-item {
+                min-height: auto;
+                padding: 12px;
+            }
+
+            .reminder-controls {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .calendar-header {
+                font-size: 0.8rem;
+                padding: 5px 0;
+            }
+
+            .calendar-day {
+                padding: 8px 3px;
+                font-size: 0.8rem;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-emoji {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            /* Migliora il layout degli emoji su mobile */
+            .emoji-picker {
+                grid-template-columns: repeat(4, 1fr); /* 4 colonne su mobile */
+                padding: 0;
+                gap: 8px;
+            }
+
+            .emoji-option {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* New styles for toggle switch and time windows */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin-left: auto;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .review-message {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--success);
+            font-weight: 600;
         }
 
         /* Calming animations */
@@ -2823,8 +2847,7 @@
                         <div>
                             <div style="font-weight: ${dailyGoal.completed ? 'normal' : 'bold'}">${dailyGoal.text}</div>
                             <div style="font-size: 0.85rem; color: var(--text-light);">
-                                ${dailyGoal.completed ? 'Completato' : 'Non completato'} •
-                                ${new Date(dailyGoal.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                ${dailyGoal.completed ? 'Completato' : 'Non completato'}
                             </div>
                         </div>
                     `;
