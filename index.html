@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
     <title>Vivi Consapevolmente</title>
-    <link rel="icon" href="logo-vivi-consapevolmente.png" type="image/png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧘</text></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap">
     <style>
@@ -336,9 +336,12 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .player-btn:active, .player-btn.active {
-            background: var(--primary-darker);
-            transform: scale(0.92);
+        .player-btn.playing .play-icon {
+            display: none;
+        }
+
+        .player-btn.playing .pause-icon {
+            display: block;
         }
 
         .player-btn .play-icon {
@@ -347,14 +350,6 @@
 
         .player-btn .pause-icon {
             display: none;
-        }
-
-        .player-btn.playing .play-icon {
-            display: none;
-        }
-
-        .player-btn.playing .pause-icon {
-            display: block;
         }
 
         .player-close {
@@ -1071,6 +1066,8 @@
             pointer-events: none;
             z-index: -1;
             opacity: 0.1;
+            /* CORREZIONE: aggiunto margine */
+            margin: 10px;
         }
 
         .calm-leaf {
@@ -1489,6 +1486,28 @@
 
             .subscription-switch {
                 flex-direction: column;
+            }
+
+            /* CORREZIONE: Emoji decorative su mobile */
+            .calm-element {
+                opacity: 0.08;
+                margin: 15px;
+            }
+            .calm-element:nth-child(1) {
+                top: 5% !important;
+                left: 5% !important;
+            }
+            .calm-element:nth-child(2) {
+                top: 10% !important;
+                right: 5% !important;
+            }
+            .calm-element:nth-child(3) {
+                top: 75% !important;
+                left: 5% !important;
+            }
+            .calm-element:nth-child(4) {
+                bottom: 5% !important;
+                right: 5% !important;
             }
         }
 
@@ -2933,11 +2952,6 @@
                         audioPlayer.pause();
                         playBtn.classList.remove('playing');
                     }
-
-                    playBtn.classList.add('active');
-                    setTimeout(() => {
-                        playBtn.classList.remove('active');
-                    }, 300);
                 });
             }
 
@@ -2952,11 +2966,6 @@
                         audioPlayer.play();
                         playBtn.classList.add('playing');
                     }
-
-                    restartBtn.classList.add('active');
-                    setTimeout(() => {
-                        restartBtn.classList.remove('active');
-                    }, 300);
                 });
             }
 
@@ -3058,11 +3067,6 @@
                     } else {
                         showToast("Hai già recensito questa meditazione");
                     }
-
-                    this.classList.add('active');
-                    setTimeout(() => {
-                        this.classList.remove('active');
-                    }, 300);
                 });
 
                 // Add touch event for mobile
@@ -3079,11 +3083,6 @@
                     audioPlayer.pause();
                     playBtn.classList.remove('playing');
                 }
-
-                this.classList.add('active');
-                setTimeout(() => {
-                    this.classList.remove('active');
-                }, 300);
             });
 
             // History section
@@ -3100,21 +3099,11 @@
             prevMonthBtn.addEventListener('click', function() {
                 state.currentCalendarDate.setMonth(state.currentCalendarDate.getMonth() - 1);
                 generateCalendar();
-
-                this.classList.add('active');
-                setTimeout(() => {
-                    this.classList.remove('active');
-                }, 300);
             });
 
             nextMonthBtn.addEventListener('click', function() {
                 state.currentCalendarDate.setMonth(state.currentCalendarDate.getMonth() + 1);
                 generateCalendar();
-
-                this.classList.add('active');
-                setTimeout(() => {
-                    this.classList.remove('active');
-                }, 300);
             });
 
             // Edit profile
@@ -3196,21 +3185,11 @@
 
                 profileEditModal.classList.remove('active');
                 showToast("Profilo aggiornato con successo! 😊");
-
-                this.classList.add('active');
-                setTimeout(() => {
-                    this.classList.remove('active');
-                }, 300);
             });
 
             // Cancel profile edit
             document.getElementById('profile-edit-cancel').addEventListener('click', function() {
                 profileEditModal.classList.remove('active');
-
-                this.classList.add('active');
-                setTimeout(() => {
-                    this.classList.remove('active');
-                }, 300);
             });
 
             // Gratitude form
@@ -3582,10 +3561,6 @@
 
                     dayElement.addEventListener('click', function() {
                         updateHistoryDisplay(day);
-                        this.classList.add('active');
-                        setTimeout(() => {
-                            this.classList.remove('active');
-                        }, 300);
                     });
 
                     calendarContainer.appendChild(dayElement);
