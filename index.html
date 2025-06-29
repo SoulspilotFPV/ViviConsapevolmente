@@ -25,6 +25,9 @@
             --calm-1: #a7f3d0;
             --calm-2: #99f6e4;
             --calm-3: #c7d2fe;
+            --premium: #f59e0b;
+            --premium-light: #fde68a;
+            --premium-gradient: linear-gradient(135deg, #fde68a, #fbbf24);
         }
 
         * {
@@ -212,8 +215,10 @@
             background: var(--card-bg);
             border-radius: 16px;
             box-shadow: var(--shadow);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, box-shadow;
             border: 1px solid rgba(13, 148, 136, 0.1);
+            cursor: pointer;
         }
 
         .meditation-item:hover {
@@ -233,6 +238,7 @@
             font-size: 1.5rem;
             color: var(--primary-dark);
             margin-right: 15px;
+            transition: all 0.3s ease;
         }
 
         .meditation-info {
@@ -320,7 +326,7 @@
             justify-content: center;
             font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.2s ease, background 0.3s ease;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
@@ -332,7 +338,15 @@
 
         .player-btn:active, .player-btn.active {
             background: var(--primary-darker);
-            transform: scale(0.95);
+            transform: scale(0.92);
+        }
+
+        .player-btn.playing .play-icon {
+            display: none;
+        }
+
+        .player-btn.playing .pause-icon {
+            display: inline-block;
         }
 
         .player-close {
@@ -392,29 +406,6 @@
 
         .player-review-star:active {
             transform: scale(0.9);
-        }
-
-        .player-review-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .player-review-btn:hover {
-            background: var(--primary-dark);
-        }
-
-        .player-review-btn:active {
-            background: var(--primary-darker);
-            transform: scale(0.98);
         }
 
         /* History Modal */
@@ -670,6 +661,7 @@
             grid-template-columns: repeat(6, 1fr);
             gap: 10px;
             margin: 20px 0;
+            justify-content: center;
         }
 
         .emoji-option {
@@ -680,6 +672,10 @@
             border-radius: 8px;
             transition: all 0.2s ease;
             background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1;
         }
 
         .emoji-option:hover, .emoji-option.selected {
@@ -1077,112 +1073,6 @@
             filter: blur(20px);
         }
 
-        /* Responsive */
-        @media (min-width: 768px) {
-            .container {
-                max-width: 750px;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .daily-card {
-                height: 250px;
-            }
-
-            .nav-bar {
-                padding: 15px 0;
-            }
-        }
-
-        /* Mobile adjustments for reminder items */
-        @media (max-width: 768px) {
-            .reminder-item {
-                min-height: auto;
-                padding: 12px;
-            }
-
-            .reminder-controls {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-
-            .calendar-header {
-                font-size: 0.8rem;
-                padding: 5px 0;
-            }
-
-            .calendar-day {
-                padding: 8px 3px;
-                font-size: 0.8rem;
-            }
-
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .profile-emoji {
-                margin-right: 0;
-                margin-bottom: 15px;
-            }
-        }
-
-        /* New styles for toggle switch and time windows */
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-            margin-left: auto;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: var(--primary);
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(26px);
-        }
-
-        .review-message {
-            text-align: center;
-            margin-top: 15px;
-            color: var(--success);
-            font-weight: 600;
-        }
-
         /* Daily Goal Styles */
         .goal-container {
             display: flex;
@@ -1193,6 +1083,7 @@
         .goal-input-container {
             display: flex;
             gap: 10px;
+            flex-direction: column;
         }
 
         .goal-input {
@@ -1210,13 +1101,14 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 12px;
             border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s ease;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
         }
 
@@ -1303,6 +1195,334 @@
             color: white;
         }
 
+        /* Premium Section */
+        .premium-description {
+            padding: 10px 0;
+        }
+
+        .premium-description ul {
+            list-style-type: none;
+            padding: 10px 0;
+        }
+
+        .premium-description li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .premium-description li i {
+            color: var(--premium);
+            margin-right: 10px;
+        }
+
+        .subscription-switch {
+            display: flex;
+            justify-content: space-between;
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 5px;
+            margin: 15px 0;
+        }
+
+        .subscription-option {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .subscription-option.active {
+            background: white;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--primary-light);
+        }
+
+        .plan-name {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .plan-price {
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .discount {
+            color: var(--success);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .subscribe-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--premium);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .subscribe-btn:hover {
+            background: #e68a00;
+        }
+
+        /* Login Modal */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .login-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .login-container {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .login-header {
+            margin-bottom: 25px;
+        }
+
+        .app-logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--calm-1), var(--calm-3));
+            border-radius: 20px;
+            font-size: 3.5rem;
+            color: var(--primary-dark);
+            box-shadow: var(--shadow);
+        }
+
+        .app-name {
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .app-tagline {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .google-login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .google-login-btn:hover {
+            background: #3367d6;
+        }
+
+        .login-close {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 750px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .daily-card {
+                height: 250px;
+            }
+
+            .nav-bar {
+                padding: 15px 0;
+            }
+
+            .goal-input-container {
+                flex-direction: row;
+            }
+
+            .profile-header {
+                flex-direction: row;
+                text-align: left;
+            }
+
+            .profile-emoji {
+                margin-right: 20px;
+                margin-bottom: 0;
+            }
+
+            /* Posizione emoji su desktop */
+            .calm-element {
+                opacity: 0.15;
+            }
+            .calm-element:nth-child(1) {
+                top: 10%;
+                left: 10%;
+            }
+            .calm-element:nth-child(2) {
+                top: 25%;
+                right: 10%;
+            }
+            .calm-element:nth-child(3) {
+                top: 60%;
+                left: 15%;
+            }
+            .calm-element:nth-child(4) {
+                bottom: 20%;
+                right: 8%;
+            }
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .reminder-item {
+                min-height: auto;
+                padding: 12px;
+            }
+
+            .reminder-controls {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .calendar-header {
+                font-size: 0.8rem;
+                padding: 5px 0;
+            }
+
+            .calendar-day {
+                padding: 8px 3px;
+                font-size: 0.8rem;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-emoji {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .emoji-picker {
+                grid-template-columns: repeat(6, 1fr);
+                padding: 0;
+                gap: 5px;
+            }
+
+            .emoji-option {
+                font-size: 1.5rem;
+                padding: 3px;
+            }
+
+            .subscription-switch {
+                flex-direction: column;
+            }
+        }
+
+        /* New styles for toggle switch and time windows */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin-left: auto;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .review-message {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
         /* Calming animations */
         @keyframes float {
             0% { transform: translateY(0px); }
@@ -1323,20 +1543,171 @@
         .pulse {
             animation: pulse 3s ease-in-out infinite;
         }
+
+        /* New premium section design */
+        .premium-card {
+            background: linear-gradient(135deg, #fff9db, #ffec99);
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .premium-card::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 120px;
+            height: 120px;
+            background: var(--premium-light);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .premium-card::after {
+            content: "";
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 80px;
+            height: 80px;
+            background: var(--premium-light);
+            border-radius: 50%;
+            opacity: 0.2;
+        }
+
+        .premium-title {
+            font-size: 1.4rem;
+            color: #d97706;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .premium-features {
+            position: relative;
+            z-index: 1;
+        }
+
+        .premium-features li {
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(245, 158, 11, 0.2);
+        }
+
+        .premium-features li:last-child {
+            border-bottom: none;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--premium-gradient);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(5deg);
+        }
+
+        .subscribe-container {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .subscribe-option {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subscribe-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .subscribe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .subscribe-name {
+            font-weight: 700;
+            color: #d97706;
+        }
+
+        .subscribe-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #d97706;
+        }
+
+        .subscribe-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .subscribe-btn-premium {
+            background: var(--premium-gradient);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .subscribe-btn-premium:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        /* New smooth animations */
+        .meditation-icon {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .meditation-item:hover .meditation-icon {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .player-btn {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
     </style>
 </head>
 <body>
     <!-- Calming background elements -->
-    <div class="calm-element" style="top: 10%; left: 5%; animation: float 8s infinite ease-in-out;">
+    <div class="calm-element floating" style="top: 10%; left: 5%;">
         <div class="calm-leaf">🍃</div>
     </div>
-    <div class="calm-element" style="top: 30%; right: 10%; animation: float 6s infinite ease-in-out reverse;">
+    <div class="calm-element floating" style="top: 30%; right: 10%; animation-delay: 0.5s;">
         <div class="calm-leaf">🌸</div>
     </div>
-    <div class="calm-element" style="top: 70%; left: 15%; animation: pulse 5s infinite ease-in-out;">
+    <div class="calm-element pulse" style="top: 70%; left: 15%;">
         <div class="calm-leaf">🌿</div>
     </div>
-    <div class="calm-element" style="bottom: 20%; right: 5%; animation: float 7s infinite ease-in-out;">
+    <div class="calm-element floating" style="bottom: 20%; right: 5%; animation-delay: 1s;">
         <div class="calm-leaf">🌱</div>
     </div>
 
@@ -1630,22 +2001,53 @@
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-title">
+            <!-- Redesigned Premium Section -->
+            <div class="premium-card">
+                <div class="premium-badge">PREMIUM</div>
+                <div class="premium-title">
                     <i class="fas fa-crown"></i>
                     <span>Diventa Premium 🌟</span>
                 </div>
-                <div class="profile-item">
+                <div class="premium-features">
+                    <ul>
+                        <li><i class="fas fa-unlock"></i> Meditazioni illimitate (9 in versione free)</li>
+                        <li><i class="fas fa-unlock"></i> Report storico completo</li>
+                        <li><i class="fas fa-unlock"></i> Statistiche avanzate</li>
+                        <li><i class="fas fa-unlock"></i> Contenuti premium esclusivi</li>
+                        <li><i class="fas fa-unlock"></i> Accesso a tutti i suoni rilassanti</li>
+                        <li><i class="fas fa-unlock"></i> Personalizzazione avanzata</li>
+                    </ul>
+                </div>
+
+                <div class="subscribe-container">
+                    <div class="subscribe-option">
+                        <div class="subscribe-header">
+                            <div class="subscribe-name">Abbonamento Mensile</div>
+                            <div class="subscribe-price">5€/mese</div>
+                        </div>
+                        <div class="subscribe-desc">Pagamento ricorrente mensile, cancellabile in qualsiasi momento</div>
+                        <button class="subscribe-btn-premium" id="monthly-subscribe">Abbonati Ora</button>
+                    </div>
+
+                    <div class="subscribe-option">
+                        <div class="subscribe-header">
+                            <div class="subscribe-name">Abbonamento Annuale</div>
+                            <div class="subscribe-price">50€/anno</div>
+                        </div>
+                        <div class="subscribe-desc">
+                            <span style="color: var(--success); font-weight: bold;">Risparmi 20%</span> rispetto al piano mensile
+                        </div>
+                        <button class="subscribe-btn-premium" id="annual-subscribe">Abbonati Ora</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="profile-item" id="login-btn">
                     <div class="profile-icon">
                         <i class="fab fa-google"></i>
                     </div>
-                    <div class="profile-text">Accedi con Google</div>
-                </div>
-                <div class="profile-item">
-                    <div class="profile-icon">
-                        <i class="fab fa-patreon"></i>
-                    </div>
-                    <div class="profile-text">Sblocca Premium con Patreon</div>
+                    <div class="profile-text">Accedi</div>
                 </div>
             </div>
 
@@ -1695,7 +2097,8 @@
                         <i class="fas fa-redo"></i>
                     </button>
                     <button class="player-btn" id="player-play">
-                        <i class="fas fa-play"></i>
+                        <i class="fas fa-play play-icon"></i>
+                        <i class="fas fa-pause pause-icon" style="display: none;"></i>
                     </button>
                 </div>
                 <audio id="meditation-audio"></audio>
@@ -1823,6 +2226,21 @@
         </div>
     </div>
 
+    <!-- Login Modal -->
+    <div class="login-modal" id="login-modal">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="app-logo">🧘</div>
+                <div class="app-name">Vivi Consapevolmente</div>
+                <div class="app-tagline">La tua app per il benessere quotidiano</div>
+            </div>
+            <button class="google-login-btn" id="google-login">
+                <i class="fab fa-google"></i> Accedi con Google
+            </button>
+            <button class="login-close" id="login-close-btn">Continua senza account</button>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
@@ -1891,7 +2309,8 @@
                         active: true
                     }
                 },
-                currentCalendarDate: new Date()
+                currentCalendarDate: new Date(),
+                isPremium: false
             };
 
             // Percorsi dei file audio (tutti nella stessa directory)
@@ -1921,12 +2340,15 @@
             const playerModal = document.getElementById('player-modal');
             const historyModal = document.getElementById('history-modal');
             const profileEditModal = document.getElementById('profile-edit-modal');
+            const loginModal = document.getElementById('login-modal');
             const audioPlayer = document.getElementById('meditation-audio');
             const playBtn = document.getElementById('player-play');
             const restartBtn = document.getElementById('player-restart');
             const toast = document.getElementById('toast');
             const historyBtn = document.getElementById('history-btn');
             const historyCloseBtn = document.getElementById('history-close-btn');
+            const loginBtn = document.getElementById('login-btn');
+            const loginCloseBtn = document.getElementById('login-close-btn');
             const editProfileBtn = document.getElementById('edit-profile-btn');
             const moodHistoryContainer = document.getElementById('mood-history-container');
             const gratitudeHistoryContainer = document.getElementById('gratitude-history-container');
@@ -1949,6 +2371,11 @@
             const currentTimeEl = document.getElementById('current-time');
             const totalTimeEl = document.getElementById('total-time');
             const dailyGoalContainer = document.getElementById('daily-goal-container');
+            const monthlySubscribeBtn = document.getElementById('monthly-subscribe');
+            const annualSubscribeBtn = document.getElementById('annual-subscribe');
+            const googleLoginBtn = document.getElementById('google-login');
+            const playIcon = playBtn.querySelector('.play-icon');
+            const pauseIcon = playBtn.querySelector('.pause-icon');
 
             // Carica dati salvati da localStorage
             function loadSavedData() {
@@ -1986,6 +2413,11 @@
                 if (savedDailyGoals) {
                     state.dailyGoals = JSON.parse(savedDailyGoals);
                 }
+
+                const savedPremium = localStorage.getItem('isPremium');
+                if (savedPremium) {
+                    state.isPremium = JSON.parse(savedPremium);
+                }
             }
 
             // Salva dati in localStorage
@@ -1997,6 +2429,7 @@
                 localStorage.setItem('userReviewed', JSON.stringify(state.userReviewed));
                 localStorage.setItem('reminders', JSON.stringify(state.reminders));
                 localStorage.setItem('dailyGoals', JSON.stringify(state.dailyGoals));
+                localStorage.setItem('isPremium', JSON.stringify(state.isPremium));
             }
 
             // Funzione per aggiornare il messaggio di benvenuto in base al genere
@@ -2326,15 +2759,15 @@
                 playBtn.addEventListener('click', function() {
                     if (audioPlayer.paused) {
                         audioPlayer.play();
-                        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                        playBtn.classList.add('active');
+                        playIcon.style.display = 'none';
+                        pauseIcon.style.display = 'inline-block';
                     } else {
                         audioPlayer.pause();
-                        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-                        playBtn.classList.remove('active');
+                        playIcon.style.display = 'inline-block';
+                        pauseIcon.style.display = 'none';
                     }
 
-                    // Remove active state after animation
+                    playBtn.classList.add('active');
                     setTimeout(() => {
                         playBtn.classList.remove('active');
                     }, 300);
@@ -2350,7 +2783,8 @@
 
                     if (audioPlayer.paused) {
                         audioPlayer.play();
-                        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                        playIcon.style.display = 'none';
+                        pauseIcon.style.display = 'inline-block';
                     }
 
                     restartBtn.classList.add('active');
@@ -2387,17 +2821,19 @@
             // When audio ends
             if (audioPlayer) {
                 audioPlayer.addEventListener('ended', function() {
-                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
-                    playBtn.classList.remove('active');
+                    playIcon.style.display = 'inline-block';
+                    pauseIcon.style.display = 'none';
                     showToast("Meditazione completata! Lascia una recensione se ti è piaciuta. 🧘");
                 });
 
                 audioPlayer.addEventListener('play', function() {
-                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    playIcon.style.display = 'none';
+                    pauseIcon.style.display = 'inline-block';
                 });
 
                 audioPlayer.addEventListener('pause', function() {
-                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    playIcon.style.display = 'inline-block';
+                    pauseIcon.style.display = 'none';
                 });
             }
 
@@ -2471,7 +2907,8 @@
                 playerModal.classList.remove('active');
                 if (audioPlayer) {
                     audioPlayer.pause();
-                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    playIcon.style.display = 'inline-block';
+                    pauseIcon.style.display = 'none';
                 }
 
                 this.classList.add('active');
@@ -2666,6 +3103,38 @@
                 });
             }
 
+            // Subscribe buttons
+            monthlySubscribeBtn.addEventListener('click', function() {
+                // Stripe integration would go here
+                window.open('https://stripe.com', '_blank');
+                showToast("Reindirizzamento a Stripe per l'abbonamento mensile");
+            });
+
+            annualSubscribeBtn.addEventListener('click', function() {
+                // Stripe integration would go here
+                window.open('https://stripe.com', '_blank');
+                showToast("Reindirizzamento a Stripe per l'abbonamento annuale");
+            });
+
+            // Login modal
+            loginBtn.addEventListener('click', function() {
+                loginModal.classList.add('active');
+            });
+
+            loginCloseBtn.addEventListener('click', function() {
+                loginModal.classList.remove('active');
+            });
+
+            // Google login
+            googleLoginBtn.addEventListener('click', function() {
+                // Google login implementation would go here
+                showToast("Accesso con Google selezionato");
+                setTimeout(() => {
+                    loginModal.classList.remove('active');
+                    showToast("Accesso effettuato con successo! 😊");
+                }, 1500);
+            });
+
             // Helper functions
             function updateMeditationRating(meditationId) {
                 const ratings = state.meditationReviews[meditationId];
@@ -2823,8 +3292,7 @@
                         <div>
                             <div style="font-weight: ${dailyGoal.completed ? 'normal' : 'bold'}">${dailyGoal.text}</div>
                             <div style="font-size: 0.85rem; color: var(--text-light);">
-                                ${dailyGoal.completed ? 'Completato' : 'Non completato'} •
-                                ${new Date(dailyGoal.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                ${dailyGoal.completed ? 'Completato' : 'Non completato'}
                             </div>
                         </div>
                     `;
