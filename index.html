@@ -341,12 +341,20 @@
             transform: scale(0.92);
         }
 
+        .player-btn .play-icon {
+            display: block;
+        }
+
+        .player-btn .pause-icon {
+            display: none;
+        }
+
         .player-btn.playing .play-icon {
             display: none;
         }
 
         .player-btn.playing .pause-icon {
-            display: inline-block;
+            display: block;
         }
 
         .player-close {
@@ -406,6 +414,32 @@
 
         .player-review-star:active {
             transform: scale(0.9);
+        }
+
+        .player-review-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+
+        .player-review-btn:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .player-review-btn:active {
+            background: var(--primary-darker);
+            transform: scale(0.98);
         }
 
         /* History Modal */
@@ -656,19 +690,22 @@
             font-size: 1.4rem;
         }
 
+        /* CORREZIONE: Maggiore spazio tra le emoji */
         .emoji-picker {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin: 20px 0;
             justify-content: center;
+            padding: 0 10px;
         }
 
+        /* CORREZIONE: Aggiunto padding alle emoji */
         .emoji-option {
             font-size: 2rem;
             text-align: center;
             cursor: pointer;
-            padding: 5px;
+            padding: 8px;
             border-radius: 8px;
             transition: all 0.2s ease;
             background: rgba(255, 255, 255, 0.7);
@@ -902,30 +939,6 @@
 
         .reminder-control input {
             background-image: none;
-        }
-
-        .save-reminders {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            width: 100%;
-            font-size: 1rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .save-reminders:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .save-reminders:active {
-            background: var(--primary-darker);
-            transform: scale(0.98);
         }
 
         /* Gratitude Diary */
@@ -1419,6 +1432,16 @@
                 bottom: 20%;
                 right: 8%;
             }
+
+            /* Profile edit modal adjustments */
+            .emoji-picker {
+                grid-template-columns: repeat(8, 1fr);
+                gap: 12px;
+            }
+
+            .emoji-option {
+                font-size: 1.8rem;
+            }
         }
 
         /* Mobile adjustments */
@@ -1456,12 +1479,12 @@
             .emoji-picker {
                 grid-template-columns: repeat(6, 1fr);
                 padding: 0;
-                gap: 5px;
+                gap: 8px;
             }
 
             .emoji-option {
                 font-size: 1.5rem;
-                padding: 3px;
+                padding: 8px;
             }
 
             .subscription-switch {
@@ -1694,6 +1717,98 @@
         .player-btn {
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+
+        /* Referral section */
+        .referral-card {
+            background: linear-gradient(135deg, #dbf9ff, #c7f3fe);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(13, 148, 136, 0.2);
+        }
+
+        .referral-card::before {
+            content: "";
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 80px;
+            height: 80px;
+            background: rgba(199, 243, 254, 0.4);
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        .referral-title {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .referral-description {
+            margin-bottom: 15px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .referral-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .referral-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Time range selector */
+        .time-range {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .time-input {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Mobile premium badge fix */
+        @media (max-width: 480px) {
+            .premium-badge {
+                top: 10px;
+                right: 10px;
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+
+            .premium-title {
+                font-size: 1.2rem;
+                padding-right: 60px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1925,6 +2040,11 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="time-range">
+                            <input type="time" class="time-input" value="08:00">
+                            <span>alle</span>
+                            <input type="time" class="time-input" value="20:00">
+                        </div>
                     </div>
 
                     <div class="reminder-item">
@@ -1949,6 +2069,11 @@
                                     <option value="piano">Pianoforte 🎹</option>
                                 </select>
                             </div>
+                        </div>
+                        <div class="time-range">
+                            <input type="time" class="time-input" value="09:00">
+                            <span>alle</span>
+                            <input type="time" class="time-input" value="21:00">
                         </div>
                     </div>
 
@@ -1975,9 +2100,12 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="time-range">
+                            <input type="time" class="time-input" value="07:00">
+                            <span>alle</span>
+                            <input type="time" class="time-input" value="22:00">
+                        </div>
                     </div>
-
-                    <button class="save-reminders" id="save-reminders-btn">Salva Impostazioni</button>
                 </div>
             </div>
         </section>
@@ -2010,7 +2138,7 @@
                 </div>
                 <div class="premium-features">
                     <ul>
-                        <li><i class="fas fa-unlock"></i> Meditazioni illimitate (9 in versione free)</li>
+                        <li><i class="fas fa-unlock"></i> Meditazioni illimitate (3 in versione free)</li>
                         <li><i class="fas fa-unlock"></i> Report storico completo</li>
                         <li><i class="fas fa-unlock"></i> Statistiche avanzate</li>
                         <li><i class="fas fa-unlock"></i> Contenuti premium esclusivi</li>
@@ -2023,23 +2151,39 @@
                     <div class="subscribe-option">
                         <div class="subscribe-header">
                             <div class="subscribe-name">Abbonamento Mensile</div>
-                            <div class="subscribe-price">5€/mese</div>
+                            <div class="subscribe-price">4,99€/mese</div>
                         </div>
                         <div class="subscribe-desc">Pagamento ricorrente mensile, cancellabile in qualsiasi momento</div>
                         <button class="subscribe-btn-premium" id="monthly-subscribe">Abbonati Ora</button>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px; text-align: center;">prezzi escluse tasse</p>
                     </div>
 
                     <div class="subscribe-option">
                         <div class="subscribe-header">
                             <div class="subscribe-name">Abbonamento Annuale</div>
-                            <div class="subscribe-price">50€/anno</div>
+                            <div class="subscribe-price">49,99€/anno</div>
                         </div>
                         <div class="subscribe-desc">
-                            <span style="color: var(--success); font-weight: bold;">Risparmi 20%</span> rispetto al piano mensile
+                            <span style="color: var(--success); font-weight: bold;">Risparmi il 16%</span> rispetto al piano mensile
                         </div>
                         <button class="subscribe-btn-premium" id="annual-subscribe">Abbonati Ora</button>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px; text-align: center;">prezzi escluse tasse</p>
                     </div>
                 </div>
+            </div>
+
+            <!-- New Referral Section -->
+            <div class="referral-card">
+                <div class="referral-title">
+                    <i class="fas fa-gift"></i>
+                    <span>Consiglia a un amico 🎁</span>
+                </div>
+                <div class="referral-description">
+                    Condividi Vivi Consapevolmente con i tuoi amici o familiari e ricevi 1 mese di Premium gratis per ogni persona che si iscrive!
+                </div>
+                <button class="referral-btn" id="referral-btn">
+                    <i class="fas fa-share-alt"></i> Condividi ora
+                </button>
             </div>
 
             <div class="card">
@@ -2098,7 +2242,7 @@
                     </button>
                     <button class="player-btn" id="player-play">
                         <i class="fas fa-play play-icon"></i>
-                        <i class="fas fa-pause pause-icon" style="display: none;"></i>
+                        <i class="fas fa-pause pause-icon"></i>
                     </button>
                 </div>
                 <audio id="meditation-audio"></audio>
@@ -2296,21 +2440,29 @@
                     breathing: {
                         interval: 60,
                         sound: 'bells',
-                        active: true
+                        active: true,
+                        from: "08:00",
+                        to: "20:00"
                     },
                     posture: {
                         interval: 45,
                         sound: 'bells',
-                        active: true
+                        active: true,
+                        from: "09:00",
+                        to: "21:00"
                     },
                     water: {
                         interval: 30,
                         sound: 'bells',
-                        active: true
+                        active: true,
+                        from: "07:00",
+                        to: "22:00"
                     }
                 },
                 currentCalendarDate: new Date(),
-                isPremium: false
+                isPremium: false,
+                referralCode: null,
+                isLoggedIn: false
             };
 
             // Percorsi dei file audio (tutti nella stessa directory)
@@ -2355,7 +2507,6 @@
             const goalHistoryContainer = document.getElementById('goal-history-container');
             const moodIndicator = document.getElementById('mood-indicator');
             const moodAverage = document.getElementById('mood-average');
-            const saveRemindersBtn = document.getElementById('save-reminders-btn');
             const playerReviewBtn = document.getElementById('player-review-btn');
             const playerReviewStars = document.querySelectorAll('.player-review-star');
             const playerReviewSection = document.getElementById('player-review-section');
@@ -2374,8 +2525,7 @@
             const monthlySubscribeBtn = document.getElementById('monthly-subscribe');
             const annualSubscribeBtn = document.getElementById('annual-subscribe');
             const googleLoginBtn = document.getElementById('google-login');
-            const playIcon = playBtn.querySelector('.play-icon');
-            const pauseIcon = playBtn.querySelector('.pause-icon');
+            const referralBtn = document.getElementById('referral-btn');
 
             // Carica dati salvati da localStorage
             function loadSavedData() {
@@ -2418,6 +2568,16 @@
                 if (savedPremium) {
                     state.isPremium = JSON.parse(savedPremium);
                 }
+
+                const savedReferralCode = localStorage.getItem('referralCode');
+                if (savedReferralCode) {
+                    state.referralCode = savedReferralCode;
+                }
+
+                const savedLogin = localStorage.getItem('isLoggedIn');
+                if (savedLogin) {
+                    state.isLoggedIn = JSON.parse(savedLogin);
+                }
             }
 
             // Salva dati in localStorage
@@ -2430,6 +2590,8 @@
                 localStorage.setItem('reminders', JSON.stringify(state.reminders));
                 localStorage.setItem('dailyGoals', JSON.stringify(state.dailyGoals));
                 localStorage.setItem('isPremium', JSON.stringify(state.isPremium));
+                localStorage.setItem('referralCode', state.referralCode || '');
+                localStorage.setItem('isLoggedIn', JSON.stringify(state.isLoggedIn));
             }
 
             // Funzione per aggiornare il messaggio di benvenuto in base al genere
@@ -2490,6 +2652,13 @@
                 document.querySelectorAll('.reminder-sound').forEach(select => {
                     const type = select.dataset.type;
                     select.value = state.reminders[type].sound;
+                });
+
+                // Initialize time inputs
+                document.querySelectorAll('.time-input').forEach(input => {
+                    const type = input.closest('.reminder-item').querySelector('.reminder-toggle').dataset.type;
+                    const index = Array.from(input.closest('.time-range').querySelectorAll('.time-input')).indexOf(input);
+                    input.value = index === 0 ? state.reminders[type].from : state.reminders[type].to;
                 });
 
                 // Initialize reminder toggles
@@ -2759,12 +2928,10 @@
                 playBtn.addEventListener('click', function() {
                     if (audioPlayer.paused) {
                         audioPlayer.play();
-                        playIcon.style.display = 'none';
-                        pauseIcon.style.display = 'inline-block';
+                        playBtn.classList.add('playing');
                     } else {
                         audioPlayer.pause();
-                        playIcon.style.display = 'inline-block';
-                        pauseIcon.style.display = 'none';
+                        playBtn.classList.remove('playing');
                     }
 
                     playBtn.classList.add('active');
@@ -2783,8 +2950,7 @@
 
                     if (audioPlayer.paused) {
                         audioPlayer.play();
-                        playIcon.style.display = 'none';
-                        pauseIcon.style.display = 'inline-block';
+                        playBtn.classList.add('playing');
                     }
 
                     restartBtn.classList.add('active');
@@ -2821,19 +2987,16 @@
             // When audio ends
             if (audioPlayer) {
                 audioPlayer.addEventListener('ended', function() {
-                    playIcon.style.display = 'inline-block';
-                    pauseIcon.style.display = 'none';
+                    playBtn.classList.remove('playing');
                     showToast("Meditazione completata! Lascia una recensione se ti è piaciuta. 🧘");
                 });
 
                 audioPlayer.addEventListener('play', function() {
-                    playIcon.style.display = 'none';
-                    pauseIcon.style.display = 'inline-block';
+                    playBtn.classList.add('playing');
                 });
 
                 audioPlayer.addEventListener('pause', function() {
-                    playIcon.style.display = 'inline-block';
-                    pauseIcon.style.display = 'none';
+                    playBtn.classList.remove('playing');
                 });
             }
 
@@ -2855,6 +3018,7 @@
                 // Prevenire zoom su mobile
                 star.addEventListener('touchstart', function(e) {
                     e.preventDefault();
+                    this.click();
                 }, { passive: false });
             });
 
@@ -2900,6 +3064,12 @@
                         this.classList.remove('active');
                     }, 300);
                 });
+
+                // Add touch event for mobile
+                playerReviewBtn.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    this.click();
+                }, { passive: false });
             }
 
             // Close player
@@ -2907,8 +3077,7 @@
                 playerModal.classList.remove('active');
                 if (audioPlayer) {
                     audioPlayer.pause();
-                    playIcon.style.display = 'inline-block';
-                    pauseIcon.style.display = 'none';
+                    playBtn.classList.remove('playing');
                 }
 
                 this.classList.add('active');
@@ -3060,48 +3229,52 @@
                 saveData();
             });
 
-            // Save reminder settings
-            if (saveRemindersBtn) {
-                saveRemindersBtn.addEventListener('click', function() {
-                    // Update breathing reminder
-                    state.reminders.breathing.interval = parseInt(
-                        document.querySelector('.reminder-interval[data-type="breathing"]').value
-                    );
-                    state.reminders.breathing.sound =
-                        document.querySelector('.reminder-sound[data-type="breathing"]').value;
-                    state.reminders.breathing.active =
-                        document.querySelector('.reminder-toggle[data-type="breathing"]').checked;
-
-                    // Update posture reminder
-                    state.reminders.posture.interval = parseInt(
-                        document.querySelector('.reminder-interval[data-type="posture"]').value
-                    );
-                    state.reminders.posture.sound =
-                        document.querySelector('.reminder-sound[data-type="posture"]').value;
-                    state.reminders.posture.active =
-                        document.querySelector('.reminder-toggle[data-type="posture"]').checked;
-
-                    // Update water reminder
-                    state.reminders.water.interval = parseInt(
-                        document.querySelector('.reminder-interval[data-type="water"]').value
-                    );
-                    state.reminders.water.sound =
-                        document.querySelector('.reminder-sound[data-type="water"]').value;
-                    state.reminders.water.active =
-                        document.querySelector('.reminder-toggle[data-type="water"]').checked;
-
-                    // Start reminders
-                    startReminders();
-
-                    showToast("Impostazioni promemoria salvate! 🔔", true);
-                    saveData(); // Salva i settaggi
-
-                    this.classList.add('active');
-                    setTimeout(() => {
-                        this.classList.remove('active');
-                    }, 300);
+            // Reminder toggle changes
+            document.querySelectorAll('.reminder-toggle').forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    const type = this.dataset.type;
+                    state.reminders[type].active = this.checked;
+                    saveData();
+                    showToast("Impostazioni salvate automaticamente! 🔔", true);
                 });
-            }
+            });
+
+            // Reminder interval changes
+            document.querySelectorAll('.reminder-interval').forEach(input => {
+                input.addEventListener('change', function() {
+                    const type = this.dataset.type;
+                    state.reminders[type].interval = parseInt(this.value);
+                    saveData();
+                    showToast("Impostazioni salvate automaticamente! 🔔", true);
+                });
+            });
+
+            // Reminder sound changes
+            document.querySelectorAll('.reminder-sound').forEach(select => {
+                select.addEventListener('change', function() {
+                    const type = this.dataset.type;
+                    state.reminders[type].sound = this.value;
+                    saveData();
+                    showToast("Impostazioni salvate automaticamente! 🔔", true);
+                });
+            });
+
+            // Time input changes
+            document.querySelectorAll('.time-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const type = this.closest('.reminder-item').querySelector('.reminder-toggle').dataset.type;
+                    const index = Array.from(this.closest('.time-range').querySelectorAll('.time-input')).indexOf(this);
+
+                    if (index === 0) {
+                        state.reminders[type].from = this.value;
+                    } else {
+                        state.reminders[type].to = this.value;
+                    }
+
+                    saveData();
+                    showToast("Impostazioni salvate automaticamente! 🔔", true);
+                });
+            });
 
             // Subscribe buttons
             monthlySubscribeBtn.addEventListener('click', function() {
@@ -3116,6 +3289,38 @@
                 showToast("Reindirizzamento a Stripe per l'abbonamento annuale");
             });
 
+            // Referral button
+            referralBtn.addEventListener('click', function() {
+                if (!state.referralCode) {
+                    // Genera un codice referral se non esiste
+                    state.referralCode = 'VIVI-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+                    saveData();
+                }
+
+                const shareUrl = 'https://viviconsapevolmente.it?ref=' + state.referralCode;
+
+                if (navigator.share) {
+                    // Use Web Share API if available
+                    navigator.share({
+                        title: 'Vivi Consapevolmente',
+                        text: 'Scopri questa fantastica app per il benessere mentale! Usa il mio codice per ottenere un mese gratis: ' + state.referralCode,
+                        url: shareUrl
+                    })
+                    .then(() => showToast("Condiviso con successo! Riceverai 1 mese gratis quando l'amico si iscrive 🎁"))
+                    .catch(error => console.log('Errore nella condivisione:', error));
+                } else {
+                    // Fallback for browsers without Web Share API
+                    const tempInput = document.createElement('input');
+                    tempInput.value = shareUrl;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+
+                    showToast("Link copiato negli appunti! Condividilo per ricevere 1 mese gratis 🎁");
+                }
+            });
+
             // Login modal
             loginBtn.addEventListener('click', function() {
                 loginModal.classList.add('active');
@@ -3127,9 +3332,11 @@
 
             // Google login
             googleLoginBtn.addEventListener('click', function() {
-                // Google login implementation would go here
+                // In produzione, qui integreresti Firebase Auth
                 showToast("Accesso con Google selezionato");
                 setTimeout(() => {
+                    state.isLoggedIn = true;
+                    saveData();
                     loginModal.classList.remove('active');
                     showToast("Accesso effettuato con successo! 😊");
                 }, 1500);
