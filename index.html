@@ -336,22 +336,6 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .player-btn.playing .play-icon {
-            display: none;
-        }
-
-        .player-btn.playing .pause-icon {
-            display: block;
-        }
-
-        .player-btn .play-icon {
-            display: block;
-        }
-
-        .player-btn .pause-icon {
-            display: none;
-        }
-
         .player-close {
             display: block;
             width: 100%;
@@ -435,6 +419,13 @@
         .player-review-btn:active {
             background: var(--primary-darker);
             transform: scale(0.98);
+        }
+
+        .review-message {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--success);
+            font-weight: 600;
         }
 
         /* History Modal */
@@ -1067,7 +1058,7 @@
             z-index: -1;
             opacity: 0.1;
             /* CORREZIONE: aggiunto margine */
-            margin: 10px;
+            margin: 20px;
         }
 
         .calm-leaf {
@@ -1491,7 +1482,7 @@
             /* CORREZIONE: Emoji decorative su mobile */
             .calm-element {
                 opacity: 0.08;
-                margin: 15px;
+                margin: 20px; /* Margine aumentato */
             }
             .calm-element:nth-child(1) {
                 top: 5% !important;
@@ -1890,6 +1881,19 @@
             </div>
 
             <div class="meditation-list">
+                <!-- Nuova meditazione per lo stretching consapevole -->
+                <div class="meditation-item" data-id="10" data-title="Stretching Consapevole" data-duration="7 minuti">
+                    <div class="meditation-icon">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <div class="meditation-info">
+                        <div class="meditation-title">Stretching Consapevole 🤸</div>
+                        <div class="meditation-desc">Sblocca il corpo con attenzione</div>
+                        <div class="meditation-rating" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Meditazioni esistenti -->
                 <div class="meditation-item" data-id="1" data-title="Meditazione del Respiro" data-duration="10 minuti">
                     <div class="meditation-icon">
                         <i class="fas fa-wind"></i>
@@ -1934,7 +1938,6 @@
                     </div>
                 </div>
 
-                <!-- New office meditations -->
                 <div class="meditation-item" data-id="5" data-title="Pausa Caffè Consapevole" data-duration="5 minuti">
                     <div class="meditation-icon">
                         <i class="fas fa-coffee"></i>
@@ -2260,8 +2263,7 @@
                         <i class="fas fa-redo"></i>
                     </button>
                     <button class="player-btn" id="player-play">
-                        <i class="fas fa-play play-icon"></i>
-                        <i class="fas fa-pause pause-icon"></i>
+                        <i class="fas fa-play" id="play-icon"></i>
                     </button>
                 </div>
                 <audio id="meditation-audio"></audio>
@@ -2484,23 +2486,24 @@
                 isLoggedIn: false
             };
 
-            // Percorsi dei file audio (tutti nella stessa directory)
+            // Percorsi dei file audio
             const meditationAudios = {
-                1: 'meditation1.mp3',
-                2: 'meditation2.mp3',
-                3: 'meditation3.mp3',
-                4: 'meditation4.mp3',
-                5: 'meditation5.mp3',
-                6: 'meditation6.mp3',
-                7: 'meditation7.mp3',
-                8: 'meditation8.mp3',
-                9: 'meditation9.mp3'
+                1: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
+                2: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
+                3: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
+                4: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
+                5: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
+                6: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
+                7: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
+                8: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
+                9: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
+                10: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3' // Nuovo audio per stretching
             };
 
             const soundFiles = {
-                bells: 'bells.mp3',
-                nature: 'nature.mp3',
-                piano: 'piano.mp3'
+                bells: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
+                nature: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
+                piano: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3'
             };
 
             // DOM Elements
@@ -2514,6 +2517,7 @@
             const loginModal = document.getElementById('login-modal');
             const audioPlayer = document.getElementById('meditation-audio');
             const playBtn = document.getElementById('player-play');
+            const playIcon = document.getElementById('play-icon');
             const restartBtn = document.getElementById('player-restart');
             const toast = document.getElementById('toast');
             const historyBtn = document.getElementById('history-btn');
@@ -2922,6 +2926,10 @@
                         // Set audio source
                         audioPlayer.src = meditationAudios[meditationId];
 
+                        // Reset player state
+                        playIcon.className = 'fas fa-play';
+                        audioPlayer.pause();
+
                         // Reset progress bar
                         progressBar.style.width = "0%";
                         currentTimeEl.textContent = "0:00";
@@ -2942,16 +2950,23 @@
                 });
             }
 
-            // Player controls
+            // Player controls - CORREZIONE APPLICATA QUI
+            function updatePlayButton() {
+                if (audioPlayer.paused) {
+                    playIcon.className = 'fas fa-play';
+                } else {
+                    playIcon.className = 'fas fa-pause';
+                }
+            }
+
             if (playBtn) {
                 playBtn.addEventListener('click', function() {
                     if (audioPlayer.paused) {
                         audioPlayer.play();
-                        playBtn.classList.add('playing');
                     } else {
                         audioPlayer.pause();
-                        playBtn.classList.remove('playing');
                     }
+                    updatePlayButton();
                 });
             }
 
@@ -2964,7 +2979,7 @@
 
                     if (audioPlayer.paused) {
                         audioPlayer.play();
-                        playBtn.classList.add('playing');
+                        updatePlayButton();
                     }
                 });
             }
@@ -2984,6 +2999,16 @@
                         totalTimeEl.textContent = formatTime(duration);
                     }
                 });
+
+                // Aggiorna il pulsante quando cambia lo stato
+                audioPlayer.addEventListener('play', updatePlayButton);
+                audioPlayer.addEventListener('pause', updatePlayButton);
+
+                // Quando l'audio finisce
+                audioPlayer.addEventListener('ended', function() {
+                    updatePlayButton();
+                    showToast("Meditazione completata! Lascia una recensione se ti è piaciuta. 🧘");
+                });
             }
 
             // Format time as MM:SS
@@ -2991,22 +3016,6 @@
                 const mins = Math.floor(seconds / 60);
                 const secs = Math.floor(seconds % 60);
                 return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            }
-
-            // When audio ends
-            if (audioPlayer) {
-                audioPlayer.addEventListener('ended', function() {
-                    playBtn.classList.remove('playing');
-                    showToast("Meditazione completata! Lascia una recensione se ti è piaciuta. 🧘");
-                });
-
-                audioPlayer.addEventListener('play', function() {
-                    playBtn.classList.add('playing');
-                });
-
-                audioPlayer.addEventListener('pause', function() {
-                    playBtn.classList.remove('playing');
-                });
             }
 
             // Player review stars - prevenire zoom su mobile
@@ -3081,7 +3090,7 @@
                 playerModal.classList.remove('active');
                 if (audioPlayer) {
                     audioPlayer.pause();
-                    playBtn.classList.remove('playing');
+                    playIcon.className = 'fas fa-play';
                 }
             });
 
