@@ -28,6 +28,9 @@
             --premium: #f59e0b;
             --premium-light: #fde68a;
             --premium-gradient: linear-gradient(135deg, #fde68a, #fbbf24);
+            --journey-1: #6366f1;
+            --journey-2: #8b5cf6;
+            --journey-3: #ec4899;
         }
 
         * {
@@ -156,8 +159,19 @@
         /* Mood Tracker */
         .mood-tracker {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             margin: 15px 0;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .mood-tracker::-webkit-scrollbar {
+            height: 5px;
+        }
+
+        .mood-tracker::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 10px;
         }
 
         .mood-btn {
@@ -169,6 +183,12 @@
             padding: 5px;
             border-radius: 50%;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .mood-btn:hover {
@@ -679,11 +699,11 @@
         /* CORREZIONE: Maggiore spazio tra le emoji */
         .emoji-picker {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
             margin: 20px 0;
             justify-content: center;
-            padding: 0 10px;
+            padding: 0 15px;
         }
 
         /* CORREZIONE: Aggiunto padding alle emoji */
@@ -1057,7 +1077,6 @@
             pointer-events: none;
             z-index: -1;
             opacity: 0.1;
-            /* CORREZIONE: aggiunto margine */
             margin: 20px;
         }
 
@@ -1368,6 +1387,410 @@
             font-size: 0.95rem;
         }
 
+        /* Journeys Section */
+        .journey-list {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .journey-item {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .journey-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .journey-header {
+            padding: 20px;
+            color: white;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .journey-1 .journey-header {
+            background: linear-gradient(135deg, var(--journey-1), #4f46e5);
+        }
+
+        .journey-2 .journey-header {
+            background: linear-gradient(135deg, var(--journey-2), #7c3aed);
+        }
+
+        .journey-3 .journey-header {
+            background: linear-gradient(135deg, var(--journey-3), #db2777);
+        }
+
+        .journey-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            z-index: 1;
+        }
+
+        .journey-duration {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .journey-status {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .journey-body {
+            padding: 15px;
+            background: white;
+        }
+
+        .journey-progress {
+            margin-bottom: 15px;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        .journey-1 .progress-fill {
+            background: var(--journey-1);
+        }
+
+        .journey-2 .progress-fill {
+            background: var(--journey-2);
+        }
+
+        .journey-3 .progress-fill {
+            background: var(--journey-3);
+        }
+
+        .journey-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+
+        .journey-1 .journey-btn {
+            background: var(--journey-1);
+            color: white;
+        }
+
+        .journey-2 .journey-btn {
+            background: var(--journey-2);
+            color: white;
+        }
+
+        .journey-3 .journey-btn {
+            background: var(--journey-3);
+            color: white;
+        }
+
+        .journey-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .journey-btn:active {
+            transform: translateY(0);
+        }
+
+        .journey-locked {
+            background: #e2e8f0;
+            color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .journey-locked:hover {
+            transform: none;
+            opacity: 1;
+        }
+
+        /* Journey Detail Modal */
+        .journey-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .journey-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .journey-container {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 20px;
+        }
+
+        .journey-modal-header {
+            padding: 20px;
+            color: white;
+            position: relative;
+        }
+
+        .journey-1 .journey-modal-header {
+            background: linear-gradient(135deg, var(--journey-1), #4f46e5);
+        }
+
+        .journey-2 .journey-modal-header {
+            background: linear-gradient(135deg, var(--journey-2), #7c3aed);
+        }
+
+        .journey-3 .journey-modal-header {
+            background: linear-gradient(135deg, var(--journey-3), #db2777);
+        }
+
+        .journey-modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            z-index: 1;
+        }
+
+        .journey-modal-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            z-index: 1;
+        }
+
+        .journey-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .journey-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .journey-modal-body {
+            padding: 20px;
+        }
+
+        .current-day {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f8fafc;
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+        }
+
+        .day-number {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            line-height: 35px;
+            margin-right: 10px;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+
+        .task-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-description {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .task-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .checkbox-label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .checkbox-custom {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text-light);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        input[type="checkbox"]:checked + .checkbox-label .checkbox-custom {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        input[type="checkbox"]:checked + .checkbox-label .checkbox-custom::after {
+            content: "✓";
+            color: white;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        .task-completed {
+            text-align: center;
+            padding: 15px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            color: var(--success);
+            font-weight: 600;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .journey-days {
+            margin-top: 25px;
+        }
+
+        .journey-days-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .day-item {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .day-item:hover {
+            background: #f1f5f9;
+        }
+
+        .day-item.completed {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .day-item.completed .day-check {
+            background: var(--success);
+            color: white;
+        }
+
+        .day-check {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .day-info {
+            flex: 1;
+        }
+
+        .day-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .day-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
         /* Responsive */
         @media (min-width: 768px) {
             .container {
@@ -1400,7 +1823,6 @@
                 margin-bottom: 0;
             }
 
-            /* Posizione emoji su desktop */
             .calm-element {
                 opacity: 0.15;
             }
@@ -1421,10 +1843,10 @@
                 right: 8%;
             }
 
-            /* Profile edit modal adjustments */
             .emoji-picker {
-                grid-template-columns: repeat(8, 1fr);
-                gap: 12px;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 15px;
+                padding: 0 20px;
             }
 
             .emoji-option {
@@ -1465,24 +1887,23 @@
             }
 
             .emoji-picker {
-                grid-template-columns: repeat(6, 1fr);
-                padding: 0;
-                gap: 8px;
+                grid-template-columns: repeat(4, 1fr);
+                padding: 0 10px;
+                gap: 12px;
             }
 
             .emoji-option {
-                font-size: 1.5rem;
-                padding: 8px;
+                font-size: 1.8rem;
+                padding: 12px;
             }
 
             .subscription-switch {
                 flex-direction: column;
             }
 
-            /* CORREZIONE: Emoji decorative su mobile */
             .calm-element {
                 opacity: 0.08;
-                margin: 20px; /* Margine aumentato */
+                margin: 20px;
             }
             .calm-element:nth-child(1) {
                 top: 5% !important;
@@ -2011,12 +2432,18 @@
                     <i class="fas fa-smile"></i> È ora per il tuo check-in del pomeriggio!
                 </div>
 
+                <!-- Nuovo monitor umore con 10 emoji -->
                 <div class="mood-tracker">
+                    <button class="mood-btn" data-mood="devastato">😭</button>
                     <button class="mood-btn" data-mood="stressato">😩</button>
+                    <button class="mood-btn" data-mood="arrabbiato">😠</button>
                     <button class="mood-btn" data-mood="triste">😔</button>
                     <button class="mood-btn" data-mood="neutro">😐</button>
-                    <button class="mood-btn" data-mood="calmo">😊</button>
-                    <button class="mood-btn" data-mood="felice">😄</button>
+                    <button class="mood-btn" data-mood="calmo">😌</button>
+                    <button class="mood-btn" data-mood="contento">🙂</button>
+                    <button class="mood-btn" data-mood="felice">😊</button>
+                    <button class="mood-btn" data-mood="entusiasta">😄</button>
+                    <button class="mood-btn" data-mood="amore">😍</button>
                 </div>
             </div>
 
@@ -2127,6 +2554,88 @@
                             <span>alle</span>
                             <input type="time" class="time-input" value="22:00">
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nuova sezione Percorsi -->
+        <section id="journeys" class="section">
+            <div class="header">
+                <h1>Percorsi Guidati 🚀</h1>
+                <p>Sfide strutturate per migliorare il tuo benessere</p>
+            </div>
+
+            <div class="journey-list">
+                <div class="journey-item journey-1">
+                    <div class="journey-header">
+                        <div>
+                            <div class="journey-title">7 giorni per ridurre l'ansia</div>
+                            <div class="journey-duration">7 giorni • Per principianti</div>
+                        </div>
+                        <div class="journey-status" id="journey-1-status">Inizia</div>
+                    </div>
+                    <div class="journey-body">
+                        <div class="journey-progress">
+                            <div class="progress-text">
+                                <span>Progresso</span>
+                                <span id="journey-1-progress">0/7 giorni</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="journey-1-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <button class="journey-btn" id="journey-1-btn">
+                            <i class="fas fa-play-circle"></i> Inizia il percorso
+                        </button>
+                    </div>
+                </div>
+
+                <div class="journey-item journey-2">
+                    <div class="journey-header">
+                        <div>
+                            <div class="journey-title">10 giorni per migliorare la concentrazione</div>
+                            <div class="journey-duration">10 giorni • Intermedio</div>
+                        </div>
+                        <div class="journey-status" id="journey-2-status">Bloccato</div>
+                    </div>
+                    <div class="journey-body">
+                        <div class="journey-progress">
+                            <div class="progress-text">
+                                <span>Progresso</span>
+                                <span id="journey-2-progress">0/10 giorni</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="journey-2-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <button class="journey-btn journey-locked" id="journey-2-btn">
+                            <i class="fas fa-lock"></i> Completa il primo percorso
+                        </button>
+                    </div>
+                </div>
+
+                <div class="journey-item journey-3">
+                    <div class="journey-header">
+                        <div>
+                            <div class="journey-title">21 giorni per creare un'abitudine</div>
+                            <div class="journey-duration">21 giorni • Esperto</div>
+                        </div>
+                        <div class="journey-status" id="journey-3-status">Bloccato</div>
+                    </div>
+                    <div class="journey-body">
+                        <div class="journey-progress">
+                            <div class="progress-text">
+                                <span>Progresso</span>
+                                <span id="journey-3-progress">0/21 giorni</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="journey-3-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <button class="journey-btn journey-locked" id="journey-3-btn">
+                            <i class="fas fa-lock"></i> Completa il secondo percorso
+                        </button>
                     </div>
                 </div>
             </div>
@@ -2391,6 +2900,52 @@
         </div>
     </div>
 
+    <!-- Journey Detail Modal -->
+    <div class="journey-modal" id="journey-modal">
+        <div class="journey-container journey-1" id="journey-modal-container">
+            <div class="journey-modal-header">
+                <div class="journey-close" id="journey-close-btn">&times;</div>
+                <div class="journey-modal-title" id="journey-modal-title">7 giorni per ridurre l'ansia</div>
+                <div class="journey-modal-subtitle" id="journey-modal-subtitle">Un percorso guidato per ritrovare la calma</div>
+            </div>
+            <div class="journey-modal-body">
+                <div class="current-day">
+                    <span class="day-number" id="current-day-number">1</span>
+                    <span id="current-day-text">Giorno 1 di 7</span>
+                </div>
+
+                <div class="task-card">
+                    <div class="task-title">
+                        <i class="fas fa-tasks"></i>
+                        <span id="task-title">Attività del giorno</span>
+                    </div>
+                    <div class="task-description" id="task-description">
+                        Completa una meditazione guidata di 5 minuti concentrandoti sul respiro. Trova un luogo tranquillo e siediti comodamente.
+                    </div>
+
+                    <div class="task-checkbox">
+                        <input type="checkbox" id="task-completed-checkbox">
+                        <label for="task-completed-checkbox" class="checkbox-label">
+                            <div class="checkbox-custom"></div>
+                            <span>Ho completato questa attività</span>
+                        </label>
+                    </div>
+
+                    <div class="task-completed" id="task-completed">
+                        <i class="fas fa-check-circle"></i> Attività completata! Bravo!
+                    </div>
+                </div>
+
+                <div class="journey-days">
+                    <div class="journey-days-title">Tappe del percorso</div>
+                    <div id="journey-days-list">
+                        <!-- Days will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Login Modal -->
     <div class="login-modal" id="login-modal">
         <div class="login-container">
@@ -2422,6 +2977,10 @@
         <a href="#" class="nav-item" data-target="health">
             <div class="nav-icon"><i class="fas fa-heartbeat"></i></div>
             <div>Salute</div>
+        </a>
+        <a href="#" class="nav-item" data-target="journeys">
+            <div class="nav-icon"><i class="fas fa-route"></i></div>
+            <div>Percorsi</div>
         </a>
         <a href="#" class="nav-item" data-target="profile">
             <div class="nav-icon"><i class="fas fa-user"></i></div>
@@ -2483,7 +3042,81 @@
                 currentCalendarDate: new Date(),
                 isPremium: false,
                 referralCode: null,
-                isLoggedIn: false
+                isLoggedIn: false,
+
+                // Nuovo stato per i percorsi
+                journeys: {
+                    anxiety: {
+                        id: 'anxiety',
+                        title: '7 giorni per ridurre l\'ansia',
+                        duration: 7,
+                        currentDay: 1,
+                        completedDays: [],
+                        startDate: null,
+                        tasks: [
+                            "Completa una meditazione guidata di 5 minuti concentrandoti sul respiro",
+                            "Scrivi tre cose per cui sei grato nel tuo diario della gratitudine",
+                            "Fai 10 minuti di respirazione profonda in un luogo tranquillo",
+                            "Identifica una situazione stressante e scrivi come potresti affrontarla diversamente",
+                            "Pratica 5 minuti di stretching consapevole",
+                            "Dedica 10 minuti a un'attività che ti rilassa senza distrazioni",
+                            "Rifletti sul percorso e sui tuoi progressi"
+                        ]
+                    },
+                    focus: {
+                        id: 'focus',
+                        title: '10 giorni per migliorare la concentrazione',
+                        duration: 10,
+                        currentDay: 1,
+                        completedDays: [],
+                        startDate: null,
+                        unlocked: false,
+                        tasks: [
+                            "Medita per 10 minuti concentrandoti su un singolo oggetto",
+                            "Organizza il tuo spazio di lavoro eliminando le distrazioni",
+                            "Pratica la tecnica del pomodoro (25 minuti lavoro, 5 minuti pausa)",
+                            "Completa un esercizio di concentrazione di 5 minuti",
+                            "Dedica 15 minuti a leggere senza distrazioni",
+                            "Crea una lista di priorità per la tua giornata",
+                            "Pratica 10 minuti di respirazione focalizzata",
+                            "Completa un puzzle o un gioco che richiede concentrazione",
+                            "Medita camminando per 10 minuti concentrandoti sui passi",
+                            "Rifletti sui miglioramenti nella tua concentrazione"
+                        ]
+                    },
+                    habit: {
+                        id: 'habit',
+                        title: '21 giorni per creare un\'abitudine',
+                        duration: 21,
+                        currentDay: 1,
+                        completedDays: [],
+                        startDate: null,
+                        unlocked: false,
+                        tasks: [
+                            "Definisci l'abitudine che vuoi creare e perché è importante",
+                            "Identifica un momento specifico della giornata per praticarla",
+                            "Prepara l'ambiente per facilitare la nuova abitudine",
+                            "Pratica l'abitudine per almeno 5 minuti",
+                            "Associa la nuova abitudine a un'abitudine esistente",
+                            "Tieni traccia dei tuoi progressi",
+                            "Celebra i piccoli successi",
+                            "Rifletti sulle difficoltà e su come superarle",
+                            "Condividi il tuo obiettivo con qualcuno",
+                            "Pratica l'abitudine per 10 minuti",
+                            "Visualizza te stesso che pratichi con successo l'abitudine",
+                            "Prepara un piano per gli ostacoli previsti",
+                            "Pratica l'abitudine in un contesto diverso",
+                            "Trova un partner di responsabilità",
+                            "Rifletti sui benefici che stai sperimentando",
+                            "Aumenta la durata a 15 minuti",
+                            "Pratica anche quando non ne hai voglia",
+                            "Ripensa ai tuoi progressi e aggiusta se necessario",
+                            "Celebra la seconda settimana di successo",
+                            "Pratica in condizioni non ideali",
+                            "Rifletti sul percorso e preparati a continuare"
+                        ]
+                    }
+                }
             };
 
             // Percorsi dei file audio
@@ -2497,7 +3130,7 @@
                 7: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
                 8: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
                 9: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3',
-                10: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3' // Nuovo audio per stretching
+                10: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3'
             };
 
             const soundFiles = {
@@ -2515,6 +3148,7 @@
             const historyModal = document.getElementById('history-modal');
             const profileEditModal = document.getElementById('profile-edit-modal');
             const loginModal = document.getElementById('login-modal');
+            const journeyModal = document.getElementById('journey-modal');
             const audioPlayer = document.getElementById('meditation-audio');
             const playBtn = document.getElementById('player-play');
             const playIcon = document.getElementById('play-icon');
@@ -2549,6 +3183,20 @@
             const annualSubscribeBtn = document.getElementById('annual-subscribe');
             const googleLoginBtn = document.getElementById('google-login');
             const referralBtn = document.getElementById('referral-btn');
+            const journeyCloseBtn = document.getElementById('journey-close-btn');
+            const journeyModalContainer = document.getElementById('journey-modal-container');
+            const journeyModalTitle = document.getElementById('journey-modal-title');
+            const journeyModalSubtitle = document.getElementById('journey-modal-subtitle');
+            const currentDayNumber = document.getElementById('current-day-number');
+            const currentDayText = document.getElementById('current-day-text');
+            const taskTitle = document.getElementById('task-title');
+            const taskDescription = document.getElementById('task-description');
+            const taskCompleted = document.getElementById('task-completed');
+            const taskCheckbox = document.getElementById('task-completed-checkbox');
+            const journeyDaysList = document.getElementById('journey-days-list');
+            const journey1Btn = document.getElementById('journey-1-btn');
+            const journey2Btn = document.getElementById('journey-2-btn');
+            const journey3Btn = document.getElementById('journey-3-btn');
 
             // Carica dati salvati da localStorage
             function loadSavedData() {
@@ -2601,6 +3249,11 @@
                 if (savedLogin) {
                     state.isLoggedIn = JSON.parse(savedLogin);
                 }
+
+                const savedJourneys = localStorage.getItem('journeys');
+                if (savedJourneys) {
+                    state.journeys = JSON.parse(savedJourneys);
+                }
             }
 
             // Salva dati in localStorage
@@ -2615,6 +3268,7 @@
                 localStorage.setItem('isPremium', JSON.stringify(state.isPremium));
                 localStorage.setItem('referralCode', state.referralCode || '');
                 localStorage.setItem('isLoggedIn', JSON.stringify(state.isLoggedIn));
+                localStorage.setItem('journeys', JSON.stringify(state.journeys));
             }
 
             // Funzione per aggiornare il messaggio di benvenuto in base al genere
@@ -2665,6 +3319,7 @@
                 document.querySelector('.profile-emoji').textContent = state.profile.emoji;
                 updateWelcomeMessage();
                 renderDailyGoal();
+                updateJourneysDisplay();
 
                 // Initialize reminder settings
                 document.querySelectorAll('.reminder-interval').forEach(input => {
@@ -2769,6 +3424,89 @@
                 } else {
                     showToast("Obiettivo riportato in corso ⏳");
                 }
+            }
+
+            // Funzione per aggiornare la visualizzazione dei percorsi
+            function updateJourneysDisplay() {
+                for (const journeyId in state.journeys) {
+                    const journey = state.journeys[journeyId];
+
+                    const progressText = document.getElementById(`journey-${journeyId}-progress`);
+                    const progressFill = document.getElementById(`journey-${journeyId}-fill`);
+                    const status = document.getElementById(`journey-${journeyId}-status`);
+
+                    if (progressText && progressFill && status) {
+                        // Aggiorna progresso
+                        const progress = journey.completedDays.length;
+                        const percent = (progress / journey.duration) * 100;
+
+                        progressText.textContent = `${progress}/${journey.duration} giorni`;
+                        progressFill.style.width = `${percent}%`;
+
+                        // Aggiorna stato
+                        if (progress === journey.duration) {
+                            status.textContent = 'Completato 🎉';
+                        } else if (progress > 0) {
+                            status.textContent = `${progress}/${journey.duration}`;
+                        } else {
+                            status.textContent = journeyId === 'anxiety' ? 'Inizia' : 'Bloccato';
+                        }
+                    }
+                }
+            }
+
+            // Funzione per aprire il dettaglio di un percorso
+            function openJourneyDetail(journeyId) {
+                const journey = state.journeys[journeyId];
+
+                // Aggiorna il contenuto modale
+                journeyModalContainer.className = `journey-container journey-${journeyId}`;
+                journeyModalTitle.textContent = journey.title;
+                journeyModalSubtitle.textContent = journeyId === 'anxiety' ?
+                    'Un percorso guidato per ritrovare la calma' :
+                    journeyId === 'focus' ?
+                    'Migliora la tua produttività e attenzione' :
+                    'Costruisci abitudini positive per la tua vita';
+
+                // Aggiorna il giorno corrente
+                currentDayNumber.textContent = journey.currentDay;
+                currentDayText.textContent = `Giorno ${journey.currentDay} di ${journey.duration}`;
+
+                // Aggiorna l'attività del giorno
+                taskTitle.textContent = `Attività del giorno ${journey.currentDay}`;
+                taskDescription.textContent = journey.tasks[journey.currentDay - 1];
+
+                // Controlla se il giorno è già completato
+                const isCompleted = journey.completedDays.includes(journey.currentDay);
+                taskCompleted.style.display = isCompleted ? 'block' : 'none';
+                taskCheckbox.checked = isCompleted;
+
+                // Aggiorna la lista dei giorni
+                journeyDaysList.innerHTML = '';
+                for (let i = 1; i <= journey.duration; i++) {
+                    const dayItem = document.createElement('div');
+                    dayItem.className = `day-item ${journey.completedDays.includes(i) ? 'completed' : ''}`;
+                    dayItem.dataset.day = i;
+
+                    dayItem.innerHTML = `
+                        <div class="day-check">${i}</div>
+                        <div class="day-info">
+                            <div class="day-title">Giorno ${i}</div>
+                            <div class="day-desc">${journey.tasks[i-1].substring(0, 50)}...</div>
+                        </div>
+                    `;
+
+                    dayItem.addEventListener('click', function() {
+                        const day = parseInt(this.dataset.day);
+                        journey.currentDay = day;
+                        openJourneyDetail(journeyId);
+                    });
+
+                    journeyDaysList.appendChild(dayItem);
+                }
+
+                // Mostra il modale
+                journeyModal.classList.add('active');
             }
 
             // Carica i dati salvati e inizializza l'UI
@@ -2950,7 +3688,7 @@
                 });
             }
 
-            // Player controls - CORREZIONE APPLICATA QUI
+            // CORREZIONE: Funzione per aggiornare l'icona play/pause
             function updatePlayButton() {
                 if (audioPlayer.paused) {
                     playIcon.className = 'fas fa-play';
@@ -2959,6 +3697,7 @@
                 }
             }
 
+            // Player controls - CORREZIONE APPLICATA QUI
             if (playBtn) {
                 playBtn.addEventListener('click', function() {
                     if (audioPlayer.paused) {
@@ -3330,6 +4069,104 @@
                 }, 1500);
             });
 
+            // Journey buttons
+            journey1Btn.addEventListener('click', function() {
+                const journey = state.journeys.anxiety;
+
+                // Verifica se il percorso è sbloccato
+                if (!journey.unlocked && journey.id !== 'anxiety') {
+                    showToast(`Completa il percorso precedente per sbloccare questo! 🔓`);
+                    return;
+                }
+
+                // Se è il primo giorno e non è stato ancora iniziato
+                if (journey.completedDays.length === 0 && journey.currentDay === 1) {
+                    journey.startDate = new Date().toISOString();
+                }
+
+                openJourneyDetail('anxiety');
+            });
+
+            journey2Btn.addEventListener('click', function() {
+                const journey = state.journeys.focus;
+
+                // Verifica se il percorso è sbloccato
+                if (!journey.unlocked) {
+                    showToast(`Completa il percorso precedente per sbloccare questo! 🔓`);
+                    return;
+                }
+
+                // Se è il primo giorno e non è stato ancora iniziato
+                if (journey.completedDays.length === 0 && journey.currentDay === 1) {
+                    journey.startDate = new Date().toISOString();
+                }
+
+                openJourneyDetail('focus');
+            });
+
+            journey3Btn.addEventListener('click', function() {
+                const journey = state.journeys.habit;
+
+                // Verifica se il percorso è sbloccato
+                if (!journey.unlocked) {
+                    showToast(`Completa il percorso precedente per sbloccare questo! 🔓`);
+                    return;
+                }
+
+                // Se è il primo giorno e non è stato ancora iniziato
+                if (journey.completedDays.length === 0 && journey.currentDay === 1) {
+                    journey.startDate = new Date().toISOString();
+                }
+
+                openJourneyDetail('habit');
+            });
+
+            // Task completion
+            taskCheckbox.addEventListener('change', function() {
+                const journeyId = journeyModalContainer.classList[1].split('-')[1];
+                const journey = state.journeys[journeyId];
+                const currentDay = journey.currentDay;
+
+                if (this.checked) {
+                    // Aggiungi il giorno ai completati se non è già presente
+                    if (!journey.completedDays.includes(currentDay)) {
+                        journey.completedDays.push(currentDay);
+                    }
+
+                    // Mostra il messaggio di completamento
+                    taskCompleted.style.display = 'block';
+
+                    // Sblocca il percorso successivo se necessario
+                    if (journeyId === 'anxiety' && journey.completedDays.length === journey.duration) {
+                        state.journeys.focus.unlocked = true;
+                        showToast('Percorso completato! Il percorso "Concentrazione" è stato sbloccato! 🎉');
+                    }
+
+                    if (journeyId === 'focus' && journey.completedDays.length === journey.duration) {
+                        state.journeys.habit.unlocked = true;
+                        showToast('Percorso completato! Il percorso "Abitudini" è stato sbloccato! 🚀');
+                    }
+
+                    // Salva lo stato
+                    saveData();
+                } else {
+                    // Rimuovi il giorno dai completati
+                    const index = journey.completedDays.indexOf(currentDay);
+                    if (index !== -1) {
+                        journey.completedDays.splice(index, 1);
+                    }
+                    taskCompleted.style.display = 'none';
+                }
+
+                // Aggiorna la visualizzazione
+                updateJourneysDisplay();
+            });
+
+            // Chiudi il modale dei percorsi
+            journeyCloseBtn.addEventListener('click', function() {
+                journeyModal.classList.remove('active');
+            });
+
             // Helper functions
             function updateMeditationRating(meditationId) {
                 const ratings = state.meditationReviews[meditationId];
@@ -3352,35 +4189,50 @@
 
             function getMoodName(mood) {
                 const names = {
+                    'devastato': 'Devastato',
                     'stressato': 'Stressato',
+                    'arrabbiato': 'Arrabbiato',
                     'triste': 'Triste',
                     'neutro': 'Neutro',
                     'calmo': 'Calmo',
-                    'felice': 'Felice'
+                    'contento': 'Contento',
+                    'felice': 'Felice',
+                    'entusiasta': 'Entusiasta',
+                    'amore': 'Amore'
                 };
                 return names[mood] || mood;
             }
 
             function getMoodEmoji(mood) {
                 const emojis = {
+                    'devastato': '😭',
                     'stressato': '😩',
+                    'arrabbiato': '😠',
                     'triste': '😔',
                     'neutro': '😐',
-                    'calmo': '😊',
-                    'felice': '😄'
+                    'calmo': '😌',
+                    'contento': '🙂',
+                    'felice': '😊',
+                    'entusiasta': '😄',
+                    'amore': '😍'
                 };
                 return emojis[mood] || '';
             }
 
             function getMoodValue(mood) {
                 const values = {
-                    'stressato': 1,
-                    'triste': 2,
-                    'neutro': 3,
-                    'calmo': 4,
-                    'felice': 5
+                    'devastato': 1,
+                    'stressato': 2,
+                    'arrabbiato': 3,
+                    'triste': 4,
+                    'neutro': 5,
+                    'calmo': 6,
+                    'contento': 7,
+                    'felice': 8,
+                    'entusiasta': 9,
+                    'amore': 10
                 };
-                return values[mood] || 3;
+                return values[mood] || 5;
             }
 
             function showToast(message, isReminder = false) {
@@ -3501,7 +4353,7 @@
                 if (moodEntries.length > 0) {
                     const moodSum = moodEntries.reduce((sum, entry) => sum + getMoodValue(entry.mood), 0);
                     const average = moodSum / moodEntries.length;
-                    const percentage = (average - 1) / 4 * 100; // Scale from 1-5 to 0-100%
+                    const percentage = (average - 1) / 9 * 100; // Scale from 1-10 to 0-100%
 
                     moodAverage.textContent = average.toFixed(1);
                     moodIndicator.style.left = `${percentage}%`;
