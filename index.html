@@ -163,6 +163,8 @@
             margin: 15px 0;
             overflow-x: auto;
             padding-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-light) transparent;
         }
 
         .mood-tracker::-webkit-scrollbar {
@@ -220,6 +222,25 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+        }
+
+        /* Mood scroll indicator */
+        .mood-scroll-indicator {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-light);
+            opacity: 0.5;
+            z-index: 10;
+        }
+
+        .mood-scroll-indicator.active {
+            background: var(--primary);
+            opacity: 1;
         }
 
         /* Meditations */
@@ -439,13 +460,6 @@
         .player-review-btn:active {
             background: var(--primary-darker);
             transform: scale(0.98);
-        }
-
-        .review-message {
-            text-align: center;
-            margin-top: 15px;
-            color: var(--success);
-            font-weight: 600;
         }
 
         /* History Modal */
@@ -728,62 +742,6 @@
 
         .emoji-option:active {
             transform: scale(0.95);
-        }
-
-        .profile-edit-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            font-size: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .profile-edit-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .profile-edit-buttons button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-edit-cancel {
-            background: #f1f5f9;
-            color: var(--text);
-        }
-
-        .profile-edit-cancel:hover {
-            background: #e2e8f0;
-        }
-
-        .profile-edit-cancel:active {
-            background: #d1d8e0;
-            transform: scale(0.98);
-        }
-
-        .profile-edit-save {
-            background: var(--primary);
-            color: white;
-        }
-
-        .profile-edit-save:hover {
-            background: var(--primary-dark);
-        }
-
-        .profile-edit-save:active {
-            background: var(--primary-darker);
-            transform: scale(0.98);
         }
 
         /* Gender Selection */
@@ -1576,7 +1534,7 @@
         }
 
         .journey-modal-header {
-            padding: 20px;
+            padding: 25px 20px 15px;
             color: white;
             position: relative;
         }
@@ -1610,22 +1568,21 @@
             position: absolute;
             top: 15px;
             right: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            color: #000;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            color: white;
-            font-size: 1.2rem;
-            z-index: 2;
+            border-radius: 50%;
+            z-index: 10;
             transition: all 0.3s ease;
         }
 
         .journey-close:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.7);
         }
 
         .journey-modal-body {
@@ -1652,6 +1609,11 @@
             border-radius: 50%;
             line-height: 35px;
             margin-right: 10px;
+        }
+
+        /* Journey progress bar */
+        .journey-modal-progress {
+            margin: 20px 0;
         }
 
         .task-card {
@@ -2136,19 +2098,6 @@
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
 
-        /* New smooth animations */
-        .meditation-icon {
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .meditation-item:hover .meditation-icon {
-            transform: scale(1.15) rotate(5deg);
-        }
-
-        .player-btn {
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
         /* Referral section */
         .referral-card {
             background: linear-gradient(135deg, #dbf9ff, #c7f3fe);
@@ -2240,6 +2189,55 @@
                 padding-right: 60px;
             }
         }
+
+        /* CORREZIONI: */
+
+        /* Fix per il player audio */
+        .player-controls {
+            position: relative;
+        }
+
+        #player-play {
+            z-index: 10;
+        }
+
+        /* Miglioramento icone storico obiettivi su mobile */
+        @media (max-width: 768px) {
+            .goal-history-icon {
+                width: 25px;
+                height: 25px;
+                font-size: 1rem;
+            }
+
+            .goal-history-icon.completed::before {
+                content: "✓";
+            }
+
+            .goal-history-icon.not-completed::before {
+                content: "✗";
+            }
+        }
+
+        /* Riduzione spazio bianco calendario */
+        .calendar-container {
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        .history-section {
+            margin-bottom: 20px;
+        }
+
+        /* Pulsante chiusura percorsi su mobile */
+        @media (max-width: 768px) {
+            .journey-close {
+                top: 10px;
+                right: 10px;
+                width: 35px;
+                height: 35px;
+                font-size: 1.3rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2266,10 +2264,10 @@
             </div>
 
             <div class="daily-card">
-                <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80" alt="Immagine del giorno">
+                <img id="daily-image" src="" alt="Immagine del giorno">
                 <div class="daily-card-overlay">
                     <h3><i class="fas fa-quote-left"></i> Pensiero del Giorno</h3>
-                    <p>"La pace viene da dentro. Non cercarla fuori." - Buddha 🌸</p>
+                    <p id="daily-quote">"La pace viene da dentro. Non cercarla fuori." - Buddha 🌸</p>
                 </div>
             </div>
 
@@ -2433,17 +2431,20 @@
                 </div>
 
                 <!-- Nuovo monitor umore con 10 emoji -->
-                <div class="mood-tracker">
-                    <button class="mood-btn" data-mood="devastato">😭</button>
-                    <button class="mood-btn" data-mood="stressato">😩</button>
-                    <button class="mood-btn" data-mood="arrabbiato">😠</button>
-                    <button class="mood-btn" data-mood="triste">😔</button>
-                    <button class="mood-btn" data-mood="neutro">😐</button>
-                    <button class="mood-btn" data-mood="calmo">😌</button>
-                    <button class="mood-btn" data-mood="contento">🙂</button>
-                    <button class="mood-btn" data-mood="felice">😊</button>
-                    <button class="mood-btn" data-mood="entusiasta">😄</button>
-                    <button class="mood-btn" data-mood="amore">😍</button>
+                <div style="position: relative;">
+                    <div class="mood-tracker" id="mood-tracker">
+                        <button class="mood-btn" data-mood="devastato">😭</button>
+                        <button class="mood-btn" data-mood="stressato">😩</button>
+                        <button class="mood-btn" data-mood="arrabbiato">😠</button>
+                        <button class="mood-btn" data-mood="triste">😔</button>
+                        <button class="mood-btn" data-mood="neutro">😐</button>
+                        <button class="mood-btn" data-mood="calmo">😌</button>
+                        <button class="mood-btn" data-mood="contento">🙂</button>
+                        <button class="mood-btn" data-mood="felice">😊</button>
+                        <button class="mood-btn" data-mood="entusiasta">😄</button>
+                        <button class="mood-btn" data-mood="amore">😍</button>
+                    </div>
+                    <div class="mood-scroll-indicator" id="mood-scroll-indicator"></div>
                 </div>
             </div>
 
@@ -2914,6 +2915,17 @@
                     <span id="current-day-text">Giorno 1 di 7</span>
                 </div>
 
+                <!-- Journey progress bar -->
+                <div class="journey-modal-progress">
+                    <div class="progress-text">
+                        <span>Progresso percorso</span>
+                        <span id="journey-progress-text">0/7 giorni</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="journey-progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
                 <div class="task-card">
                     <div class="task-title">
                         <i class="fas fa-tasks"></i>
@@ -3139,6 +3151,90 @@
                 piano: 'https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-552.mp3'
             };
 
+            // Immagini e citazioni casuali
+            const dailyInspiration = [
+                {
+                    image: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La pace viene da dentro. Non cercarla fuori." - Buddha 🌸'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"Il momento presente è l\'unico momento disponibile." - Thich Nhat Hanh 🍃'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"Respira. Lascia andare. E ricorda che questo momento è l\'unico che sai per certo di avere." - Oprah Winfrey 🌊'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La meditazione non è fuga dalla realtà. È un incontro sereno con la realtà." - Thich Nhat Hanh ☀️'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1497250681960-ef046c08a56e?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La natura non ha fretta, eppure tutto si realizza." - Lao Tzu 🌳'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"Cammina come se stessi baciando la terra con i tuoi piedi." - Thich Nhat Hanh 👣'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La felicità non è una meta, ma un modo di viaggiare." - Buddha 🌈'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1506260408121-e353d10b87c7?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"Il silenzio è la migliore risposta alla stoltezza." - Eckhart Tolle 🤫'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La natura è l\'arte di Dio." - Dante Alighieri 🎨'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La pace inizia con un sorriso." - Madre Teresa di Calcutta 😊'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"Guardare profondamente nella natura è comprendere tutto meglio." - Albert Einstein 🔍'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La bellezza della natura è che non ha bisogno di essere perfetta per essere perfetta." - Anonimo 🌟'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"Ogni mattina nasciamo di nuovo. Ciò che facciamo oggi è ciò che conta di più." - Buddha 🌅'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1506269996138-4c6d92fbd8a5?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La vera meditazione riguarda l\'essere onestamente presenti." - Jon Kabat-Zinn 🧘'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La natura non è un luogo da visitare. È casa." - Gary Snyder 🏡'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La mente è tutto. Ciò che pensi, diventi." - Buddha 💭'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La pazienza è la migliore forma di meditazione." - Buddha ⏳'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La foresta è un luogo sacro dove puoi ritrovare te stesso." - John Muir 🌲'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La semplicità è la chiave della felicità." - Buddha 🔑'
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&w=800&ixlib=rb-1.2.1&q=80",
+                    quote: '"La meditazione non è una fuga, ma un incontro sereno con la realtà." - Jiddu Krishnamurti 🌅'
+                }
+            ];
+
             // DOM Elements
             const sections = document.querySelectorAll('.section');
             const navItems = document.querySelectorAll('.nav-item');
@@ -3197,6 +3293,12 @@
             const journey1Btn = document.getElementById('journey-1-btn');
             const journey2Btn = document.getElementById('journey-2-btn');
             const journey3Btn = document.getElementById('journey-3-btn');
+            const dailyImage = document.getElementById('daily-image');
+            const dailyQuote = document.getElementById('daily-quote');
+            const moodTracker = document.getElementById('mood-tracker');
+            const moodScrollIndicator = document.getElementById('mood-scroll-indicator');
+            const journeyProgressText = document.getElementById('journey-progress-text');
+            const journeyProgressFill = document.getElementById('journey-progress-fill');
 
             // Carica dati salvati da localStorage
             function loadSavedData() {
@@ -3320,6 +3422,11 @@
                 updateWelcomeMessage();
                 renderDailyGoal();
                 updateJourneysDisplay();
+
+                // Set random daily inspiration
+                const randomInspiration = dailyInspiration[Math.floor(Math.random() * dailyInspiration.length)];
+                dailyImage.src = randomInspiration.image;
+                dailyQuote.textContent = randomInspiration.quote;
 
                 // Initialize reminder settings
                 document.querySelectorAll('.reminder-interval').forEach(input => {
@@ -3481,6 +3588,12 @@
                 taskCompleted.style.display = isCompleted ? 'block' : 'none';
                 taskCheckbox.checked = isCompleted;
 
+                // Aggiorna la barra di progresso del percorso
+                const progress = journey.completedDays.length;
+                const progressPercent = (progress / journey.duration) * 100;
+                journeyProgressText.textContent = `${progress}/${journey.duration} giorni`;
+                journeyProgressFill.style.width = `${progressPercent}%`;
+
                 // Aggiorna la lista dei giorni
                 journeyDaysList.innerHTML = '';
                 for (let i = 1; i <= journey.duration; i++) {
@@ -3537,6 +3650,24 @@
                     }
                 });
             });
+
+            // Mood scroll indicator
+            function updateMoodScrollIndicator() {
+                const scrollLeft = moodTracker.scrollLeft;
+                const maxScroll = moodTracker.scrollWidth - moodTracker.clientWidth;
+
+                if (maxScroll > 10) {
+                    moodScrollIndicator.classList.add('active');
+                    const position = (scrollLeft / maxScroll) * 90;
+                    moodScrollIndicator.style.transform = `translateX(${position}px) translateY(-50%)`;
+                } else {
+                    moodScrollIndicator.classList.remove('active');
+                }
+            }
+
+            moodTracker.addEventListener('scroll', updateMoodScrollIndicator);
+            window.addEventListener('resize', updateMoodScrollIndicator);
+            updateMoodScrollIndicator();
 
             // Funzione per inizializzare il check-in basato sul tempo
             function initTimeBasedCheckin() {
@@ -4489,7 +4620,7 @@
                 yesterday.setDate(yesterday.getDate() - 1);
                 const yesterdayStr = getLocalDateString(yesterday);
 
-                // Se esiste un obiettivo per ieri ma non è stato completato
+                // Se esiste un obiettivo per ieri ma non è stato ancora completato
                 if (state.dailyGoals[yesterdayStr] && !state.dailyGoals[yesterdayStr].completed) {
                     // Non modifichiamo lo stato, solo per riferimento
                     console.log("Obiettivo di ieri non completato");
