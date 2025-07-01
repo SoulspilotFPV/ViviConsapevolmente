@@ -224,25 +224,6 @@
             gap: 8px;
         }
 
-        /* Mood scroll indicator */
-        .mood-scroll-indicator {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--text-light);
-            opacity: 0.5;
-            z-index: 10;
-        }
-
-        .mood-scroll-indicator.active {
-            background: var(--primary);
-            opacity: 1;
-        }
-
         /* Meditations */
         .meditation-list {
             display: grid;
@@ -775,6 +756,43 @@
 
         .gender-option:active {
             transform: scale(0.95);
+        }
+
+        /* CORREZIONE: Stile per i pulsanti di modifica profilo */
+        .profile-edit-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .profile-edit-cancel,
+        .profile-edit-save {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .profile-edit-cancel {
+            background: #f1f5f9;
+            color: var(--text);
+        }
+
+        .profile-edit-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .profile-edit-save {
+            background: var(--primary);
+            color: white;
+        }
+
+        .profile-edit-save:hover {
+            background: var(--primary-dark);
         }
 
         /* Toast Notification */
@@ -1528,65 +1546,49 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: var(--shadow-lg);
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
+            background: linear-gradient(to bottom, #f0fdfa, #e0f2fe);
             margin: 20px;
+            padding: 25px;
         }
 
         .journey-modal-header {
-            padding: 25px 20px 15px;
-            color: white;
-            position: relative;
-        }
-
-        .journey-1 .journey-modal-header {
-            background: linear-gradient(135deg, var(--journey-1), #4f46e5);
-        }
-
-        .journey-2 .journey-modal-header {
-            background: linear-gradient(135deg, var(--journey-2), #7c3aed);
-        }
-
-        .journey-3 .journey-modal-header {
-            background: linear-gradient(135deg, var(--journey-3), #db2777);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
         .journey-modal-title {
-            font-size: 1.4rem;
-            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
             margin-bottom: 5px;
-            z-index: 1;
-        }
-
-        .journey-modal-subtitle {
-            font-size: 0.95rem;
-            opacity: 0.9;
-            z-index: 1;
         }
 
         .journey-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.5);
-            color: #000;
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
             width: 40px;
             height: 40px;
-            font-size: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            z-index: 10;
             transition: all 0.3s ease;
         }
 
         .journey-close:hover {
-            background: rgba(255, 255, 255, 0.7);
+            background: #f1f5f9;
+            color: var(--text);
         }
 
-        .journey-modal-body {
-            padding: 20px;
+        .journey-close:active {
+            background: #e2e8f0;
+            transform: scale(0.9);
         }
 
         .current-day {
@@ -2208,14 +2210,6 @@
                 height: 25px;
                 font-size: 1rem;
             }
-
-            .goal-history-icon.completed::before {
-                content: "✓";
-            }
-
-            .goal-history-icon.not-completed::before {
-                content: "✗";
-            }
         }
 
         /* Riduzione spazio bianco calendario */
@@ -2237,6 +2231,63 @@
                 height: 35px;
                 font-size: 1.3rem;
             }
+        }
+
+        /* Nuovi stili per i percorsi */
+        .journey-progress-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .progress-circle {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            margin: 0 auto 10px;
+        }
+
+        .progress-fill-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            clip: rect(0, 30px, 60px, 0);
+            background: currentColor;
+        }
+
+        .journey-modal-completed {
+            text-align: center;
+            padding: 15px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            color: var(--success);
+            font-weight: 600;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .journey-modal-completed i {
+            font-size: 1.5rem;
+        }
+
+        .journey-day-completed {
+            background: rgba(16, 185, 129, 0.1) !important;
+            border: 1px solid var(--success) !important;
+        }
+
+        .journey-day-completed .day-check {
+            background: var(--success) !important;
+            color: white !important;
         }
     </style>
 </head>
@@ -2444,7 +2495,6 @@
                         <button class="mood-btn" data-mood="entusiasta">😄</button>
                         <button class="mood-btn" data-mood="amore">😍</button>
                     </div>
-                    <div class="mood-scroll-indicator" id="mood-scroll-indicator"></div>
                 </div>
             </div>
 
@@ -2453,11 +2503,11 @@
                     <i class="fas fa-book"></i>
                     <span>Diario della Gratitudine 🌟</span>
                 </div>
-                <form class="gratitude-form">
+                <form class="gratitude-form" id="gratitude-form">
                     <input type="text" placeholder="1. Oggi sono grato/a per... 😊" required class="gratitude-input">
                     <input type="text" placeholder="2. Un'altra cosa che apprezzo... 🌸" required class="gratitude-input">
                     <input type="text" placeholder="3. E infine sono grato/a per... ❤️" required class="gratitude-input">
-                    <button type="submit" class="gratitude-btn">Salva le note di oggi</button>
+                    <button type="submit" class="gratitude-btn" id="gratitude-btn">Salva le note di oggi</button>
                 </form>
             </div>
 
@@ -2563,7 +2613,7 @@
         <!-- Nuova sezione Percorsi -->
         <section id="journeys" class="section">
             <div class="header">
-                <h1>Percorsi Guidati 🚀</h1>
+                <h1>Percorsi Guidati 🌈</h1>
                 <p>Sfide strutturate per migliorare il tuo benessere</p>
             </div>
 
@@ -2571,7 +2621,7 @@
                 <div class="journey-item journey-1">
                     <div class="journey-header">
                         <div>
-                            <div class="journey-title">7 giorni per ridurre l'ansia</div>
+                            <div class="journey-title">7 giorni per ridurre l'ansia 🌊</div>
                             <div class="journey-duration">7 giorni • Per principianti</div>
                         </div>
                         <div class="journey-status" id="journey-1-status">Inizia</div>
@@ -2595,7 +2645,7 @@
                 <div class="journey-item journey-2">
                     <div class="journey-header">
                         <div>
-                            <div class="journey-title">10 giorni per migliorare la concentrazione</div>
+                            <div class="journey-title">10 giorni per migliorare la concentrazione 🎯</div>
                             <div class="journey-duration">10 giorni • Intermedio</div>
                         </div>
                         <div class="journey-status" id="journey-2-status">Bloccato</div>
@@ -2619,7 +2669,7 @@
                 <div class="journey-item journey-3">
                     <div class="journey-header">
                         <div>
-                            <div class="journey-title">21 giorni per creare un'abitudine</div>
+                            <div class="journey-title">21 giorni per creare un'abitudine 🔄</div>
                             <div class="journey-duration">21 giorni • Esperto</div>
                         </div>
                         <div class="journey-status" id="journey-3-status">Bloccato</div>
@@ -2862,13 +2912,13 @@
         <div class="profile-edit-container">
             <h2 class="profile-edit-title">Modifica Profilo ✏️</h2>
 
-            <div>
-                <label>Nome</label>
-                <input type="text" class="profile-edit-input" id="profile-name-input" placeholder="Il tuo nome">
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Nome</label>
+                <input type="text" class="profile-edit-input" id="profile-name-input" placeholder="Il tuo nome" style="width: 100%; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem;">
             </div>
 
             <div class="gender-selection">
-                <label>Genere</label>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Genere</label>
                 <div class="gender-options">
                     <div class="gender-option" data-gender="M">Maschile</div>
                     <div class="gender-option" data-gender="F">Femminile</div>
@@ -2876,8 +2926,8 @@
                 </div>
             </div>
 
-            <div>
-                <label>Emoji</label>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Emoji</label>
                 <div class="emoji-picker">
                     <div class="emoji-option" data-emoji="😊">😊</div>
                     <div class="emoji-option" data-emoji="😄">😄</div>
@@ -2894,6 +2944,7 @@
                 </div>
             </div>
 
+            <!-- CORREZIONE: Pulsanti aggiunti correttamente -->
             <div class="profile-edit-buttons">
                 <button class="profile-edit-cancel" id="profile-edit-cancel">Annulla</button>
                 <button class="profile-edit-save" id="profile-edit-save">Salva</button>
@@ -2903,56 +2954,55 @@
 
     <!-- Journey Detail Modal -->
     <div class="journey-modal" id="journey-modal">
-        <div class="journey-container journey-1" id="journey-modal-container">
+        <div class="journey-container" id="journey-modal-container">
             <div class="journey-modal-header">
-                <div class="journey-close" id="journey-close-btn">&times;</div>
-                <div class="journey-modal-title" id="journey-modal-title">7 giorni per ridurre l'ansia</div>
-                <div class="journey-modal-subtitle" id="journey-modal-subtitle">Un percorso guidato per ritrovare la calma</div>
+                <div class="journey-modal-title" id="journey-modal-title">7 giorni per ridurre l'ansia 🌊</div>
+                <button class="journey-close" id="journey-close-btn">&times;</button>
             </div>
-            <div class="journey-modal-body">
-                <div class="current-day">
-                    <span class="day-number" id="current-day-number">1</span>
-                    <span id="current-day-text">Giorno 1 di 7</span>
+
+            <div class="current-day">
+                <span class="day-number" id="current-day-number">1</span>
+                <span id="current-day-text">Giorno 1 di 7</span>
+            </div>
+
+            <!-- Visualizzazione progresso a cerchio -->
+            <div class="journey-modal-progress">
+                <div class="progress-circle">
+                    <div class="progress-fill-circle" id="journey-progress-fill-circle"></div>
+                    <div class="journey-progress-number" id="journey-progress-number">0/7</div>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <div class="task-title">
+                    <i class="fas fa-tasks"></i>
+                    <span id="task-title">Attività del giorno</span>
+                </div>
+                <div class="task-description" id="task-description">
+                    Completa una meditazione guidata di 5 minuti concentrandoti sul respiro. Trova un luogo tranquillo e siediti comodamente. 🧘‍♀️
                 </div>
 
-                <!-- Journey progress bar -->
-                <div class="journey-modal-progress">
-                    <div class="progress-text">
-                        <span>Progresso percorso</span>
-                        <span id="journey-progress-text">0/7 giorni</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="journey-progress-fill" style="width: 0%"></div>
-                    </div>
+                <div class="task-checkbox">
+                    <input type="checkbox" id="task-completed-checkbox">
+                    <label for="task-completed-checkbox" class="checkbox-label">
+                        <div class="checkbox-custom"></div>
+                        <span>Ho completato questa attività</span>
+                    </label>
                 </div>
 
-                <div class="task-card">
-                    <div class="task-title">
-                        <i class="fas fa-tasks"></i>
-                        <span id="task-title">Attività del giorno</span>
-                    </div>
-                    <div class="task-description" id="task-description">
-                        Completa una meditazione guidata di 5 minuti concentrandoti sul respiro. Trova un luogo tranquillo e siediti comodamente.
-                    </div>
-
-                    <div class="task-checkbox">
-                        <input type="checkbox" id="task-completed-checkbox">
-                        <label for="task-completed-checkbox" class="checkbox-label">
-                            <div class="checkbox-custom"></div>
-                            <span>Ho completato questa attività</span>
-                        </label>
-                    </div>
-
-                    <div class="task-completed" id="task-completed">
-                        <i class="fas fa-check-circle"></i> Attività completata! Bravo!
-                    </div>
+                <div class="task-completed" id="task-completed">
+                    <i class="fas fa-check-circle"></i> Attività completata! Bravo! 🎉
                 </div>
+            </div>
 
-                <div class="journey-days">
-                    <div class="journey-days-title">Tappe del percorso</div>
-                    <div id="journey-days-list">
-                        <!-- Days will be populated here -->
-                    </div>
+            <div class="journey-modal-completed" id="journey-completed-message" style="display: none;">
+                <i class="fas fa-trophy"></i> Percorso completato! Ottimo lavoro! 🌟
+            </div>
+
+            <div class="journey-days">
+                <div class="journey-days-title">Tappe del percorso</div>
+                <div id="journey-days-list">
+                    <!-- Days will be populated here -->
                 </div>
             </div>
         </div>
@@ -3060,72 +3110,73 @@
                 journeys: {
                     anxiety: {
                         id: 'anxiety',
-                        title: '7 giorni per ridurre l\'ansia',
+                        title: '7 giorni per ridurre l\'ansia 🌊',
                         duration: 7,
                         currentDay: 1,
                         completedDays: [],
                         startDate: null,
+                        unlocked: true,
                         tasks: [
-                            "Completa una meditazione guidata di 5 minuti concentrandoti sul respiro",
-                            "Scrivi tre cose per cui sei grato nel tuo diario della gratitudine",
-                            "Fai 10 minuti di respirazione profonda in un luogo tranquillo",
-                            "Identifica una situazione stressante e scrivi come potresti affrontarla diversamente",
-                            "Pratica 5 minuti di stretching consapevole",
-                            "Dedica 10 minuti a un'attività che ti rilassa senza distrazioni",
-                            "Rifletti sul percorso e sui tuoi progressi"
+                            "Completa una meditazione guidata di 5 minuti concentrandoti sul respiro 🧘‍♀️",
+                            "Scrivi tre cose per cui sei grato nel tuo diario della gratitudine 📝",
+                            "Fai 10 minuti di respirazione profonda in un luogo tranquillo 🌳",
+                            "Identifica una situazione stressante e scrivi come potresti affrontarla diversamente ✍️",
+                            "Pratica 5 minuti di stretching consapevole 🤸",
+                            "Dedica 10 minuti a un'attività che ti rilassa senza distrazioni 🎵",
+                            "Rifletti sul percorso e sui tuoi progressi 🤔"
                         ]
                     },
                     focus: {
                         id: 'focus',
-                        title: '10 giorni per migliorare la concentrazione',
+                        title: '10 giorni per migliorare la concentrazione 🎯',
                         duration: 10,
                         currentDay: 1,
                         completedDays: [],
                         startDate: null,
                         unlocked: false,
                         tasks: [
-                            "Medita per 10 minuti concentrandoti su un singolo oggetto",
-                            "Organizza il tuo spazio di lavoro eliminando le distrazioni",
-                            "Pratica la tecnica del pomodoro (25 minuti lavoro, 5 minuti pausa)",
-                            "Completa un esercizio di concentrazione di 5 minuti",
-                            "Dedica 15 minuti a leggere senza distrazioni",
-                            "Crea una lista di priorità per la tua giornata",
-                            "Pratica 10 minuti di respirazione focalizzata",
-                            "Completa un puzzle o un gioco che richiede concentrazione",
-                            "Medita camminando per 10 minuti concentrandoti sui passi",
-                            "Rifletti sui miglioramenti nella tua concentrazione"
+                            "Medita per 10 minuti concentrandoti su un singolo oggetto 🔍",
+                            "Organizza il tuo spazio di lavoro eliminando le distrazioni 🗑️",
+                            "Pratica la tecnica del pomodoro (25 minuti lavoro, 5 minuti pausa) ⏱️",
+                            "Completa un esercizio di concentrazione di 5 minuti 🧩",
+                            "Dedica 15 minuti a leggere senza distrazioni 📚",
+                            "Crea una lista di priorità per la tua giornata 📋",
+                            "Pratica 10 minuti di respirazione focalizzata 🌬️",
+                            "Completa un puzzle o un gioco che richiede concentrazione 🧠",
+                            "Medita camminando per 10 minuti concentrandoti sui passi 👣",
+                            "Rifletti sui miglioramenti nella tua concentrazione 💭"
                         ]
                     },
                     habit: {
                         id: 'habit',
-                        title: '21 giorni per creare un\'abitudine',
+                        title: '21 giorni per creare un\'abitudine 🔄',
                         duration: 21,
                         currentDay: 1,
                         completedDays: [],
                         startDate: null,
                         unlocked: false,
                         tasks: [
-                            "Definisci l'abitudine che vuoi creare e perché è importante",
-                            "Identifica un momento specifico della giornata per praticarla",
-                            "Prepara l'ambiente per facilitare la nuova abitudine",
-                            "Pratica l'abitudine per almeno 5 minuti",
-                            "Associa la nuova abitudine a un'abitudine esistente",
-                            "Tieni traccia dei tuoi progressi",
-                            "Celebra i piccoli successi",
-                            "Rifletti sulle difficoltà e su come superarle",
-                            "Condividi il tuo obiettivo con qualcuno",
-                            "Pratica l'abitudine per 10 minuti",
-                            "Visualizza te stesso che pratichi con successo l'abitudine",
-                            "Prepara un piano per gli ostacoli previsti",
-                            "Pratica l'abitudine in un contesto diverso",
-                            "Trova un partner di responsabilità",
-                            "Rifletti sui benefici che stai sperimentando",
-                            "Aumenta la durata a 15 minuti",
-                            "Pratica anche quando non ne hai voglia",
-                            "Ripensa ai tuoi progressi e aggiusta se necessario",
-                            "Celebra la seconda settimana di successo",
-                            "Pratica in condizioni non ideali",
-                            "Rifletti sul percorso e preparati a continuare"
+                            "Definisci l'abitudine che vuoi creare e perché è importante 🎯",
+                            "Identifica un momento specifico della giornata per praticarla ⏰",
+                            "Prepara l'ambiente per facilitare la nuova abitudine 🛋️",
+                            "Pratica l'abitudine per almeno 5 minuti ⏳",
+                            "Associa la nuova abitudine a un'abitudine esistente 🔗",
+                            "Tieni traccia dei tuoi progressi 📊",
+                            "Celebra i piccoli successi 🎉",
+                            "Rifletti sulle difficoltà e su come superarle 🤔",
+                            "Condividi il tuo obiettivo con qualcuno 🗣️",
+                            "Pratica l'abitudine per 10 minuti ⏳",
+                            "Visualizza te stesso che pratichi con successo l'abitudine 👁️",
+                            "Prepara un piano per gli ostacoli previsti 🛡️",
+                            "Pratica l'abitudine in un contesto diverso 🌍",
+                            "Trova un partner di responsabilità 👫",
+                            "Rifletti sui benefici che stai sperimentando 🌟",
+                            "Aumenta la durata a 15 minuti ⏳",
+                            "Pratica anche quando non ne hai voglia 💪",
+                            "Ripensa ai tuoi progressi e aggiusta se necessario 🔧",
+                            "Celebra la seconda settimana di successo 🎊",
+                            "Pratica in condizioni non ideali 🌧️",
+                            "Rifletti sul percorso e preparati a continuare 🚀"
                         ]
                     }
                 }
@@ -3282,7 +3333,6 @@
             const journeyCloseBtn = document.getElementById('journey-close-btn');
             const journeyModalContainer = document.getElementById('journey-modal-container');
             const journeyModalTitle = document.getElementById('journey-modal-title');
-            const journeyModalSubtitle = document.getElementById('journey-modal-subtitle');
             const currentDayNumber = document.getElementById('current-day-number');
             const currentDayText = document.getElementById('current-day-text');
             const taskTitle = document.getElementById('task-title');
@@ -3295,10 +3345,16 @@
             const journey3Btn = document.getElementById('journey-3-btn');
             const dailyImage = document.getElementById('daily-image');
             const dailyQuote = document.getElementById('daily-quote');
-            const moodTracker = document.getElementById('mood-tracker');
-            const moodScrollIndicator = document.getElementById('mood-scroll-indicator');
+            const gratitudeForm = document.getElementById('gratitude-form');
+            const gratitudeInputs = document.querySelectorAll('.gratitude-input');
+            const gratitudeBtn = document.getElementById('gratitude-btn');
             const journeyProgressText = document.getElementById('journey-progress-text');
             const journeyProgressFill = document.getElementById('journey-progress-fill');
+            const journeyProgressFillCircle = document.getElementById('journey-progress-fill-circle');
+            const journeyProgressNumber = document.getElementById('journey-progress-number');
+            const journeyCompletedMessage = document.getElementById('journey-completed-message');
+            const profileEditCancel = document.getElementById('profile-edit-cancel');
+            const profileEditSave = document.getElementById('profile-edit-save');
 
             // Carica dati salvati da localStorage
             function loadSavedData() {
@@ -3456,6 +3512,9 @@
                 for (const meditationId in state.meditationReviews) {
                     updateMeditationRating(meditationId);
                 }
+
+                // Controlla se il diario della gratitudine è già stato compilato oggi
+                checkGratitudeLock();
             }
 
             // Funzione per visualizzare l'obiettivo giornaliero
@@ -3553,10 +3612,22 @@
                         // Aggiorna stato
                         if (progress === journey.duration) {
                             status.textContent = 'Completato 🎉';
+                            status.style.background = 'var(--success)';
+                            status.style.color = 'white';
+                            status.style.padding = '3px 10px';
+                            status.style.borderRadius = '15px';
                         } else if (progress > 0) {
                             status.textContent = `${progress}/${journey.duration}`;
+                            status.style.background = '';
+                            status.style.color = '';
+                            status.style.padding = '';
+                            status.style.borderRadius = '';
                         } else {
-                            status.textContent = journeyId === 'anxiety' ? 'Inizia' : 'Bloccato';
+                            status.textContent = journey.unlocked ? 'Inizia' : 'Bloccato';
+                            status.style.background = '';
+                            status.style.color = '';
+                            status.style.padding = '';
+                            status.style.borderRadius = '';
                         }
                     }
                 }
@@ -3565,15 +3636,10 @@
             // Funzione per aprire il dettaglio di un percorso
             function openJourneyDetail(journeyId) {
                 const journey = state.journeys[journeyId];
+                journeyModalContainer.dataset.journeyId = journeyId;
 
                 // Aggiorna il contenuto modale
-                journeyModalContainer.className = `journey-container journey-${journeyId}`;
                 journeyModalTitle.textContent = journey.title;
-                journeyModalSubtitle.textContent = journeyId === 'anxiety' ?
-                    'Un percorso guidato per ritrovare la calma' :
-                    journeyId === 'focus' ?
-                    'Migliora la tua produttività e attenzione' :
-                    'Costruisci abitudini positive per la tua vita';
 
                 // Aggiorna il giorno corrente
                 currentDayNumber.textContent = journey.currentDay;
@@ -3594,11 +3660,28 @@
                 journeyProgressText.textContent = `${progress}/${journey.duration} giorni`;
                 journeyProgressFill.style.width = `${progressPercent}%`;
 
+                // Aggiorna il cerchio di progresso
+                if (journeyProgressFillCircle && journeyProgressNumber) {
+                    journeyProgressFillCircle.style.transform = `rotate(${progressPercent * 3.6}deg)`;
+                    journeyProgressNumber.textContent = `${progress}/${journey.duration}`;
+                    journeyProgressFillCircle.style.color = journeyId === 'anxiety' ? 'var(--journey-1)' :
+                                                journeyId === 'focus' ? 'var(--journey-2)' :
+                                                'var(--journey-3)';
+                }
+
+                // Mostra/nascondi messaggio completamento percorso
+                if (journeyCompletedMessage) {
+                    journeyCompletedMessage.style.display = progress === journey.duration ? 'flex' : 'none';
+                }
+
                 // Aggiorna la lista dei giorni
                 journeyDaysList.innerHTML = '';
                 for (let i = 1; i <= journey.duration; i++) {
                     const dayItem = document.createElement('div');
-                    dayItem.className = `day-item ${journey.completedDays.includes(i) ? 'completed' : ''}`;
+                    dayItem.className = `day-item ${journey.completedDays.includes(i) ? 'journey-day-completed' : ''}`;
+                    if (i === journey.currentDay) {
+                        dayItem.style.border = '2px solid var(--primary)';
+                    }
                     dayItem.dataset.day = i;
 
                     dayItem.innerHTML = `
@@ -3612,6 +3695,7 @@
                     dayItem.addEventListener('click', function() {
                         const day = parseInt(this.dataset.day);
                         journey.currentDay = day;
+                        saveData();
                         openJourneyDetail(journeyId);
                     });
 
@@ -3620,6 +3704,25 @@
 
                 // Mostra il modale
                 journeyModal.classList.add('active');
+            }
+
+            // Funzione per bloccare il diario della gratitudine dopo il completamento
+            function checkGratitudeLock() {
+                const today = getLocalDateString();
+
+                if (state.gratitudeEntries[today]) {
+                    // Disabilita gli input e il pulsante
+                    gratitudeInputs.forEach(input => {
+                        input.value = state.gratitudeEntries[today][Array.from(gratitudeInputs).indexOf(input)] || '';
+                        input.disabled = true;
+                    });
+
+                    gratitudeBtn.disabled = true;
+                    gratitudeBtn.textContent = "Completato per oggi ✅";
+                    gratitudeBtn.style.background = "#e2e8f0";
+                    gratitudeBtn.style.color = "#64748b";
+                    gratitudeBtn.style.cursor = "not-allowed";
+                }
             }
 
             // Carica i dati salvati e inizializza l'UI
@@ -3650,76 +3753,6 @@
                     }
                 });
             });
-
-            // Mood scroll indicator
-            function updateMoodScrollIndicator() {
-                const scrollLeft = moodTracker.scrollLeft;
-                const maxScroll = moodTracker.scrollWidth - moodTracker.clientWidth;
-
-                if (maxScroll > 10) {
-                    moodScrollIndicator.classList.add('active');
-                    const position = (scrollLeft / maxScroll) * 90;
-                    moodScrollIndicator.style.transform = `translateX(${position}px) translateY(-50%)`;
-                } else {
-                    moodScrollIndicator.classList.remove('active');
-                }
-            }
-
-            moodTracker.addEventListener('scroll', updateMoodScrollIndicator);
-            window.addEventListener('resize', updateMoodScrollIndicator);
-            updateMoodScrollIndicator();
-
-            // Funzione per inizializzare il check-in basato sul tempo
-            function initTimeBasedCheckin() {
-                const moodStatus = document.querySelector('.mood-status');
-                const moodButtons = document.querySelectorAll('.mood-btn');
-
-                // Se non siamo nella pagina Salute, esci
-                if (!moodStatus || !moodButtons.length) return;
-
-                const now = new Date();
-                const currentTime = now.getHours() + now.getMinutes()/100;
-
-                // Trova la finestra oraria attuale
-                let currentWindow = null;
-                let nextWindow = null;
-
-                for (const window of state.timeWindows) {
-                    if (currentTime >= window.start && currentTime <= window.end) {
-                        currentWindow = window;
-                        break;
-                    }
-
-                    // Trova la prossima finestra disponibile
-                    if (currentTime < window.start) {
-                        nextWindow = window;
-                        break;
-                    }
-                }
-
-                // Abilita/disabilita i pulsanti in base alla finestra corrente
-                if (currentWindow) {
-                    moodStatus.innerHTML = `<i class="fas fa-smile"></i> È ora per il tuo check-in della ${currentWindow.name}!`;
-                    moodButtons.forEach(btn => btn.disabled = false);
-                } else {
-                    if (nextWindow) {
-                        moodStatus.innerHTML = `<i class="fas fa-clock"></i> Prossimo check-in alle ${nextWindow.start}:00`;
-                    } else {
-                        moodStatus.innerHTML = `<i class="fas fa-check"></i> Check-in completati per oggi`;
-                    }
-                    moodButtons.forEach(btn => btn.disabled = true);
-                }
-
-                // Controlla se ci sono check-in già effettuati oggi
-                const today = getLocalDateString();
-                if (state.moodEntries[today]) {
-                    state.moodEntries[today].forEach(entry => {
-                        if (entry.window === currentWindow?.id) {
-                            moodButtons.forEach(btn => btn.disabled = true);
-                        }
-                    });
-                }
-            }
 
             // Mood tracking con finestre orarie
             if (moodButtons.length) {
@@ -4030,7 +4063,7 @@
             });
 
             // Save profile
-            document.getElementById('profile-edit-save').addEventListener('click', function() {
+            profileEditSave.addEventListener('click', function() {
                 const newName = document.getElementById('profile-name-input').value.trim();
                 const selectedEmoji = document.querySelector('.emoji-option.selected');
                 const selectedGender = document.querySelector('.gender-option.selected');
@@ -4067,12 +4100,12 @@
             });
 
             // Cancel profile edit
-            document.getElementById('profile-edit-cancel').addEventListener('click', function() {
+            profileEditCancel.addEventListener('click', function() {
                 profileEditModal.classList.remove('active');
             });
 
             // Gratitude form
-            document.querySelector('.gratitude-form').addEventListener('submit', function(e) {
+            gratitudeForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const today = getLocalDateString();
 
@@ -4085,6 +4118,9 @@
 
                 // Salva i dati
                 saveData();
+
+                // Blocca il diario fino al giorno successivo
+                checkGratitudeLock();
             });
 
             // Reminder toggle changes
@@ -4200,19 +4236,14 @@
                 }, 1500);
             });
 
-            // Journey buttons
+            // Journey buttons - CORREZIONE: Aggiunto binding per pulsanti percorsi
             journey1Btn.addEventListener('click', function() {
                 const journey = state.journeys.anxiety;
-
-                // Verifica se il percorso è sbloccato
-                if (!journey.unlocked && journey.id !== 'anxiety') {
-                    showToast(`Completa il percorso precedente per sbloccare questo! 🔓`);
-                    return;
-                }
 
                 // Se è il primo giorno e non è stato ancora iniziato
                 if (journey.completedDays.length === 0 && journey.currentDay === 1) {
                     journey.startDate = new Date().toISOString();
+                    saveData();
                 }
 
                 openJourneyDetail('anxiety');
@@ -4223,13 +4254,14 @@
 
                 // Verifica se il percorso è sbloccato
                 if (!journey.unlocked) {
-                    showToast(`Completa il percorso precedente per sbloccare questo! 🔓`);
+                    showToast(`Completa il primo percorso per sbloccare questo! 🔓`);
                     return;
                 }
 
                 // Se è il primo giorno e non è stato ancora iniziato
                 if (journey.completedDays.length === 0 && journey.currentDay === 1) {
                     journey.startDate = new Date().toISOString();
+                    saveData();
                 }
 
                 openJourneyDetail('focus');
@@ -4240,13 +4272,14 @@
 
                 // Verifica se il percorso è sbloccato
                 if (!journey.unlocked) {
-                    showToast(`Completa il percorso precedente per sbloccare questo! 🔓`);
+                    showToast(`Completa il secondo percorso per sbloccare questo! 🔓`);
                     return;
                 }
 
                 // Se è il primo giorno e non è stato ancora iniziato
                 if (journey.completedDays.length === 0 && journey.currentDay === 1) {
                     journey.startDate = new Date().toISOString();
+                    saveData();
                 }
 
                 openJourneyDetail('habit');
@@ -4254,7 +4287,7 @@
 
             // Task completion
             taskCheckbox.addEventListener('change', function() {
-                const journeyId = journeyModalContainer.classList[1].split('-')[1];
+                const journeyId = journeyModalContainer.dataset.journeyId;
                 const journey = state.journeys[journeyId];
                 const currentDay = journey.currentDay;
 
@@ -4291,6 +4324,7 @@
 
                 // Aggiorna la visualizzazione
                 updateJourneysDisplay();
+                openJourneyDetail(journeyId); // Aggiorna il modale con i nuovi dati
             });
 
             // Chiudi il modale dei percorsi
@@ -4457,7 +4491,7 @@
                     gratitudeHistoryContainer.innerHTML = '<p style="text-align: center; padding: 10px; color: var(--text-light);">Nessun diario della gratitudine in questa data</p>';
                 }
 
-                // Update goal history
+                // Update goal history - CORREZIONE: Fix visualizzazione doppia icone
                 goalHistoryContainer.innerHTML = '';
                 if (dailyGoal) {
                     const goalItem = document.createElement('div');
