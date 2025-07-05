@@ -1166,7 +1166,7 @@
 
         .goal-history-item {
             padding: 10px;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9);
             display: flex;
             align-items: center;
         }
@@ -1216,7 +1216,7 @@
         .subscription-switch {
             display: flex;
             justify-content: space-between;
-            background: #f1f5f9;
+            background: #f1f5f9);
             border-radius: 12px;
             padding: 5px;
             margin: 15px 0;
@@ -1881,6 +1881,33 @@
                 bottom: 5% !important;
                 right: 5% !important;
             }
+
+            /* Miglioramenti per i percorsi su mobile */
+            .journey-title {
+                font-size: 1.1rem;
+            }
+
+            .journey-duration {
+                font-size: 0.8rem;
+            }
+
+            .journey-status {
+                font-size: 0.75rem;
+                padding: 3px 8px;
+            }
+
+            .journey-btn {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .journey-modal-container {
+                padding: 15px;
+            }
+
+            .journey-modal-title {
+                font-size: 1.3rem;
+            }
         }
 
         /* New styles for toggle switch and time windows */
@@ -2289,6 +2316,42 @@
         /* CORREZIONE: Rimuove il progresso dal modal */
         .journey-modal-progress {
             display: none;
+        }
+
+        /* CORREZIONE: Miglioramenti percorsi su mobile */
+        @media (max-width: 480px) {
+            .journey-title {
+                font-size: 1rem;
+            }
+
+            .journey-duration {
+                font-size: 0.75rem;
+            }
+
+            .journey-status {
+                font-size: 0.7rem;
+                padding: 2px 6px;
+            }
+
+            .progress-text {
+                font-size: 0.8rem;
+            }
+
+            .journey-btn {
+                font-size: 0.85rem;
+            }
+
+            .journey-modal-title {
+                font-size: 1.2rem;
+            }
+
+            .task-title {
+                font-size: 1rem;
+            }
+
+            .task-description {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -3099,7 +3162,7 @@
                 referralCode: null,
                 isLoggedIn: false,
 
-                // Nuovo stato per i percorsi
+                // CORREZIONE: Stato riscritto per i percorsi
                 journeys: {
                     anxiety: {
                         id: 'anxiety',
@@ -3581,48 +3644,108 @@
                 }
             }
 
-            // Funzione per aggiornare la visualizzazione dei percorsi
+            // CORREZIONE: Aggiornamento completo dei percorsi
             function updateJourneysDisplay() {
-                for (const journeyId in state.journeys) {
-                    const journey = state.journeys[journeyId];
+                // Percorso 1: Ansia
+                const journey1 = state.journeys.anxiety;
+                const journey1Progress = document.getElementById('journey-1-progress');
+                const journey1Fill = document.getElementById('journey-1-fill');
+                const journey1Status = document.getElementById('journey-1-status');
 
-                    const progressText = document.getElementById(`journey-${journeyId}-progress`);
-                    const progressFill = document.getElementById(`journey-${journeyId}-fill`);
-                    const status = document.getElementById(`journey-${journeyId}-status`);
+                if (journey1Progress && journey1Fill && journey1Status) {
+                    const progressPercent = (journey1.completedDays.length / journey1.duration) * 100;
 
-                    if (progressText && progressFill && status) {
-                        // Aggiorna progresso
-                        const progress = journey.completedDays.length;
-                        const percent = (progress / journey.duration) * 100;
+                    journey1Progress.textContent = `${journey1.completedDays.length}/${journey1.duration} giorni`;
+                    journey1Fill.style.width = `${progressPercent}%`;
 
-                        progressText.textContent = `${progress}/${journey.duration} giorni`;
-                        progressFill.style.width = `${percent}%`;
+                    if (journey1.completedDays.length === journey1.duration) {
+                        journey1Status.textContent = 'Completato 🎉';
+                        journey1Status.style.background = 'var(--success)';
+                        journey1Status.style.color = 'white';
+                    } else if (journey1.completedDays.length > 0) {
+                        journey1Status.textContent = `${journey1.completedDays.length}/${journey1.duration}`;
+                        journey1Status.style.background = '';
+                        journey1Status.style.color = '';
+                    } else {
+                        journey1Status.textContent = journey1.unlocked ? 'Inizia' : 'Bloccato';
+                        journey1Status.style.background = '';
+                        journey1Status.style.color = '';
+                    }
 
-                        // Aggiorna stato
-                        if (progress === journey.duration) {
-                            status.textContent = 'Completato 🎉';
-                            status.style.background = 'var(--success)';
-                            status.style.color = 'white';
-                            status.style.padding = '3px 10px';
-                            status.style.borderRadius = '15px';
-                        } else if (progress > 0) {
-                            status.textContent = `${progress}/${journey.duration}`;
-                            status.style.background = '';
-                            status.style.color = '';
-                            status.style.padding = '';
-                            status.style.borderRadius = '';
-                        } else {
-                            status.textContent = journey.unlocked ? 'Inizia' : 'Bloccato';
-                            status.style.background = '';
-                            status.style.color = '';
-                            status.style.padding = '';
-                            status.style.borderRadius = '';
-                        }
+                    // Sblocca il secondo percorso se il primo è completo
+                    if (journey1.completedDays.length === journey1.duration) {
+                        state.journeys.focus.unlocked = true;
                     }
                 }
+
+                // Percorso 2: Concentrazione
+                const journey2 = state.journeys.focus;
+                const journey2Progress = document.getElementById('journey-2-progress');
+                const journey2Fill = document.getElementById('journey-2-fill');
+                const journey2Status = document.getElementById('journey-2-status');
+
+                if (journey2Progress && journey2Fill && journey2Status) {
+                    const progressPercent = (journey2.completedDays.length / journey2.duration) * 100;
+
+                    journey2Progress.textContent = `${journey2.completedDays.length}/${journey2.duration} giorni`;
+                    journey2Fill.style.width = `${progressPercent}%`;
+
+                    if (journey2.completedDays.length === journey2.duration) {
+                        journey2Status.textContent = 'Completato 🎉';
+                        journey2Status.style.background = 'var(--success)';
+                        journey2Status.style.color = 'white';
+                    } else if (journey2.completedDays.length > 0) {
+                        journey2Status.textContent = `${journey2.completedDays.length}/${journey2.duration}`;
+                        journey2Status.style.background = '';
+                        journey2Status.style.color = '';
+                    } else {
+                        journey2Status.textContent = journey2.unlocked ? 'Inizia' : 'Bloccato';
+                        journey2Status.style.background = '';
+                        journey2Status.style.color = '';
+                    }
+
+                    // Sblocca il terzo percorso se il secondo è completo
+                    if (journey2.completedDays.length === journey2.duration) {
+                        state.journeys.habit.unlocked = true;
+                    }
+                }
+
+                // Percorso 3: Abitudine
+                const journey3 = state.journeys.habit;
+                const journey3Progress = document.getElementById('journey-3-progress');
+                const journey3Fill = document.getElementById('journey-3-fill');
+                const journey3Status = document.getElementById('journey-3-status');
+
+                if (journey3Progress && journey3Fill && journey3Status) {
+                    const progressPercent = (journey3.completedDays.length / journey3.duration) * 100;
+
+                    journey3Progress.textContent = `${journey3.completedDays.length}/${journey3.duration} giorni`;
+                    journey3Fill.style.width = `${progressPercent}%`;
+
+                    if (journey3.completedDays.length === journey3.duration) {
+                        journey3Status.textContent = 'Completato 🎉';
+                        journey3Status.style.background = 'var(--success)';
+                        journey3Status.style.color = 'white';
+                    } else if (journey3.completedDays.length > 0) {
+                        journey3Status.textContent = `${journey3.completedDays.length}/${journey3.duration}`;
+                        journey3Status.style.background = '';
+                        journey3Status.style.color = '';
+                    } else {
+                        journey3Status.textContent = journey3.unlocked ? 'Inizia' : 'Bloccato';
+                        journey3Status.style.background = '';
+                        journey3Status.style.color = '';
+                    }
+                }
+
+                // Aggiorna i pulsanti
+                journey1Btn.disabled = !state.journeys.anxiety.unlocked;
+                journey2Btn.disabled = !state.journeys.focus.unlocked;
+                journey3Btn.disabled = !state.journeys.habit.unlocked;
+
+                saveData();
             }
 
-            // Funzione per aprire il dettaglio di un percorso
+            // CORREZIONE: Miglioramento della funzione per aprire i dettagli del percorso
             function openJourneyDetail(journeyId) {
                 const journey = state.journeys[journeyId];
                 journeyModalContainer.dataset.journeyId = journeyId;
@@ -4265,7 +4388,7 @@
                 openJourneyDetail('habit');
             });
 
-            // Task completion
+            // CORREZIONE: Funzione di completamento attività completamente riscritta
             taskCheckbox.addEventListener('change', function() {
                 const journeyId = journeyModalContainer.dataset.journeyId;
                 const journey = state.journeys[journeyId];
@@ -4293,6 +4416,10 @@
 
                     // Salva lo stato
                     saveData();
+
+                    // Aggiorna la visualizzazione
+                    updateJourneysDisplay();
+                    openJourneyDetail(journeyId); // Aggiorna il modale con i nuovi dati
                 } else {
                     // Rimuovi il giorno dai completati
                     const index = journey.completedDays.indexOf(currentDay);
@@ -4300,11 +4427,10 @@
                         journey.completedDays.splice(index, 1);
                     }
                     taskCompleted.style.display = 'none';
+                    saveData();
+                    updateJourneysDisplay();
+                    openJourneyDetail(journeyId);
                 }
-
-                // Aggiorna la visualizzazione
-                updateJourneysDisplay();
-                openJourneyDetail(journeyId); // Aggiorna il modale con i nuovi dati
             });
 
             // Chiudi il modale dei percorsi
@@ -4610,6 +4736,38 @@
 
                     window.reminderIntervals.push(interval);
                 }
+            }
+
+            // CORREZIONE: Funzione per inizializzare il check-in basato sul tempo
+            function initTimeBasedCheckin() {
+                const now = new Date();
+                const currentTime = now.getHours() + now.getMinutes()/100;
+                const today = getLocalDateString();
+
+                // Trova la finestra oraria attuale
+                let currentWindow = null;
+                for (const window of state.timeWindows) {
+                    if (currentTime >= window.start && currentTime <= window.end) {
+                        currentWindow = window;
+                        break;
+                    }
+                }
+
+                // Se non c'è una finestra corrente, disabilita i pulsanti
+                if (!currentWindow) {
+                    moodButtons.forEach(btn => btn.disabled = true);
+                    return;
+                }
+
+                // Controlla se l'utente ha già effettuato il check-in in questa finestra
+                const hasLoggedInCurrentWindow = state.moodEntries[today]?.some(entry =>
+                    entry.window === currentWindow.id
+                );
+
+                // Abilita i pulsanti solo se non è stato fatto il check-in
+                moodButtons.forEach(btn => {
+                    btn.disabled = hasLoggedInCurrentWindow;
+                });
             }
 
             // Initialize the app
